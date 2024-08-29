@@ -66,14 +66,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Activity? DeleteActivity(int activity_Id)
+        public Task<Activity?> DeleteActivity(int activity_Id)
         {
             try
             {
                 string sql = "DELETE FROM Activity WHERE Activity_Id = @activity_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@activity_Id", activity_Id);
-                return _connection.QueryFirst<Activity?>(sql, parameters);
+                return _connection.QueryFirstAsync<Activity?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -83,20 +83,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<Activity?> GetAllActivities()
+        public async Task <IEnumerable<Activity?>> GetAllActivities()
         {
             string sql = "SELECT * FROM Activity";
-            return _connection.Query<Activity?>(sql);
+            return await _connection.QueryAsync<Activity?>(sql);
         }
 
-        public Activity? GetByIdActivity(int activity_Id)
+        public Task<Activity?> GetByIdActivity(int activity_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Activity WHERE Activity_Id = @activity_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@activity_Id", activity_Id);
-                return _connection.QueryFirst<Activity?>(sql, parameters);
+                return _connection.QueryFirstAsync<Activity?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -106,7 +106,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Activity? UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id)
+        public Task<Activity?> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@posLat", posLat);
                 parameters.Add("@posLong", posLong);
                 parameters.Add("@organisateur_Id", organisateur_Id);
-                return _connection.QueryFirst<Activity?>(sql, parameters);
+                return _connection.QueryFirstAsync<Activity?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -130,7 +130,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating activity : {ex}");
             }
-            return new Activity();
+            return null;
         }
     }
 }

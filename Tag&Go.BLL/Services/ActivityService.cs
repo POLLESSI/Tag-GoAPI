@@ -52,7 +52,7 @@ namespace Tag_Go.BLL.Services
         }
 
         
-        public Activity? DeleteActivity(int activity_Id)
+        public Task<Activity?> DeleteActivity(int activity_Id)
         {
             try
             {
@@ -66,12 +66,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<Activity?> GetAllActivities()
+        public Task <IEnumerable<Activity?>> GetAllActivities()
         {
             return _activityRepository.GetAllActivities();
         }
 
-        public Activity? GetByIdActivity(int activity_Id)
+        public Task<Activity?> GetByIdActivity(int activity_Id)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Activity? UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id)
+        public Task<Activity?> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating activity : {ex}");
             }
-            return new Activity();
+            return null;
         }
     }
 }

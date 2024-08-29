@@ -13,9 +13,9 @@ namespace Tag_Go.BLL.Interfaces
     #nullable disable
         bool Create(Bonus bonus);
         void CreateBonus(Bonus bonus);
-        IEnumerable<Bonus?> GetAllBonuss();
-        Bonus? GetByIdBonus(int bonus_Id);
-        Bonus? DeleteBonus(int bonus_Id);
-        Bonus? UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted);
+        Task<IEnumerable<Bonus?>> GetAllBonuss();
+        Task<Bonus?> GetByIdBonus(int bonus_Id);
+        Task<Bonus?> DeleteBonus(int bonus_Id);
+        Task<Bonus?> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted);
     }
 }

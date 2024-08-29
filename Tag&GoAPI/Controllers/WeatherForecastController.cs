@@ -16,6 +16,10 @@
 //    public class WeatherForecastController : ControllerBase
 //    {
 //#nullable disable
+//        private static readonly string[] TemperatureC = new[]
+//        {
+//            "0°", "10°", "20°", "30°", "40°", "50°", "60°"
+//        };
 //        private static readonly string[] Summaries = new[]
 //        {
 //            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -23,6 +27,14 @@
 //        private static readonly string[] Descriptions = new[]
 //        {
 //            "Fair", "Normal", "UnNatural", "Catastrophic", "Apocaliptic"
+//        };
+//        private static readonly string[] Humidities = new[]
+//        {
+//            "00°", "10°", "20°", "30°", "40°", "50°" , "60°", "70°", "80°", "90°", "100°"
+//        };
+//        private static readonly string[] Precipitations = new[]
+//        {
+//            "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"
 //        };
 //        private readonly IWeatherForecastRepository _forecastRepository;
 //        private readonly ILogger<WeatherForecastController> _logger;
@@ -35,25 +47,34 @@
 //            _logger = logger;
 //            _hub = hub;
 //        }
-//        public IEnumerable<WeatherForecast> Get()
+//        public async Task<IEnumerable<WeatherForecast>> Get()
 //        {
 //            return Enumerable.Range(1, 5).Select(Index => new WeatherForecast
 //            {
-//                //Date = DateTime.Now.AddDays(Index),
-//                //TemperatureC = TemperatureC[Random.Shared.Next(-20, 55)],
+//                Date = DateTime.Now.AddDays(Index),
+//                TemperatureC = TemperatureC[Random.Shared.Next(-20, 55)],
 //                Summary = Summaries[Random.Shared.Next(Summaries.Length)],
-//                //Description = Descriptions[Random.Shared.Next(Descriptions.Length)]
-//                //Humidity = Humidity[Random.Shared(-1, 100)]
-//                //Precipitation = Precipitation[Random.Shared.Next(0, 1000)]
+//                Description = Descriptions[Random.Shared.Next(Descriptions.Length)],
+//                Humidity = Humidities[Random.Shared.Next(-1, 100)],
+//                Precipitation = Precipitations[Random.Shared.Next(0, 1000)]
 //            })
 //            .ToArray();
 //        }
-//        //[HttpGet]
-//        //public ActionResult<IEnumerable<WeatherForecast>> GetAllWeatherForecasts()
-//        //{
-//        //    var activeWeatherForecasts = _forecastRepository.GetAllWeatherForecasts();
-//        //    return Ok(activeWeatherForecasts);
-//        //}
+//        [HttpGet]
+//        public async Task<IActionResult> GetAllWeatherForecasts()
+//        {
+//            try
+//            {
+//                var activeWeatherForecasts = await _forecastRepository.GetAllWeatherForecasts();
+//                return Ok(activeWeatherForecasts);
+//            }
+//            catch (Exception ex)
+//            {
+
+//                return StatusCode(500, ex.Message);
+//            }
+            
+//        }
 //        //public IActionResult GetAll()
 //        //{
 //        //    return Ok(_forecastRepository.GetAll());
@@ -94,7 +115,16 @@
 //        {
 //            foreach (var item in newUpdate)
 //            {
-//                _currentWeatherForecast[item.Key] = item.Value;
+//                try
+//                {
+//                    _currentWeatherForecast[item.Key] = item.Value;
+//                }
+//                catch (Exception ex)
+//                {
+
+//                    BadRequest(ex.Message);
+//                }
+                
 //            }
 //            await _hub.Clients.All.SendAsync("receiveweatherupdate", new WeatherForecast
 //            {

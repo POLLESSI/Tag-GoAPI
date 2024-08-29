@@ -49,7 +49,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Bonus? DeleteBonus(int bonus_Id)
+        public Task<Bonus?> DeleteBonus(int bonus_Id)
         {
             try
             {
@@ -63,12 +63,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<Bonus?> GetAllBonuss()
+        public Task<IEnumerable<Bonus?>> GetAllBonuss()
         {
             return _bonusRepository.GetAllBonuss();
         }
 
-        public Bonus? GetByIdBonus(int bonus_Id)
+        public Task<Bonus?> GetByIdBonus(int bonus_Id)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Bonus? UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
+        public Task<Bonus?> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating bonus : {ex}");
             }
-            return new Bonus();
+            return null;
         }
     }
 }

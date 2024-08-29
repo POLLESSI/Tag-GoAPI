@@ -25,16 +25,26 @@ namespace Tag_GoAPI.Controllers
             _mapHub = mapHub;
         }
         [HttpGet]
-        public IActionResult GetAllMaps()
-        {
-            return Ok(_mapRepository.GetAllMaps());
-        }
-        [HttpGet("{map_Id}")]
-        public IActionResult GetByIdMap(int map_Id)
+        public async Task<IActionResult> GetAllMaps()
         {
             try
             {
-                var map = _mapRepository.GetByIdMap(map_Id);
+                var maps = await _mapRepository.GetAllMaps();
+                return Ok(maps);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{map_Id}")]
+        public async Task<IActionResult> GetByIdMap(int map_Id)
+        {
+            try
+            {
+                var map = await _mapRepository.GetByIdMap(map_Id);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -61,23 +71,54 @@ namespace Tag_GoAPI.Controllers
             return BadRequest("Registration Error");
         }
         [HttpDelete("{map_Id}")]
-        public IActionResult DeleteMap(int map_Id)
+        public async Task<IActionResult> DeleteMap(int map_Id)
         {
-            _mapRepository.DeleteMap(map_Id);
-            return Ok();
+            try
+            {
+                var map = await _mapRepository.DeleteMap(map_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _mapRepository.DeleteMap(map_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
-        [HttpPut("update")]
-        public IActionResult UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
+        [HttpPut("map_Id")]
+        public async Task<IActionResult> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
         {
-            _mapRepository.UpdateMap(map_Id, dateCreation, mapUrl, description);
-            return Ok();
+            try
+            {
+                var map = await _mapRepository.UpdateMap(map_Id, dateCreation, mapUrl, description);
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveMapUpdate(Dictionary<string, string> newUpdate)
+        public async Task<IActionResult> ReceiveMapUpdate(Dictionary<string, string> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentMap[item.Key] = item.Value;
+                try
+                {
+                    _currentMap[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentMap);
         }

@@ -12,9 +12,9 @@ namespace Tag_Go.DAL.Interfaces
     #nullable disable
         bool Create(NIcon nIcon);
         void CreateIcon(NIcon nIcon);
-        IEnumerable<NIcon?> GetAllNIcons();
-        NIcon? GetByIdNIcon(int nIcon_Id);
-        NIcon? DeleteNIcon(int nIcon_Id);
-        NIcon? UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id);
+        Task<IEnumerable<NIcon?>> GetAllNIcons();
+        Task<NIcon?> GetByIdNIcon(int nIcon_Id);
+        Task<NIcon?> DeleteNIcon(int nIcon_Id);
+        Task<NIcon?> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id);
     }
 }

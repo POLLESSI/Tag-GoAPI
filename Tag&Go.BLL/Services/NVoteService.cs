@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public NVote? DeleteNVote(int nVote_Id)
+        public Task<NVote?> DeleteNVote(int nVote_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<NVote?> GetAllNVotes()
+        public Task<IEnumerable<NVote?>> GetAllNVotes()
         {
             return _nVoteRepository.GetAllNVotes();
         }
 
-        public NVote? GetByIdNVote(int nVote_Id)
+        public Task<NVote?> GetByIdNVote(int nVote_Id)
         {
             try
             {

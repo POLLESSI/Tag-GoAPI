@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public NEvenement? DeleteNEvenement(int nEvenement_Id)
+        public Task<NEvenement?> DeleteNEvenement(int nEvenement_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<NEvenement?> GetAllNEvenements()
+        public Task<IEnumerable<NEvenement?>> GetAllNEvenements()
         {
             return _nEvenementRepository.GetAllNEvenements();
         }
 
-        public NEvenement? GetByIdNEvenement(int nEvenement_Id)
+        public Task<NEvenement?> GetByIdNEvenement(int nEvenement_Id)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public NEvenement? UpdateNEvenement(DateTime nEvenementDate, string nEvenementName, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
+        public Task<NEvenement?> UpdateNEvenement(DateTime nEvenementDate, string nEvenementName, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating event : {ex}");
             }
-            return new NEvenement();
+            return null;
         }
     }
 }

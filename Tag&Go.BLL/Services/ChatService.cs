@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Chat? DeleteMessage(int chat_Id)
+        public Task<Chat?> DeleteMessage(int chat_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<Chat?> GetAllMessages()
+        public Task<IEnumerable<Chat?>> GetAllMessages()
         {
             return _chatRepository.GetAllMessages();
         }
 
-        public Chat? GetByIdChat(int chat_Id)
+        public Task<Chat?> GetByIdChat(int chat_Id)
         {
             try
             {

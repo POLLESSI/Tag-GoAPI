@@ -24,16 +24,26 @@ namespace Tag_GoAPI.Controllers
             _recompenseHub = recompenseHub;
         }
         [HttpGet]
-        public ActionResult GetAllRecompenses()
-        {
-            return Ok(_recompenseRepository.GetAllRecompenses());
-        }
-        [HttpGet("{recompense_Id}")]
-        public ActionResult GetByIdRecompense(int recompense_Id)
+        public async Task<IActionResult> GetAllRecompenses()
         {
             try
             {
-                var recompense = _recompenseRepository.GetByIdRecompense(recompense_Id);
+                var recompenses = await _recompenseRepository.GetAllRecompenses();
+                return Ok(recompenses);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{recompense_Id}")]
+        public async Task<IActionResult> GetByIdRecompense(int recompense_Id)
+        {
+            try
+            {
+                var recompense = await _recompenseRepository.GetByIdRecompense(recompense_Id);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -72,17 +82,35 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpPut("{recompense_Id}")]
-        public IActionResult UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
+        public async Task<IActionResult> UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
         {
-            _recompenseRepository.UpdateRecompense(definition, point, implication, granted, recompense_Id);
-            return Ok();
+            try
+            {
+                var recompense = await _recompenseRepository.UpdateRecompense(definition, point, implication, granted, recompense_Id);
+                return Ok(recompense);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveRecompenseUpdate(Dictionary<string, RecompenseHub> newUpdate)
+        public async Task<IActionResult> ReceiveRecompenseUpdate(Dictionary<string, RecompenseHub> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentRecompense[item.Key] = item.Value;
+                try
+                {
+                    _currentRecompense[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentRecompense);
         }

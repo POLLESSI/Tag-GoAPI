@@ -73,14 +73,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public NPerson? DeleteNPerson(int nPerson_Id)
+        public Task<NPerson?> DeleteNPerson(int nPerson_Id)
         {
             try
             {
                 string sql = "DELETE FROM NPerson WHERE NPerson_Id = @nPerson_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nPerson_Id", nPerson_Id);
-                return _connection.QueryFirst<NPerson?>(sql, parameters);
+                return _connection.QueryFirstAsync<NPerson?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -90,20 +90,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<NPerson?> GetAllNPersons()
+        public Task<IEnumerable<NPerson?>> GetAllNPersons()
         {
             string sql = "SELECT * FROM NPerson";
-            return _connection.Query<NPerson?>(sql);
+            return _connection.QueryAsync<NPerson?>(sql);
         }
 
-        public NPerson? GetByIdNPerson(int nPerson_Id)
+        public Task<NPerson?> GetByIdNPerson(int nPerson_Id)
         {
             try
             {
                 string sql = "SELECT * FROM NPerson WHERE NPerson_Id = @nPerson_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nPerson_Id", nPerson_Id);
-                return _connection.QueryFirst<NPerson?>(sql, parameters);
+                return _connection.QueryFirstAsync<NPerson?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -113,7 +113,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public NPerson? UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
+        public Task<NPerson> UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@telephone", telephone);
                 parameters.Add("@gsm", gsm);
                 parameters.Add("@nPerson_Id", nPerson_Id);
-                return _connection.QueryFirst<NPerson?>(sql, parameters);
+                return _connection.QueryFirstAsync<NPerson?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -141,7 +141,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating Person : {ex}");
             }
-            return new NPerson();
+            return null;
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Tag_Go.DAL.Interfaces
     #nullable disable
         bool Create(Activity activity);
         void CreateActivity(Activity activity);
-        IEnumerable<Activity?> GetAllActivities();
-        Activity? GetByIdActivity(int activity_Id);
-        Activity? DeleteActivity(int activity_Id);
-        Activity? UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id);
+        Task <IEnumerable<Activity?>> GetAllActivities();
+        Task<Activity?> GetByIdActivity(int activity_Id);
+        Task<Activity?> DeleteActivity(int activity_Id);
+        Task<Activity?> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id);
     }
 }

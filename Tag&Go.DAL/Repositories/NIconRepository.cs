@@ -60,14 +60,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public NIcon? DeleteNIcon(int nIcon_Id)
+        public Task<NIcon?> DeleteNIcon(int nIcon_Id)
         {
             try
             {
                 string sql = "DELETE FROM NIcon WHERE NIcon_Id = @nIcon_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nIcon_Id", nIcon_Id);
-                return _connection.QueryFirst<NIcon?>(sql, parameters);
+                return _connection.QueryFirstAsync<NIcon?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -77,20 +77,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<NIcon?> GetAllNIcons()
+        public Task<IEnumerable<NIcon?>> GetAllNIcons()
         {
             string sql = "SELECT * FROM NIcon";
-            return _connection.Query<NIcon?>(sql);
+            return _connection.QueryAsync<NIcon?>(sql);
         }
 
-        public NIcon? GetByIdNIcon(int nIcon_Id)
+        public Task<NIcon?> GetByIdNIcon(int nIcon_Id)
         {
             try
             {
                 string sql = "SELECT * FROM NIcon WHERE NIcon_Id = @nIcon_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nIcon_Id", nIcon_Id);
-                return _connection.QueryFirst<NIcon?>(sql, parameters);
+                return _connection.QueryFirstAsync<NIcon?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public NIcon? UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id)
+        public Task<NIcon?> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@nIconDescription", nIconDescription);
                 parameters.Add("@nIconUrl", nIconUrl);
                 parameters.Add("@nIcon_Id", nIcon_Id);
-                return _connection.QueryFirst<NIcon?>(sql, parameters);
+                return _connection.QueryFirstAsync<NIcon?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -121,7 +121,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error Updating Icon : {ex}");
             }
-            return new NIcon();
+            return null;
         }
     }
 }

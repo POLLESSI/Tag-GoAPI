@@ -60,14 +60,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Recompense? DeleteRecompense(int recompense_Id)
+        public Task<Recompense?> DeleteRecompense(int recompense_Id)
         {
             try
             {
                 string sql = "DELETE FROM Recompense WHERE Recompense_Id = @recompense_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@recompense_Id", recompense_Id);
-                return _connection.QueryFirst<Recompense?>(sql, parameters);
+                return _connection.QueryFirstAsync<Recompense?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -77,20 +77,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<Recompense?> GetAllRecompenses()
+        public Task<IEnumerable<Recompense?>> GetAllRecompenses()
         {
             string sql = "SELECT * FROM Recompense";
-            return _connection.Query<Recompense?>(sql);
+            return _connection.QueryAsync<Recompense?>(sql);
         }
 
-        public Recompense? GetByIdRecompense(int recompense_Id)
+        public Task<Recompense?> GetByIdRecompense(int recompense_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Recompense WHERE Recompense_Id = @recompense_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@recompense_Id", recompense_Id);
-                return _connection.QueryFirst<Recompense?>(sql, parameters);
+                return _connection.QueryFirstAsync<Recompense?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Recompense? UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
+        public Task<Recompense?> UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@implication", implication);
                 parameters.Add("@granted", granted);
                 parameters.Add("@recompense_Id", recompense_Id);
-                return _connection.QueryFirst<Recompense?>(sql, parameters);
+                return _connection.QueryFirstAsync<Recompense?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -122,7 +122,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating Recompense : {ex}");
             }
-            return new Recompense();
+            return null;
         }
     }
 }

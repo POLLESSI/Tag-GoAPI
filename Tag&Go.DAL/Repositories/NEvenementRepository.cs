@@ -75,14 +75,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public NEvenement? DeleteNEvenement(int nEvenement_Id)
+        public Task<NEvenement?> DeleteNEvenement(int nEvenement_Id)
         {
             try
             {
                 string sql = "DELETE FROM NEvenement WHERE NEvenement_Id = @nEvenement_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nEvenement_Id", nEvenement_Id);
-                return _connection.QueryFirst<NEvenement?>(sql, parameters);
+                return _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -92,20 +92,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<NEvenement?> GetAllNEvenements()
+        public Task<IEnumerable<NEvenement?>> GetAllNEvenements()
         {
             string sql = "SELECT * FROM NEvenement";
-            return _connection.Query<NEvenement?>(sql);
+            return _connection.QueryAsync<NEvenement?>(sql);
         }
 
-        public NEvenement? GetByIdNEvenement(int nEvenement_Id)
+        public Task<NEvenement?> GetByIdNEvenement(int nEvenement_Id)
         {
             try
             {
                 string sql = "SELECT * FROM NEvenement WHERE NEvenement_Id = @nEvenement_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nEvenement_Id", nEvenement_Id);
-                return _connection.QueryFirst<NEvenement?>(sql, parameters);
+                return _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -115,7 +115,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public NEvenement? UpdateNEvenement(DateTime nEvenementDate, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
+        public Task<NEvenement?> UpdateNEvenement(DateTime nEvenementDate, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@mediaItem", mediaItem_Id);
                 parameters.Add("@nEvenement_Id", nEvenement_Id);
 
-                return _connection.QueryFirst<NEvenement?>(sql, parameters);
+                return _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -144,7 +144,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating event : {ex}");
             }
-            return new NEvenement();
+            return null;
         }
     }
 }

@@ -24,16 +24,25 @@ namespace Tag_GoAPI.Controllers
             _nVoteHub = nVoteHub;
         }
         [HttpGet]
-        public IActionResult GetAllNVotes()
-        {
-            return Ok(_nVoteRepository.GetAllNVotes());
-        }
-        [HttpGet("{nVote_Id}")]
-        public IActionResult GetByIdNVote(int nVote_Id) 
+        public async Task<IActionResult> GetAllNVotes()
         {
             try
             {
-                var nvote = _nVoteRepository.GetByIdNVote(nVote_Id);
+                var nvotes = await _nVoteRepository.GetAllNVotes();
+                return Ok(nvotes);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpGet("{nVote_Id}")]
+        public async Task<IActionResult> GetByIdNVote(int nVote_Id) 
+        {
+            try
+            {
+                var nvote = await _nVoteRepository.GetByIdNVote(nVote_Id);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -71,17 +80,40 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{nVote_Id}")]
-        public IActionResult DeleteNVote(int nVote_Id)
+        public async Task<IActionResult> DeleteNVote(int nVote_Id)
         {
-            _nVoteRepository.DeleteNVote(nVote_Id);
-            return Ok();
+            try
+            {
+                var nvote = await _nVoteRepository.DeleteNVote(nVote_Id);
+                if (!ModelState.IsValid) 
+                {
+                    return NotFound();
+                    
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveVoteUpdate(Dictionary<string, NVoteHub> newUpdate)
+        public async Task<IActionResult> ReceiveVoteUpdate(Dictionary<string, NVoteHub> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentNVote[item.Key] = item.Value;
+                try
+                {
+                    _currentNVote[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentNVote);
         }

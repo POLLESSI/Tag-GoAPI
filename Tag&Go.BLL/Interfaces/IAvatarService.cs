@@ -13,9 +13,9 @@ namespace Tag_Go.BLL.Interfaces
     #nullable disable
         bool Create(Avatar avatar);
         void CreateAvatar(Avatar avatar);
-        IEnumerable<Avatar?> GetAllAvatars();
-        Avatar? GetByIdAvatar(int avatar_Id);
-        Avatar? DeleteAvatar(int avatar_Id);
-        Avatar? UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description);
+        Task <IEnumerable<Avatar?>> GetAllAvatars();
+        Task<Avatar?> GetByIdAvatar(int avatar_Id);
+        Task<Avatar?> DeleteAvatar(int avatar_Id);
+        Task<Avatar?> UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description);
     }
 }

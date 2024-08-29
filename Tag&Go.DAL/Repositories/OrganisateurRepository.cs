@@ -61,14 +61,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Organisateur? DeleteOrganisateur(int organisateur_Id)
+        public Task<Organisateur?> DeleteOrganisateur(int organisateur_Id)
         {
             try
             {
                 string sql = "DELETE FROM Organisateur WHERE Organisateur_Id = @organisateur_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@organisateur_Id", organisateur_Id);
-                return _connection.QueryFirst<Organisateur?>(sql, parameters);
+                return _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -78,20 +78,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<Organisateur?> GetAllOrganisateurs()
+        public Task<IEnumerable<Organisateur?>> GetAllOrganisateurs()
         {
             string sql = "SELECT * FROM Organisateur";
-            return _connection.Query<Organisateur?>(sql);
+            return _connection.QueryAsync<Organisateur?>(sql);
         }
 
-        public Organisateur? GetByIdOrganisateur(int organisateur_Id)
+        public Task<Organisateur?> GetByIdOrganisateur(int organisateur_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Organisateur WHERE Organisateur_Id = @organisateur_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@organisateur_Id", organisateur_Id);
-                return _connection.QueryFirst<Organisateur?>(sql, parameters);
+                return _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Organisateur? UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
+        public Task<Organisateur?> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@nUser_Id", nUser_Id);
                 parameters.Add("@point", point);
                 parameters.Add("@organisateur_Id", organisateur_Id);
-                return _connection.QueryFirst<Organisateur?>(sql, parameters);
+                return _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -123,7 +123,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating Organisator : {ex}");
             }
-            return new Organisateur();
+            return null;
         }
     }
 }

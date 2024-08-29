@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Recompense? DeleteRecompense(int recompense_Id)
+        public Task<Recompense?> DeleteRecompense(int recompense_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<Recompense?> GetAllRecompenses()
+        public Task<IEnumerable<Recompense?>> GetAllRecompenses()
         {
             return _recompenseRepository.GetAllRecompenses();
         }
 
-        public Recompense? GetByIdRecompense(int recompense_Id)
+        public Task<Recompense?> GetByIdRecompense(int recompense_Id)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Recompense? UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
+        public Task<Recompense?> UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating recompense : {ex}");
             }
-            return new Recompense();
+            return null;
         }
     }
 }

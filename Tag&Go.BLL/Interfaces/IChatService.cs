@@ -13,8 +13,8 @@ namespace Tag_Go.BLL.Interfaces
     #nullable disable
         bool Create(Chat chat);
         void CreateChat(Chat chat);
-        IEnumerable<Chat?> GetAllMessages();
-        Chat? GetByIdChat(int chat_Id);
-        Chat? DeleteMessage(int chat_Id);
+        Task<IEnumerable<Chat?>> GetAllMessages();
+        Task<Chat?> GetByIdChat(int chat_Id);
+        Task<Chat?> DeleteMessage(int chat_Id);
     }
 }

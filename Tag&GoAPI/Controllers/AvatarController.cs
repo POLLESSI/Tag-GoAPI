@@ -24,16 +24,26 @@ namespace Tag_GoAPI.Controllers
             _avatarHub = avatarHub;
         }
         [HttpGet]
-        public IActionResult GetAllAvatars()
-        {
-            return Ok(_avatarRepository.GetAllAvatars());
-        }
-        [HttpGet("{avatar_Id}")]
-        public IActionResult GetByIdAvatar(int avatar_Id)
+        public async Task <IActionResult> GetAllAvatars()
         {
             try
             {
-                var avatar = _avatarRepository.GetByIdAvatar(avatar_Id);
+                var avatars = await _avatarRepository.GetAllAvatars();
+                return Ok(avatars);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
+            
+        }
+        [HttpGet("{avatar_Id}")]
+        public async Task<IActionResult> GetByIdAvatar(int avatar_Id)
+        {
+            try
+            {
+                var avatar = await _avatarRepository.GetByIdAvatar(avatar_Id);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -72,23 +82,55 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{avatar_Id}")]
-        public IActionResult DeleteAvatar(int avatar_Id)
+        public async Task<IActionResult> DeleteAvatar(int avatar_Id)
         {
-            _avatarRepository.DeleteAvatar(avatar_Id);
-            return Ok();
+            try
+            {
+                var avatar = await _avatarRepository.DeleteAvatar(avatar_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _avatarRepository.DeleteAvatar(avatar_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+           
         }
         [HttpPut("{avatar_Id}")]
-        public IActionResult UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description)
+        public async Task<IActionResult> UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description)
         {
-            _avatarRepository.UpdateAvatar(avatar_Id, avatarName, avatarUrl, description);
-            return Ok();
+            try
+            {
+                var avatar = await _avatarRepository.UpdateAvatar(avatar_Id, avatarName, avatarUrl, description);
+                
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveAvatarUpdate(Dictionary<string, AvatarHub> newUpdate)
+        public async Task<IActionResult> ReceiveAvatarUpdate(Dictionary<string, AvatarHub> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentAvatar[item.Key] = item.Value;
+                try
+                {
+                    _currentAvatar[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentAvatar);
         }

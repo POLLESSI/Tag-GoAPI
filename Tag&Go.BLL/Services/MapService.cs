@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Map? DeleteMap(int map_Id)
+        public Task<Map?> DeleteMap(int map_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<Map?> GetAllMaps()
+        public Task<IEnumerable<Map?>> GetAllMaps()
         {
             return _mapRepository.GetAllMaps();
         }
 
-        public Map? GetByIdMap(int map_Id)
+        public Task<Map?> GetByIdMap(int map_Id)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Map? UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
+        public Task<Map?> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating map : {ex}");
             }
-            return new Map();
+            return null;
         }
     }
 }
