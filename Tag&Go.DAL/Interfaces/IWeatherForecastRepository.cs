@@ -12,9 +12,9 @@ namespace Tag_Go.DAL.Interfaces
     #nullable disable
         bool Create(WeatherForecast wearherForecast);
         void CreateWeatherForecast(WeatherForecast weatherForecast);
-        IEnumerable<WeatherForecast?> GetAllWeatherForecasts();
-        WeatherForecast? GetByIdWeatherForecast(int weatherForecast_Id);
-        WeatherForecast? DeleteWeatherForecast(int weatherForecast_Id);
-        WeatherForecast? UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id);
+        Task<IEnumerable<WeatherForecast?>> GetAllWeatherForecasts();
+        Task<WeatherForecast?> GetByIdWeatherForecast(int weatherForecast_Id);
+        Task<WeatherForecast?> DeleteWeatherForecast(int weatherForecast_Id);
+        Task<WeatherForecast?> UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id);
     }
 }

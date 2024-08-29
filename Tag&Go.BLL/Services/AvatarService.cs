@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Avatar? DeleteAvatar(int avatar_Id)
+        public Task<Avatar?> DeleteAvatar(int avatar_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<Avatar?> GetAllAvatars()
+        public Task <IEnumerable<Avatar?>> GetAllAvatars()
         {
             return _avatarRepository.GetAllAvatars();
         }
 
-        public Avatar? GetByIdAvatar(int avatar_Id)
+        public Task<Avatar?> GetByIdAvatar(int avatar_Id)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Avatar? UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description)
+        public Task<Avatar?> UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating avatar : {ex}");
             }
-            return new Avatar();
+            return null;
         }
     }
 }

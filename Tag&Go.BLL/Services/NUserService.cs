@@ -49,7 +49,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public NUser? DeleteNUser(int nUser_Id)
+        public Task<NUser?> DeleteNUser(int nUser_Id)
         {
             try
             {
@@ -63,12 +63,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<NUser?> GetAllNUsers()
+        public Task<IEnumerable<NUser?>> GetAllNUsers()
         {
             return _nUserRepository.GetAllNUsers();
         }
 
-        public NUser? GetByIdNUser(int nUser_Id)
+        public Task<NUser?> GetByIdNUser(int nUser_Id)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public NUser? LoginNUser(string? email, string? pwd)
+        public Task<NUser?> LoginNUser(string? email, string? pwd)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public NUser? UpdateNUser(int nUser_Id, string? email, string? pwd, int nPerson_Id, string? role_Id, int avatar_Id, string? point)
+        public Task<NUser?> UpdateNUser(int nUser_Id, string? email, string? pwd, int nPerson_Id, string? role_Id, int avatar_Id, string? point)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating user: {ex}");
             }
-            return new NUser();
+            return null;
         }
     }
 }

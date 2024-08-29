@@ -24,16 +24,26 @@ namespace Tag_GoAPI.Controllers
             _nIconHub = nIconHub;
         }
         [HttpGet]
-        public IActionResult GetAllNIcons()
-        {
-            return Ok(_nIconRepository.GetAllNIcons());
-        }
-        [HttpGet("{nIcon_Id}")]
-        public IActionResult GetByIdNIcon(int nIconId)
+        public async Task<IActionResult> GetAllNIcons()
         {
             try
             {
-                var nicon = _nIconRepository.GetByIdNIcon(nIconId);
+                var nicons = await _nIconRepository.GetAllNIcons();
+                return Ok(nicons);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{nIcon_Id}")]
+        public async Task<IActionResult> GetByIdNIcon(int nIconId)
+        {
+            try
+            {
+                var nicon = await _nIconRepository.GetByIdNIcon(nIconId);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -72,23 +82,55 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{nIcon_Id}")]
-        public IActionResult DeleteNIcon(int nIconId)
+        public async Task<IActionResult> DeleteNIcon(int nIconId)
         {
-            _nIconRepository.DeleteNIcon(nIconId);
-            return Ok();
+            try
+            {
+                var nicon = await _nIconRepository.DeleteNIcon(nIconId);
+                if (!ModelState.IsValid)
+                {
+                    await _nIconRepository.DeleteNIcon(nIconId);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPut("{nIcon_Id}")]
-        public IActionResult UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIconId)
+        public async Task<IActionResult> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIconId)
         {
-            _nIconRepository.UpdateNIcon(nIconName, nIconDescription, nIconUrl, nIconId);
-            return Ok();
+            try
+            {
+                var nicon = await _nIconRepository.UpdateNIcon(nIconName, nIconDescription, nIconUrl, nIconId);
+
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveIconUpdate(Dictionary<string, NIconHub> newUpdate)
+        public async Task<IActionResult> ReceiveIconUpdate(Dictionary<string, NIconHub> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentNIcon[item.Key] = item.Value;
+                try
+                {
+                    _currentNIcon[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentNIcon);
         }

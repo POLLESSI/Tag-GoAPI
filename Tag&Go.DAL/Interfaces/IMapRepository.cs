@@ -12,9 +12,9 @@ namespace Tag_Go.DAL.Interfaces
     #nullable disable
         bool Create(Map map);
         void CreateMap(Map map);
-        IEnumerable<Map?> GetAllMaps();
-        Map? GetByIdMap(int map_Id);
-        Map? DeleteMap(int map_Id);
-        Map? UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description);
+        Task<IEnumerable<Map?>> GetAllMaps();
+        Task<Map?> GetByIdMap(int map_Id);
+        Task<Map?> DeleteMap(int map_Id);
+        Task<Map?> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description);
     }
 }

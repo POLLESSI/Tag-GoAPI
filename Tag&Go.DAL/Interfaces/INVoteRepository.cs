@@ -12,8 +12,8 @@ namespace Tag_Go.DAL.Interfaces
     #nullable disable
         bool Create(NVote nVote);
         void CreateVote(NVote nVote);
-        IEnumerable<NVote?> GetAllNVotes();
-        NVote? GetByIdNVote(int nVote_Id);
-        NVote? DeleteNVote(int nVote_Id);
+        Task<IEnumerable<NVote?>> GetAllNVotes();
+        Task<NVote?> GetByIdNVote(int nVote_Id);
+        Task<NVote?> DeleteNVote(int nVote_Id);
     }
 }

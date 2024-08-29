@@ -23,16 +23,26 @@ namespace Tag_GoAPI.Controllers
             _chatHub = chatHub;
         }
         [HttpGet]
-        public IActionResult GetAllMessages()
-        {
-            return Ok(_chatRepository.GetAllMessages());
-        }
-        [HttpGet("{chat_Id}")]
-        public IActionResult GetByIdChat(int chat_Id)
+        public async Task<IActionResult> GetAllMessages()
         {
             try
             {
-                var chat = _chatRepository.GetByIdChat(chat_Id);
+                var chat = await _chatRepository.GetAllMessages();
+                return Ok(chat);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{chat_Id}")]
+        public async Task<IActionResult> GetByIdChat(int chat_Id)
+        {
+            try
+            {
+                var chat = await _chatRepository.GetByIdChat(chat_Id);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -71,10 +81,23 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{chat_Id}")]
-        public IActionResult DeleteMessage(int chat_Id)
+        public async Task<IActionResult> DeleteMessage(int chat_Id)
         {
-            _chatRepository.DeleteMessage(chat_Id);
-            return Ok();
+            try
+            {
+                var message = await _chatRepository.DeleteMessage(chat_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _chatRepository.DeleteMessage(chat_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
     }
 }

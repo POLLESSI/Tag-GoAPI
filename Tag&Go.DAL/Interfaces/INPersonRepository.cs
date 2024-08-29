@@ -12,9 +12,9 @@ namespace Tag_Go.DAL.Interfaces
     #nullable disable
         bool Create(NPerson nPerson);
         void CreatePerson(NPerson nPerson);
-        IEnumerable<NPerson?> GetAllNPersons();
-        NPerson? GetByIdNPerson(int nPerson_Id);
-        NPerson? DeleteNPerson(int nPerson_Id);
-        NPerson? UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id);
+        Task<IEnumerable<NPerson?>> GetAllNPersons();
+        Task<NPerson?> GetByIdNPerson(int nPerson_Id);
+        Task<NPerson?> DeleteNPerson(int nPerson_Id);
+        Task<NPerson?> UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id);
     }
 }

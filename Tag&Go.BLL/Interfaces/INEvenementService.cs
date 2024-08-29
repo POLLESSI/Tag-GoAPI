@@ -13,9 +13,9 @@ namespace Tag_Go.BLL.Interfaces
     #nullable disable
         bool Create(NEvenement nEvenement);
         void CreateEvenement(NEvenement nEvenement);
-        IEnumerable<NEvenement?> GetAllNEvenements();
-        NEvenement? GetByIdNEvenement(int nEvenement_Id);
-        NEvenement? DeleteNEvenement(int nEvenement_Id);
-        NEvenement? UpdateNEvenement(DateTime nEvenementDate, string nEvenementName, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id);
+        Task<IEnumerable<NEvenement?>> GetAllNEvenements();
+        Task<NEvenement?> GetByIdNEvenement(int nEvenement_Id);
+        Task<NEvenement?> DeleteNEvenement(int nEvenement_Id);
+        Task<NEvenement?> UpdateNEvenement(DateTime nEvenementDate, string nEvenementName, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id);
     }
 }

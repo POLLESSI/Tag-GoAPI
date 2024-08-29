@@ -59,14 +59,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public MediaItem? DeleteMediaItem(int mediaItem_Id)
+        public Task<MediaItem?> DeleteMediaItem(int mediaItem_Id)
         {
             try
             {
                 string sql = "DELETE FROM MediaItem WHERE MediaItem_Id = @mediaItem_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@mediaItem_Id", mediaItem_Id);
-                return _connection.QueryFirst<MediaItem?>(sql, parameters);
+                return _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -76,20 +76,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<MediaItem?> GetAllMediaItems()
+        public Task<IEnumerable<MediaItem?>> GetAllMediaItems()
         {
             string sql = "SELECT * FROM MediaItem";
-            return _connection.Query<MediaItem?>(sql);
+            return _connection.QueryAsync<MediaItem?>(sql);
         }
 
-        public MediaItem? GetByIdMediaItem(int mediaItem_Id)
+        public Task<MediaItem?> GetByIdMediaItem(int mediaItem_Id)
         {
             try
             {
                 string sql = "SELECT * FROM MediaItem WHERE MediaItem_Id = @mediaItem_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@mediaItem_Id", mediaItem_Id);
-                return _connection.QueryFirst<MediaItem?>(sql, parameters);
+                return _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -99,7 +99,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public MediaItem? UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
+        public Task<MediaItem?> UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@mediaType", mediaType);
                 parameters.Add("@urlItem", urlItem);
                 parameters.Add("description", description);
-                return _connection.QueryFirst<MediaItem?>(sql, parameters);
+                return _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -119,7 +119,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating Media Item : {ex}");
             }
-            return new MediaItem();
+            return null;
         }
     }
 }

@@ -59,14 +59,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Map? DeleteMap(int map_Id)
+        public Task<Map?> DeleteMap(int map_Id)
         {
             try
             {
                 string sql = "DELETE FROM Map WHERE Map_Id = @map_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@map_Id", map_Id);
-                return _connection.QueryFirst<Map?>(sql, parameters);
+                return _connection.QueryFirstAsync<Map?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -76,20 +76,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<Map?> GetAllMaps()
+        public Task<IEnumerable<Map?>> GetAllMaps()
         {
             string sql = "SELECT * FROM Map";
-            return _connection.Query<Map?>(sql);
+            return _connection.QueryAsync<Map?>(sql);
         }
 
-        public Map? GetByIdMap(int map_Id)
+        public Task<Map?> GetByIdMap(int map_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Map WHERE Map_Id = @map_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@map_Id", map_Id);
-                return _connection.QueryFirst<Map?>(sql, parameters);
+                return _connection.QueryFirstAsync<Map?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -99,7 +99,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Map? UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
+        public Task<Map?> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@dateCreation", dateCreation);
                 parameters.Add("@mapUrl", mapUrl);
                 parameters.Add("description", description);
-                return _connection.QueryFirst<Map?>(sql, parameters);
+                return _connection.QueryFirstAsync<Map?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -119,7 +119,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error Updating Map : {ex}");
             }
-            return new Map();
+            return null;
         }
     }
 }

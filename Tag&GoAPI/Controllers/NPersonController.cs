@@ -24,16 +24,26 @@ namespace Tag_GoAPI.Controllers
             _nPersonHub = nPersonHub;
         }
         [HttpGet]
-        public IActionResult GetAllNPersons()
-        {
-            return Ok(_nPersonRepository.GetAllNPersons());
-        }
-        [HttpGet("{person_Id}")]
-        public IActionResult GetByIdNPerson(int nPerson_Id)
+        public async Task<IActionResult> GetAllNPersons()
         {
             try
             {
-                var nperson = _nPersonRepository.GetByIdNPerson(nPerson_Id);
+                var npersons = await _nPersonRepository.GetAllNPersons();
+                return Ok(npersons);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{person_Id}")]
+        public async Task<IActionResult> GetByIdNPerson(int nPerson_Id)
+        {
+            try
+            {
+                var nperson = await _nPersonRepository.GetByIdNPerson(nPerson_Id);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -73,23 +83,54 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{nPerson_Id}")]
-        public IActionResult DeleteNPerson(int nPerson_Id)
+        public async Task<IActionResult> DeleteNPerson(int nPerson_Id)
         {
-            _nPersonRepository.DeleteNPerson(nPerson_Id);
-            return Ok();
+            try
+            {
+                var nperson = await _nPersonRepository.DeleteNPerson(nPerson_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _nPersonRepository.DeleteNPerson(nPerson_Id);
+                }
+                return Ok(nperson);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPut("{nPerson_Id}")]
-        public IActionResult UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
+        public async Task<IActionResult> UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
         {
-            _nPersonRepository.UpdateNPerson(lastname, firstname, email, address_Street, address_Nbr, postalCode, address_City, address_Country, telephone, gsm, nPerson_Id);
-            return Ok();
+            try
+            {
+                var nperson = await _nPersonRepository.UpdateNPerson(lastname, firstname, email, address_Street, address_Nbr, postalCode, address_City, address_Country, telephone, gsm, nPerson_Id);
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceivePersonUpdate(Dictionary<string, NPersonHub> newUpdate)
+        public async Task<IActionResult> ReceivePersonUpdate(Dictionary<string, NPersonHub> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentNPerson[item.Key] = item.Value;
+                try
+                {
+                    _currentNPerson[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentNPerson);
         }

@@ -13,9 +13,9 @@ namespace Tag_Go.BLL.Interfaces
     #nullable disable
         bool Create(Recompense recompense);
         void CreateRecompense(Recompense recompense);
-        IEnumerable<Recompense?> GetAllRecompenses();
-        Recompense? GetByIdRecompense(int recompense_Id);
-        Recompense? DeleteRecompense(int recompense_Id);
-        Recompense? UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id);
+        Task<IEnumerable<Recompense?>> GetAllRecompenses();
+        Task<Recompense?> GetByIdRecompense(int recompense_Id);
+        Task<Recompense?> DeleteRecompense(int recompense_Id);
+        Task<Recompense?> UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id);
     }
 }

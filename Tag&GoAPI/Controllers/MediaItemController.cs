@@ -24,16 +24,26 @@ namespace Tag_GoAPI.Controllers
             _mediaItemHub = mediaItemHub;
         }
         [HttpGet]
-        public ActionResult GetAllMediaItems()
-        {
-            return Ok(_mediaItemRepository.GetAllMediaItems());
-        }
-        [HttpGet("{mediaItem_Id}")]
-        public ActionResult GetById(int mediaItem_Id)
+        public async Task<ActionResult> GetAllMediaItems()
         {
             try
             {
-                var mediaItem = _mediaItemRepository.GetByIdMediaItem(mediaItem_Id);
+                var mediaitems = await _mediaItemRepository.GetAllMediaItems();
+                return Ok(mediaitems);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{mediaItem_Id}")]
+        public async Task<ActionResult> GetById(int mediaItem_Id)
+        {
+            try
+            {
+                var mediaItem = await _mediaItemRepository.GetByIdMediaItem(mediaItem_Id);
                 if (!ModelState.IsValid) 
                 { 
                     return NotFound();
@@ -72,23 +82,54 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{mediaItem_Id}")]
-        public IActionResult DeleteMediaItem(int mediaItem_Id)
+        public async Task<IActionResult> DeleteMediaItem(int mediaItem_Id)
         {
-            _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
-            return Ok();
+            try
+            {
+                var mediaitem = await _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPut("{mediaItem_Id}")]
-        public IActionResult UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
+        public async Task<IActionResult> UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
         {
-            _mediaItemRepository.UpdateMediaItem(mediaItem_Id, mediaType, urlItem, description);
-            return Ok();
+            try
+            {
+                var mediaitem = await _mediaItemRepository.UpdateMediaItem(mediaItem_Id, mediaType, urlItem, description);
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveMediaItemUpdate(Dictionary<string, MediaItemHub> newUpdate)
+        public async Task<IActionResult> ReceiveMediaItemUpdate(Dictionary<string, MediaItemHub> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentMediaItem[item.Key] = item.Value;
+                try
+                {
+                    _currentMediaItem[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentMediaItem);
         }

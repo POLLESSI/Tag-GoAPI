@@ -59,14 +59,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Avatar? DeleteAvatar(int avatar_Id)
+        public Task<Avatar?> DeleteAvatar(int avatar_Id)
         {
             try
             {
                 string sql = "DELETE FROM Avatar WHERE Avatar_Id = @avatar_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@avatar_Id", avatar_Id);
-                return _connection.QueryFirst<Avatar?>(sql, parameters);
+                return _connection.QueryFirstAsync<Avatar?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -76,20 +76,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<Avatar?> GetAllAvatars()
+        public async Task <IEnumerable<Avatar?>> GetAllAvatars()
         {
             string sql = "SELECT * FROM Avatar";
-            return _connection.Query<Avatar?>(sql);
+            return await _connection.QueryAsync<Avatar?>(sql);
         }
 
-        public Avatar? GetByIdAvatar(int avatar_Id)
+        public Task<Avatar?> GetByIdAvatar(int avatar_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Avatar WHERE Avatar_Id = @avatar_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@avatar_Id", avatar_Id);
-                return _connection.QueryFirst<Avatar?>(sql, parameters);
+                return _connection.QueryFirstAsync<Avatar?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -99,7 +99,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Avatar? UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description)
+        public Task<Avatar?> UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@avatarName", avatarName);
                 parameters.Add("@avatarUrl", avatarUrl);
                 parameters.Add("@description", description);
-                return _connection.QueryFirst<Avatar?>(sql, parameters);
+                return _connection.QueryFirstAsync<Avatar?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -119,7 +119,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating avatar : {ex}");
             }
-            return new Avatar();
+            return null;
         }
     }
 }

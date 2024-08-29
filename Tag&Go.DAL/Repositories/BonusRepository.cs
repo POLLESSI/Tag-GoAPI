@@ -61,14 +61,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Bonus? DeleteBonus(int bonus_Id)
+        public Task<Bonus?> DeleteBonus(int bonus_Id)
         {
             try
             {
                 string sql = "DELETE FROM Bonus WHERE Bonus_Id = @bonus_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@bonus_Id", bonus_Id);
-                return _connection.QueryFirst<Bonus?>(sql, parameters);
+                return _connection.QueryFirstAsync<Bonus?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -78,20 +78,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<Bonus?> GetAllBonuss()
+        public Task<IEnumerable<Bonus?>> GetAllBonuss()
         {
             string sql = "SELECT * FROM Bonus";
-            return _connection.Query<Bonus?>(sql);
+            return _connection.QueryAsync<Bonus?>(sql);
         }
 
-        public Bonus? GetByIdBonus(int bonus_Id)
+        public Task<Bonus?> GetByIdBonus(int bonus_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Bonus WHERE Bonus_Id = @bonus_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@bonus_Id", bonus_Id);
-                return _connection.QueryFirst<Bonus?>(sql, parameters);
+                return _connection.QueryFirstAsync<Bonus?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Bonus? UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
+        public Task<Bonus?> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@bonusDescription", bonusDescription);
                 parameters.Add("@application", application);
                 parameters.Add("@granted", granted);
-                return _connection.QueryFirst<Bonus?>(sql, parameters);
+                return _connection.QueryFirstAsync<Bonus?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -122,7 +122,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating Bonus : {ex}");
             }
-            return new Bonus();
+            return null;
         }
     }
 }

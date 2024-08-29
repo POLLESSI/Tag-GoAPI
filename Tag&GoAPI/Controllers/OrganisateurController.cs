@@ -24,9 +24,19 @@ namespace Tag_GoAPI.Controllers
             _organisateurHub = organisateurHub;
         }
         [HttpGet]
-        public IActionResult GetAllOrganisateurs()
+        public async Task<IActionResult> GetAllOrganisateurs()
         {
-            return Ok(_organisateurRepository.GetAllOrganisateurs());
+            try
+            {
+                var organisateurs = await _organisateurRepository.GetAllOrganisateurs();
+                return Ok(organisateurs);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpGet("{organisateur_id}")]
         public IActionResult GetByIdOrganisateur(int organisateur_Id)
@@ -72,23 +82,55 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{organisateur_id}")]
-        public IActionResult DeleteOrganisateur(int organisateur_Id)
+        public async Task<IActionResult> DeleteOrganisateur(int organisateur_Id)
         {
-            _organisateurRepository.DeleteOrganisateur(organisateur_Id);
-            return Ok();
+            try
+            {
+                var organisateur = await _organisateurRepository.DeleteOrganisateur(organisateur_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPut("{organisateur_Id}")]
-        public IActionResult UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
+        public async Task<IActionResult> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
         {
-            _organisateurRepository.UpdateOrganisateur(companyName, businessNumber, nUser_Id, point, organisateur_Id);
-            return Ok();
+            try
+            {
+                _organisateurRepository.UpdateOrganisateur(companyName, businessNumber, nUser_Id, point, organisateur_Id);
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveOrganisateurUpdate(Dictionary<string, OrganisateurHub> newOrganisateur)
+        public async Task<IActionResult> ReceiveOrganisateurUpdate(Dictionary<string, OrganisateurHub> newOrganisateur)
         {
             foreach (var item in newOrganisateur)
             {
-                _currentOrganisateur[item.Key] = item.Value;
+                try
+                {
+                    _currentOrganisateur[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentOrganisateur);
         }

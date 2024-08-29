@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public WeatherForecast? DeleteWeatherForecast(int weatherForecast_Id)
+        public Task<WeatherForecast?> DeleteWeatherForecast(int weatherForecast_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<WeatherForecast> GetAllWeatherForecasts()
+        public Task<IEnumerable<WeatherForecast>> GetAllWeatherForecasts()
         {
             return _weatherForecastRepository.GetAllWeatherForecasts();
         }
 
-        public WeatherForecast? GetByIdWeatherForecast(int weatherForecast_Id)
+        public Task<WeatherForecast?> GetByIdWeatherForecast(int weatherForecast_Id)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public WeatherForecast? UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id)
+        public Task<WeatherForecast?> UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating weather forecast: {ex}");
             }
-            return new WeatherForecast();
+            return null;
         }
     }
 }

@@ -23,16 +23,26 @@ namespace Tag_GoAPI.Controllers
             _bonusHub = bonusHub;
         }
         [HttpGet]
-        public IActionResult GetAllBonuss()
-        {
-            return Ok(_bonusRepository.GetAllBonuss());
-        }
-        [HttpGet("{bonus_Id}")]
-        public IActionResult GetById(int bonus_Id)
+        public async Task<IActionResult> GetAllBonuss()
         {
             try
             {
-                var bonus = _bonusRepository.GetByIdBonus(bonus_Id);
+                var bonus = await _bonusRepository.GetAllBonuss();
+                return Ok(_bonusRepository.GetAllBonuss());
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{bonus_Id}")]
+        public async Task<IActionResult> GetById(int bonus_Id)
+        {
+            try
+            {
+                var bonus = await _bonusRepository.GetByIdBonus(bonus_Id);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -70,23 +80,55 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{bonus_Id}")]
-        public IActionResult DeleteBonus(int bonus_Id)
+        public async Task<IActionResult> DeleteBonus(int bonus_Id)
         {
-            _bonusRepository.DeleteBonus(bonus_Id);
-            return Ok();
+            try
+            {
+                var bonus = await _bonusRepository.DeleteBonus(bonus_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _bonusRepository.DeleteBonus(bonus_Id);
+                }
+
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPut("{bonus_Id}")]
-        public IActionResult UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
+        public async Task<IActionResult> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
         {
-            _bonusRepository.UpdateBonus(bonus_Id, bonusType, bonusDescription, application, granted);
-            return Ok();
+            try
+            {
+                var bonus = await _bonusRepository.UpdateBonus(bonus_Id, bonusType, bonusDescription, application, granted);
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveBonusUpdate(Dictionary<string, string> newUpdate)
+        public async Task <IActionResult> ReceiveBonusUpdate(Dictionary<string, string> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentBonus[item.Key] = item.Value;
+                try
+                {
+                    _currentBonus[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentBonus);
         }

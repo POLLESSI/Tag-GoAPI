@@ -24,16 +24,26 @@ namespace Tag_GoAPI.Controllers
             _nEvenementHub = nEvenementHub;
         }
         [HttpGet]
-        public IActionResult GetAllNEvenements()
-        {
-            return Ok(_nEvenementRepository.GetAllNEvenements());
-        }
-        [HttpGet("{nEvenement_Id}")]
-        public IActionResult GetByIdNEvenement(int nEvenement_Id)
+        public async Task<IActionResult> GetAllNEvenements()
         {
             try
             {
-                var nevenement = _nEvenementRepository.GetByIdNEvenement(nEvenement_Id);
+                var nevenements = await _nEvenementRepository.GetAllNEvenements();
+                return Ok(nevenements);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{nEvenement_Id}")]
+        public async Task<IActionResult> GetByIdNEvenement(int nEvenement_Id)
+        {
+            try
+            {
+                var nevenement = await _nEvenementRepository.GetByIdNEvenement(nEvenement_Id);
                 if (!ModelState.IsValid) 
                 {
                     return NotFound();
@@ -72,23 +82,54 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{nEvenement_Id}")]
-        public IActionResult DeleteNEvenement(int nEvenement_Id)
+        public async Task<IActionResult> DeleteNEvenement(int nEvenement_Id)
         {
-            _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
-            return Ok();
+            try
+            {
+                var nevenement = await _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
+                if (nevenement == null)
+                {
+                    await _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPut("{nEvenement_Id}")]
-        public IActionResult UpdateNEvenement(DateTime nEvenementDate, string nEvenementName, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
+        public async Task<IActionResult> UpdateNEvenement(DateTime nEvenementDate, string nEvenementName, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
         {
-            _nEvenementRepository.UpdateNEvenement(nEvenementDate, nEvenementDescription, posLat, posLong, positif, organisateur_Id, nIcon_Id, recompense_Id, bonus_Id, mediaItem_Id, nEvenement_Id);
-            return Ok();
+            try
+            {
+                var nevenment = await _nEvenementRepository.UpdateNEvenement(nEvenementDate, nEvenementDescription, posLat, posLong, positif, organisateur_Id, nIcon_Id, recompense_Id, bonus_Id, mediaItem_Id, nEvenement_Id);
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveEvenementUpdate(Dictionary<string, NEvenementHub> newUpdate)
+        public async Task <IActionResult> ReceiveEvenementUpdate(Dictionary<string, NEvenementHub> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentNEvenement[item.Key] = item.Value;
+                try
+                {
+                    _currentNEvenement[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentNEvenement);
         }

@@ -26,16 +26,26 @@ namespace Tag_GoAPI.Controllers
             _activityHub = activityHub;
         }
         [HttpGet]
-        public IActionResult GetAllActivities()
-        {
-            return Ok(_activityRepository.GetAllActivities());
-        }
-        [HttpGet("{activity_Id}")]
-        public IActionResult GetByIdActivity(int activity_Id)
+        public async Task<IActionResult> GetAllActivities()
         {
             try
             {
-                var activity = _activityRepository.GetByIdActivity(activity_Id);
+                var activities = await _activityRepository.GetAllActivities();
+                return Ok(activities);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+        [HttpGet("{activity_Id}")]
+        public async Task<IActionResult> GetByIdActivity(int activity_Id)
+        {
+            try
+            {
+                var activity = await _activityRepository.GetByIdActivity(activity_Id);
                 if (!ModelState.IsValid)
                 {
                     return NotFound();
@@ -48,7 +58,7 @@ namespace Tag_GoAPI.Controllers
                 return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create(ActivityRegisterForm activity)
         {
             if (!ModelState.IsValid)
@@ -73,23 +83,55 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpDelete("{activity_Id}")]
-        public IActionResult DeleteActivity(int activity_Id)
+        public async Task<IActionResult> DeleteActivity(int activity_Id)
         {
-            _activityRepository.DeleteActivity(activity_Id);
-            return Ok();
+            try
+            {
+                var activity = await _activityRepository.DeleteActivity(activity_Id);
+                if (ModelState.IsValid)
+                {
+                    await _activityRepository.DeleteActivity(activity_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPut("{activity_Id}")]
-        public IActionResult UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string ComplementareInformation, string posLat, string posLong, int organisateur_Id)
+        public async Task<IActionResult> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string ComplementareInformation, string posLat, string posLong, int organisateur_Id)
         {
-            _activityRepository.UpdateActivity(activity_Id, activityName, activityAddress, activityDescription, ComplementareInformation, posLat, posLong, organisateur_Id);
-            return Ok();
+            try
+            {
+                var activity = await _activityRepository.UpdateActivity(activity_Id, activityName, activityAddress, activityDescription, ComplementareInformation, posLat, posLong, organisateur_Id);
+
+                return Ok("Updated");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+            
         }
         [HttpPost("update")]
-        public IActionResult ReceiveActivityUpdate(Dictionary<string, string> newUpdate)
+        public async Task<IActionResult> ReceiveActivityUpdate(Dictionary<string, string> newUpdate)
         {
             foreach (var item in newUpdate)
             {
-                _currentActivity[item.Key] = item.Value;
+                try
+                {
+                    _currentActivity[item.Key] = item.Value;
+                }
+                catch (Exception ex)
+                {
+
+                    BadRequest(ex.Message);
+                }
+                
             }
             return Ok(_currentActivity);
         }

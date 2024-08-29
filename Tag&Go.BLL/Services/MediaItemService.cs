@@ -49,7 +49,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public MediaItem? DeleteMediaItem(int mediaItem_Id)
+        public Task<MediaItem?> DeleteMediaItem(int mediaItem_Id)
         {
             try
             {
@@ -63,12 +63,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<MediaItem?> GetAllMediaItems()
+        public Task<IEnumerable<MediaItem?>> GetAllMediaItems()
         {
             return _mediaItemRepository.GetAllMediaItems();
         }
 
-        public MediaItem? GetByIdMediaItem(int mediaItem_Id)
+        public Task<MediaItem?> GetByIdMediaItem(int mediaItem_Id)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public MediaItem? UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
+        public Task<MediaItem?> UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating Media Item : {ex.Message}");
             }
-            return new MediaItem();
+            return null;
         }
     }
 }

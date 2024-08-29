@@ -66,13 +66,13 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public WeatherForecast? DeleteWeatherForecast(int weatherForecast_Id)
+        public Task<WeatherForecast?> DeleteWeatherForecast(int weatherForecast_Id)
         {
             try
             {
                 string sql = "DELETE FROM WeatherForecast WHERE WeatherForecast_Id = @weatherForecast_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                return _connection.QueryFirst<WeatherForecast>(sql, parameters);
+                return _connection.QueryFirstAsync<WeatherForecast>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -82,20 +82,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<WeatherForecast?> GetAllWeatherForecasts()
+        public Task<IEnumerable<WeatherForecast?>> GetAllWeatherForecasts()
         {
             string sql = "SELECT * FROM WeatherForecast";
-            return _connection.Query<WeatherForecast?>(sql);
+            return _connection.QueryAsync<WeatherForecast?>(sql);
         }
 
-        public WeatherForecast? GetByIdWeatherForecast(int weatherForecast_Id)
+        public Task<WeatherForecast?> GetByIdWeatherForecast(int weatherForecast_Id)
         {
             try
             {
                 string sql = "SELECT * FROM WeatherForecast WHERE WeatherForecast_Id = @weatherForecast_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@weatherForecast_Id", weatherForecast_Id);
-                return _connection.QueryFirst<WeatherForecast?>(sql, parameters);
+                return _connection.QueryFirstAsync<WeatherForecast?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -105,7 +105,7 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public WeatherForecast? UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id)
+        public Task<WeatherForecast?> UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@precipitation", precipitation);
                 parameters.Add("@nEvenement_Id", nEvenement_Id);
 
-                return _connection.QueryFirst<WeatherForecast?>(sql, parameters);
+                return _connection.QueryFirstAsync<WeatherForecast?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -132,7 +132,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 Console.WriteLine($"Error updating Weather Forecast: {ex}");
             }
-            return new WeatherForecast();
+            return null;
         }
     }
 }

@@ -59,14 +59,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public NVote? DeleteNVote(int nVote_Id)
+        public Task<NVote?> DeleteNVote(int nVote_Id)
         {
             try
             {
                 string sql = "DELETE FROM NVote WHERE NVote_Id = @nVote_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nVote_Id", nVote_Id);
-                return _connection.QueryFirst<NVote?>(sql, parameters);
+                return _connection.QueryFirstAsync<NVote?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -76,20 +76,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<NVote?> GetAllNVotes()
+        public Task<IEnumerable<NVote?>> GetAllNVotes()
         {
             string sql = "SELECT * FROM NVote";
-            return _connection.Query<NVote?>(sql);
+            return _connection.QueryAsync<NVote?>(sql);
         }
 
-        public NVote? GetByIdNVote(int nVote_Id)
+        public Task<NVote?> GetByIdNVote(int nVote_Id)
         {
             try
             {
                 string sql = "SELECT * FROM NVote WHERE NVote_Id = @nVote_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nVote_Id", nVote_Id);
-                return _connection.QueryFirst<NVote?>(sql, parameters);
+                return _connection.QueryFirstAsync<NVote?>(sql, parameters);
             }
             catch (Exception ex)
             {

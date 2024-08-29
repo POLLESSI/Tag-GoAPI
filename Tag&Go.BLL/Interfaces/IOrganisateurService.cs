@@ -13,9 +13,9 @@ namespace Tag_Go.BLL.Interfaces
     #nullable disable
         bool Create(Organisateur organisateur);
         void CreateOrganisateur(Organisateur organisateur);
-        IEnumerable<Organisateur?> GetAllOrganisateurs();
-        Organisateur? GetByIdOrganisateur(int organisateur_Id);
-        Organisateur? DeleteOrganisateur(int organisateur_Id);
-        Organisateur? UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id);
+        Task<IEnumerable<Organisateur?>> GetAllOrganisateurs();
+        Task<Organisateur?> GetByIdOrganisateur(int organisateur_Id);
+        Task<Organisateur?> DeleteOrganisateur(int organisateur_Id);
+        Task<Organisateur?> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id);
     }
 }

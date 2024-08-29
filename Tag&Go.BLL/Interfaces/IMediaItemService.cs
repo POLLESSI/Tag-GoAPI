@@ -13,9 +13,9 @@ namespace Tag_Go.BLL.Interfaces
     #nullable disable
         bool Create(MediaItem mediaItem);
         void CreateMediaItem(MediaItem mediaItem);
-        IEnumerable<MediaItem?> GetAllMediaItems();
-        MediaItem? GetByIdMediaItem(int mediaItem_Id);
-        MediaItem? DeleteMediaItem(int mediaItem_Id);
-        MediaItem? UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description);
+        Task<IEnumerable<MediaItem?>> GetAllMediaItems();
+        Task<MediaItem?> GetByIdMediaItem(int mediaItem_Id);
+        Task<MediaItem?> DeleteMediaItem(int mediaItem_Id);
+        Task<MediaItem?> UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description);
     }
 }

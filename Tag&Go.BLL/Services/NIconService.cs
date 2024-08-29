@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public NIcon? DeleteNIcon(int nIcon_Id)
+        public Task<NIcon?> DeleteNIcon(int nIcon_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<NIcon?> GetAllNIcons()
+        public Task<IEnumerable<NIcon?>> GetAllNIcons()
         {
             return _nIconRepository.GetAllNIcons();
         }
 
-        public NIcon? GetByIdNIcon(int nIcon_Id)
+        public Task<NIcon?> GetByIdNIcon(int nIcon_Id)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public NIcon? UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id)
+        public Task<NIcon?> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating icon : {ex}");
             }
-            return new NIcon();
+            return null;
         }
     }
 }

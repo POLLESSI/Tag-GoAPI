@@ -61,14 +61,14 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Chat? DeleteMessage(int chat_Id)
+        public Task<Chat?> DeleteMessage(int chat_Id)
         {
             try
             {
                 string sql = "DELETE FROM Chat WHERE Chat_Id = @chat_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@chat_Id", chat_Id);
-                return _connection.QueryFirst<Chat?>(sql, parameters);
+                return _connection.QueryFirstAsync<Chat?>(sql, parameters);
             }
             catch (Exception ex)
             {
@@ -78,20 +78,20 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public IEnumerable<Chat?> GetAllMessages()
+        public Task<IEnumerable<Chat?>> GetAllMessages()
         {
             string sql = "SELECT * FROM Chat";
-            return _connection.Query<Chat?>(sql);
+            return _connection.QueryAsync<Chat?>(sql);
         }
 
-        public Chat? GetByIdChat(int chat_Id)
+        public Task<Chat?> GetByIdChat(int chat_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Chat WHERE Chat_Id = @chat_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@chat_Id", chat_Id);
-                return _connection.QueryFirst<Chat?>(sql, parameters);
+                return _connection.QueryFirstAsync<Chat?>(sql, parameters);
             }
             catch (Exception ex)
             {

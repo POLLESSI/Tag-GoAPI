@@ -48,7 +48,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Organisateur? DeleteOrganisateur(int organisateur_Id)
+        public Task<Organisateur?> DeleteOrganisateur(int organisateur_Id)
         {
             try
             {
@@ -62,12 +62,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<Organisateur?> GetAllOrganisateurs()
+        public Task<IEnumerable<Organisateur?>> GetAllOrganisateurs()
         {
             return _organisateurRepository.GetAllOrganisateurs();
         }
 
-        public Organisateur? GetByIdOrganisateur(int organisateur_Id)
+        public Task<Organisateur?> GetByIdOrganisateur(int organisateur_Id)
         {
             try
             {
@@ -81,12 +81,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Organisateur? UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
+        public Task<Organisateur?> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
         {
             try
             {
-                var UpdateOrganisateur = _organisateurRepository.UpdateOrganisateur(companyName, businessNumber, nUser_Id, point, organisateur_Id);
-                return UpdateOrganisateur;
+                var updateOrganisateur = _organisateurRepository.UpdateOrganisateur(companyName, businessNumber, nUser_Id, point, organisateur_Id);
+                return updateOrganisateur;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
@@ -97,7 +97,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating organisator : {ex}");
             }
-            return new Organisateur();
+            return null;
         }
     }
 }

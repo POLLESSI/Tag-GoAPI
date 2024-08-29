@@ -47,7 +47,7 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public NPerson? DeleteNPerson(int nPerson_Id)
+        public Task<NPerson?> DeleteNPerson(int nPerson_Id)
         {
             try
             {
@@ -61,12 +61,12 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public IEnumerable<NPerson?> GetAllNPersons()
+        public Task<IEnumerable<NPerson?>> GetAllNPersons()
         {
             return _nPersonRepository.GetAllNPersons();
         }
 
-        public NPerson? GetByIdNPerson(int nPerson_Id)
+        public Task<NPerson?> GetByIdNPerson(int nPerson_Id)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public NPerson? UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
+        public Task<NPerson?> UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Tag_Go.BLL.Services
             {
                 Console.WriteLine($"Error updating person : {ex.Message}");
             }
-            return new NPerson();
+            return null;
         }
     }
 }
