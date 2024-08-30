@@ -22,40 +22,40 @@ namespace Tag_GoAPI.Controllers
             _bonusRepository = bonusRepository;
             _bonusHub = bonusHub;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllBonuss()
-        {
-            try
-            {
-                var bonus = await _bonusRepository.GetAllBonuss();
-                return Ok(_bonusRepository.GetAllBonuss());
-            }
-            catch (Exception ex)
-            {
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllBonuss()
+        //{
+        //    try
+        //    {
+        //        var bonus = await _bonusRepository.GetAllBonuss();
+        //        return Ok(_bonusRepository.GetAllBonuss());
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpGet("{bonus_Id}")]
-        public async Task<IActionResult> GetById(int bonus_Id)
-        {
-            try
-            {
-                var bonus = await _bonusRepository.GetByIdBonus(bonus_Id);
-                if (!ModelState.IsValid) 
-                {
-                    return NotFound();
-                }
-                return Ok(_bonusRepository.GetByIdBonus(bonus_Id));
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpGet("{bonus_Id}")]
+        //public async Task<IActionResult> GetById(int bonus_Id)
+        //{
+        //    try
+        //    {
+        //        var bonus = await _bonusRepository.GetByIdBonus(bonus_Id);
+        //        if (!ModelState.IsValid) 
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(_bonusRepository.GetByIdBonus(bonus_Id));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-            }
+        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+        //    }
             
-        }
+        //}
         [HttpPost]
         public async Task<IActionResult> Create(BonusRegisterForm bonus)
         {
@@ -79,58 +79,58 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpDelete("{bonus_Id}")]
-        public async Task<IActionResult> DeleteBonus(int bonus_Id)
-        {
-            try
-            {
-                var bonus = await _bonusRepository.DeleteBonus(bonus_Id);
-                if (!ModelState.IsValid)
-                {
-                    await _bonusRepository.DeleteBonus(bonus_Id);
-                }
+        //[HttpDelete("{bonus_Id}")]
+        //public async Task<IActionResult> DeleteBonus(int bonus_Id)
+        //{
+        //    try
+        //    {
+        //        var bonus = await _bonusRepository.DeleteBonus(bonus_Id);
+        //        if (!ModelState.IsValid)
+        //        {
+        //            await _bonusRepository.DeleteBonus(bonus_Id);
+        //        }
 
-                return Ok("Deleted");
-            }
-            catch (Exception ex)
-            {
+        //        return Ok("Deleted");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPut("{bonus_Id}")]
-        public async Task<IActionResult> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
-        {
-            try
-            {
-                var bonus = await _bonusRepository.UpdateBonus(bonus_Id, bonusType, bonusDescription, application, granted);
-                return Ok("Updated");
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpPut("{bonus_Id}")]
+        //public async Task<IActionResult> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
+        //{
+        //    try
+        //    {
+        //        var bonus = await _bonusRepository.UpdateBonus(bonus_Id, bonusType, bonusDescription, application, granted);
+        //        return Ok("Updated");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPost("update")]
-        public async Task <IActionResult> ReceiveBonusUpdate(Dictionary<string, string> newUpdate)
-        {
-            foreach (var item in newUpdate)
-            {
-                try
-                {
-                    _currentBonus[item.Key] = item.Value;
-                }
-                catch (Exception ex)
-                {
+        //}
+        //[HttpPost("update")]
+        //public async Task <IActionResult> ReceiveBonusUpdate(Dictionary<string, string> newUpdate)
+        //{
+        //    foreach (var item in newUpdate)
+        //    {
+        //        try
+        //        {
+        //            _currentBonus[item.Key] = item.Value;
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    BadRequest(ex.Message);
-                }
+        //            BadRequest(ex.Message);
+        //        }
                 
-            }
-            return Ok(_currentBonus);
-        }
+        //    }
+        //    return Ok(_currentBonus);
+        //}
     }
 }

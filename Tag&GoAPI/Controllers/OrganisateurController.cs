@@ -23,40 +23,40 @@ namespace Tag_GoAPI.Controllers
             _organisateurRepository = organisateurRepository;
             _organisateurHub = organisateurHub;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllOrganisateurs()
-        {
-            try
-            {
-                var organisateurs = await _organisateurRepository.GetAllOrganisateurs();
-                return Ok(organisateurs);
-            }
-            catch (Exception ex)
-            {
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllOrganisateurs()
+        //{
+        //    try
+        //    {
+        //        var organisateurs = await _organisateurRepository.GetAllOrganisateurs();
+        //        return Ok(organisateurs);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpGet("{organisateur_id}")]
-        public IActionResult GetByIdOrganisateur(int organisateur_Id)
-        {
-            try
-            {
-                var organisateur = _organisateurRepository.GetByIdOrganisateur(organisateur_Id);
-                if (!ModelState.IsValid) 
-                {
-                    return NotFound();
-                }
-                return Ok(_organisateurRepository.GetByIdOrganisateur(organisateur_Id));
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpGet("{organisateur_id}")]
+        //public IActionResult GetByIdOrganisateur(int organisateur_Id)
+        //{
+        //    try
+        //    {
+        //        var organisateur = _organisateurRepository.GetByIdOrganisateur(organisateur_Id);
+        //        if (!ModelState.IsValid) 
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(_organisateurRepository.GetByIdOrganisateur(organisateur_Id));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-            }
+        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+        //    }
             
-        }
+        //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(OrganisateurRegisterForm newOrganisateur)
         {
@@ -81,58 +81,58 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpDelete("{organisateur_id}")]
-        public async Task<IActionResult> DeleteOrganisateur(int organisateur_Id)
-        {
-            try
-            {
-                var organisateur = await _organisateurRepository.DeleteOrganisateur(organisateur_Id);
-                if (!ModelState.IsValid)
-                {
-                    return NotFound();
-                }
-                return Ok("Deleted");
-            }
-            catch (Exception ex)
-            {
+        //[HttpDelete("{organisateur_id}")]
+        //public async Task<IActionResult> DeleteOrganisateur(int organisateur_Id)
+        //{
+        //    try
+        //    {
+        //        var organisateur = await _organisateurRepository.DeleteOrganisateur(organisateur_Id);
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok("Deleted");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPut("{organisateur_Id}")]
-        public async Task<IActionResult> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
-        {
-            try
-            {
-                _organisateurRepository.UpdateOrganisateur(companyName, businessNumber, nUser_Id, point, organisateur_Id);
-                return Ok("Updated");
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpPut("{organisateur_Id}")]
+        //public async Task<IActionResult> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
+        //{
+        //    try
+        //    {
+        //        _organisateurRepository.UpdateOrganisateur(companyName, businessNumber, nUser_Id, point, organisateur_Id);
+        //        return Ok("Updated");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
             
-        }
-        [HttpPost("update")]
-        public async Task<IActionResult> ReceiveOrganisateurUpdate(Dictionary<string, OrganisateurHub> newOrganisateur)
-        {
-            foreach (var item in newOrganisateur)
-            {
-                try
-                {
-                    _currentOrganisateur[item.Key] = item.Value;
-                }
-                catch (Exception ex)
-                {
+        //}
+        //[HttpPost("update")]
+        //public async Task<IActionResult> ReceiveOrganisateurUpdate(Dictionary<string, OrganisateurHub> newOrganisateur)
+        //{
+        //    foreach (var item in newOrganisateur)
+        //    {
+        //        try
+        //        {
+        //            _currentOrganisateur[item.Key] = item.Value;
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    BadRequest(ex.Message);
-                }
+        //            BadRequest(ex.Message);
+        //        }
                 
-            }
-            return Ok(_currentOrganisateur);
-        }
+        //    }
+        //    return Ok(_currentOrganisateur);
+        //}
     }
 }

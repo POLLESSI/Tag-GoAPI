@@ -24,40 +24,40 @@ namespace Tag_GoAPI.Controllers
             _mapRepository = mapRepository;
             _mapHub = mapHub;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllMaps()
-        {
-            try
-            {
-                var maps = await _mapRepository.GetAllMaps();
-                return Ok(maps);
-            }
-            catch (Exception ex)
-            {
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllMaps()
+        //{
+        //    try
+        //    {
+        //        var maps = await _mapRepository.GetAllMaps();
+        //        return Ok(maps);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpGet("{map_Id}")]
-        public async Task<IActionResult> GetByIdMap(int map_Id)
-        {
-            try
-            {
-                var map = await _mapRepository.GetByIdMap(map_Id);
-                if (!ModelState.IsValid) 
-                {
-                    return NotFound();
-                }
-                return Ok(_mapRepository.GetByIdMap(map_Id));
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpGet("{map_Id}")]
+        //public async Task<IActionResult> GetByIdMap(int map_Id)
+        //{
+        //    try
+        //    {
+        //        var map = await _mapRepository.GetByIdMap(map_Id);
+        //        if (!ModelState.IsValid) 
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(_mapRepository.GetByIdMap(map_Id));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
-            }
+        //        return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+        //    }
             
-        }
+        //}
         [HttpPost]
         public async Task<IActionResult> Create(MapRegisterForm map)
         {
@@ -70,57 +70,57 @@ namespace Tag_GoAPI.Controllers
             }
             return BadRequest("Registration Error");
         }
-        [HttpDelete("{map_Id}")]
-        public async Task<IActionResult> DeleteMap(int map_Id)
-        {
-            try
-            {
-                var map = await _mapRepository.DeleteMap(map_Id);
-                if (!ModelState.IsValid)
-                {
-                    await _mapRepository.DeleteMap(map_Id);
-                }
-                return Ok("Deleted");
-            }
-            catch (Exception ex)
-            {
+        //[HttpDelete("{map_Id}")]
+        //public async Task<IActionResult> DeleteMap(int map_Id)
+        //{
+        //    try
+        //    {
+        //        var map = await _mapRepository.DeleteMap(map_Id);
+        //        if (!ModelState.IsValid)
+        //        {
+        //            await _mapRepository.DeleteMap(map_Id);
+        //        }
+        //        return Ok("Deleted");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw;
-            }
+        //        throw;
+        //    }
             
-        }
-        [HttpPut("map_Id")]
-        public async Task<IActionResult> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
-        {
-            try
-            {
-                var map = await _mapRepository.UpdateMap(map_Id, dateCreation, mapUrl, description);
-                return Ok("Updated");
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpPut("map_Id")]
+        //public async Task<IActionResult> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
+        //{
+        //    try
+        //    {
+        //        var map = await _mapRepository.UpdateMap(map_Id, dateCreation, mapUrl, description);
+        //        return Ok("Updated");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPost("update")]
-        public async Task<IActionResult> ReceiveMapUpdate(Dictionary<string, string> newUpdate)
-        {
-            foreach (var item in newUpdate)
-            {
-                try
-                {
-                    _currentMap[item.Key] = item.Value;
-                }
-                catch (Exception ex)
-                {
+        //}
+        //[HttpPost("update")]
+        //public async Task<IActionResult> ReceiveMapUpdate(Dictionary<string, string> newUpdate)
+        //{
+        //    foreach (var item in newUpdate)
+        //    {
+        //        try
+        //        {
+        //            _currentMap[item.Key] = item.Value;
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    BadRequest(ex.Message);
-                }
+        //            BadRequest(ex.Message);
+        //        }
                 
-            }
-            return Ok(_currentMap);
-        }
+        //    }
+        //    return Ok(_currentMap);
+        //}
     }
 }

@@ -22,40 +22,40 @@ namespace Tag_GoAPI.Controllers
             _chatRepository = chatRepository;
             _chatHub = chatHub;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllMessages()
-        {
-            try
-            {
-                var chat = await _chatRepository.GetAllMessages();
-                return Ok(chat);
-            }
-            catch (Exception ex)
-            {
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllMessages()
+        //{
+        //    try
+        //    {
+        //        var chat = await _chatRepository.GetAllMessages();
+        //        return Ok(chat);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpGet("{chat_Id}")]
-        public async Task<IActionResult> GetByIdChat(int chat_Id)
-        {
-            try
-            {
-                var chat = await _chatRepository.GetByIdChat(chat_Id);
-                if (!ModelState.IsValid) 
-                {
-                    return NotFound();
-                }
-                return Ok(_chatRepository.GetByIdChat(chat_Id));
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpGet("{chat_Id}")]
+        //public async Task<IActionResult> GetByIdChat(int chat_Id)
+        //{
+        //    try
+        //    {
+        //        var chat = await _chatRepository.GetByIdChat(chat_Id);
+        //        if (!ModelState.IsValid) 
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(_chatRepository.GetByIdChat(chat_Id));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-            }
+        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+        //    }
             
-        }
+        //}
         [HttpPost]
         public async Task<IActionResult> Create(MessageModel newMessage)
         {
@@ -80,24 +80,24 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpDelete("{chat_Id}")]
-        public async Task<IActionResult> DeleteMessage(int chat_Id)
-        {
-            try
-            {
-                var message = await _chatRepository.DeleteMessage(chat_Id);
-                if (!ModelState.IsValid)
-                {
-                    await _chatRepository.DeleteMessage(chat_Id);
-                }
-                return Ok("Deleted");
-            }
-            catch (Exception ex)
-            {
+        //[HttpDelete("{chat_Id}")]
+        //public async Task<IActionResult> DeleteMessage(int chat_Id)
+        //{
+        //    try
+        //    {
+        //        var message = await _chatRepository.DeleteMessage(chat_Id);
+        //        if (!ModelState.IsValid)
+        //        {
+        //            await _chatRepository.DeleteMessage(chat_Id);
+        //        }
+        //        return Ok("Deleted");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
+        //}
     }
 }

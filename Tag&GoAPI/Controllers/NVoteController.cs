@@ -23,38 +23,38 @@ namespace Tag_GoAPI.Controllers
             _nVoteRepository = nVoteRepository;
             _nVoteHub = nVoteHub;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllNVotes()
-        {
-            try
-            {
-                var nvotes = await _nVoteRepository.GetAllNVotes();
-                return Ok(nvotes);
-            }
-            catch (Exception ex)
-            {
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllNVotes()
+        //{
+        //    try
+        //    {
+        //        var nvotes = await _nVoteRepository.GetAllNVotes();
+        //        return Ok(nvotes);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpGet("{nVote_Id}")]
-        public async Task<IActionResult> GetByIdNVote(int nVote_Id) 
-        {
-            try
-            {
-                var nvote = await _nVoteRepository.GetByIdNVote(nVote_Id);
-                if (!ModelState.IsValid) 
-                {
-                    return NotFound();
-                }
-                return Ok(_nVoteRepository.GetByIdNVote(nVote_Id));
-            }
-            catch (Exception ex)
-            {
+        //        return StatusCode(500, ex.Message);
+        //    }
+        //}
+        //[HttpGet("{nVote_Id}")]
+        //public async Task<IActionResult> GetByIdNVote(int nVote_Id) 
+        //{
+        //    try
+        //    {
+        //        var nvote = await _nVoteRepository.GetByIdNVote(nVote_Id);
+        //        if (!ModelState.IsValid) 
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(_nVoteRepository.GetByIdNVote(nVote_Id));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-            }
-        }
+        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+        //    }
+        //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(NVoteRegisterForm nVote)
         {
@@ -79,43 +79,43 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpDelete("{nVote_Id}")]
-        public async Task<IActionResult> DeleteNVote(int nVote_Id)
-        {
-            try
-            {
-                var nvote = await _nVoteRepository.DeleteNVote(nVote_Id);
-                if (!ModelState.IsValid) 
-                {
-                    return NotFound();
+        //[HttpDelete("{nVote_Id}")]
+        //public async Task<IActionResult> DeleteNVote(int nVote_Id)
+        //{
+        //    try
+        //    {
+        //        var nvote = await _nVoteRepository.DeleteNVote(nVote_Id);
+        //        if (!ModelState.IsValid) 
+        //        {
+        //            return NotFound();
                     
-                }
-                return Ok("Deleted");
-            }
-            catch (Exception ex)
-            {
+        //        }
+        //        return Ok("Deleted");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPost("update")]
-        public async Task<IActionResult> ReceiveVoteUpdate(Dictionary<string, NVoteHub> newUpdate)
-        {
-            foreach (var item in newUpdate)
-            {
-                try
-                {
-                    _currentNVote[item.Key] = item.Value;
-                }
-                catch (Exception ex)
-                {
+        //}
+        //[HttpPost("update")]
+        //public async Task<IActionResult> ReceiveVoteUpdate(Dictionary<string, NVoteHub> newUpdate)
+        //{
+        //    foreach (var item in newUpdate)
+        //    {
+        //        try
+        //        {
+        //            _currentNVote[item.Key] = item.Value;
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    BadRequest(ex.Message);
-                }
+        //            BadRequest(ex.Message);
+        //        }
                 
-            }
-            return Ok(_currentNVote);
-        }
+        //    }
+        //    return Ok(_currentNVote);
+        //}
     }
 }

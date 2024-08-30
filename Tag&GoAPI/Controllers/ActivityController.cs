@@ -25,39 +25,39 @@ namespace Tag_GoAPI.Controllers
             _activityRepository = activityRepository;
             _activityHub = activityHub;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllActivities()
-        {
-            try
-            {
-                var activities = await _activityRepository.GetAllActivities();
-                return Ok(activities);
-            }
-            catch (Exception ex)
-            {
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllActivities()
+        //{
+        //    try
+        //    {
+        //        var activities = await _activityRepository.GetAllActivities();
+        //        return Ok(activities);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpGet("{activity_Id}")]
-        public async Task<IActionResult> GetByIdActivity(int activity_Id)
-        {
-            try
-            {
-                var activity = await _activityRepository.GetByIdActivity(activity_Id);
-                if (!ModelState.IsValid)
-                {
-                    return NotFound();
-                }
-                return Ok(_activityRepository.GetByIdActivity(activity_Id));
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpGet("{activity_Id}")]
+        //public async Task<IActionResult> GetByIdActivity(int activity_Id)
+        //{
+        //    try
+        //    {
+        //        var activity = await _activityRepository.GetByIdActivity(activity_Id);
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(_activityRepository.GetByIdActivity(activity_Id));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-            }
-        }
+        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+        //    }
+        //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(ActivityRegisterForm activity)
         {
@@ -82,58 +82,58 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpDelete("{activity_Id}")]
-        public async Task<IActionResult> DeleteActivity(int activity_Id)
-        {
-            try
-            {
-                var activity = await _activityRepository.DeleteActivity(activity_Id);
-                if (ModelState.IsValid)
-                {
-                    await _activityRepository.DeleteActivity(activity_Id);
-                }
-                return Ok("Deleted");
-            }
-            catch (Exception ex)
-            {
+        //[HttpDelete("{activity_Id}")]
+        //public async Task<IActionResult> DeleteActivity(int activity_Id)
+        //{
+        //    try
+        //    {
+        //        var activity = await _activityRepository.DeleteActivity(activity_Id);
+        //        if (ModelState.IsValid)
+        //        {
+        //            await _activityRepository.DeleteActivity(activity_Id);
+        //        }
+        //        return Ok("Deleted");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPut("{activity_Id}")]
-        public async Task<IActionResult> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string ComplementareInformation, string posLat, string posLong, int organisateur_Id)
-        {
-            try
-            {
-                var activity = await _activityRepository.UpdateActivity(activity_Id, activityName, activityAddress, activityDescription, ComplementareInformation, posLat, posLong, organisateur_Id);
+        //}
+        //[HttpPut("{activity_Id}")]
+        //public async Task<IActionResult> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string ComplementareInformation, string posLat, string posLong, int organisateur_Id)
+        //{
+        //    try
+        //    {
+        //        var activity = await _activityRepository.UpdateActivity(activity_Id, activityName, activityAddress, activityDescription, ComplementareInformation, posLat, posLong, organisateur_Id);
 
-                return Ok("Updated");
-            }
-            catch (Exception ex)
-            {
+        //        return Ok("Updated");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPost("update")]
-        public async Task<IActionResult> ReceiveActivityUpdate(Dictionary<string, string> newUpdate)
-        {
-            foreach (var item in newUpdate)
-            {
-                try
-                {
-                    _currentActivity[item.Key] = item.Value;
-                }
-                catch (Exception ex)
-                {
+        //}
+        //[HttpPost("update")]
+        //public async Task<IActionResult> ReceiveActivityUpdate(Dictionary<string, string> newUpdate)
+        //{
+        //    foreach (var item in newUpdate)
+        //    {
+        //        try
+        //        {
+        //            _currentActivity[item.Key] = item.Value;
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    BadRequest(ex.Message);
-                }
+        //            BadRequest(ex.Message);
+        //        }
                 
-            }
-            return Ok(_currentActivity);
-        }
+        //    }
+        //    return Ok(_currentActivity);
+        //}
     }
 }

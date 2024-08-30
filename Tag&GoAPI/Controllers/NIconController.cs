@@ -23,40 +23,40 @@ namespace Tag_GoAPI.Controllers
             _nIconRepository = nIconRepository;
             _nIconHub = nIconHub;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllNIcons()
-        {
-            try
-            {
-                var nicons = await _nIconRepository.GetAllNIcons();
-                return Ok(nicons);
-            }
-            catch (Exception ex)
-            {
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllNIcons()
+        //{
+        //    try
+        //    {
+        //        var nicons = await _nIconRepository.GetAllNIcons();
+        //        return Ok(nicons);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpGet("{nIcon_Id}")]
-        public async Task<IActionResult> GetByIdNIcon(int nIconId)
-        {
-            try
-            {
-                var nicon = await _nIconRepository.GetByIdNIcon(nIconId);
-                if (!ModelState.IsValid) 
-                {
-                    return NotFound();
-                }
-                return Ok(_nIconRepository.GetByIdNIcon(nIconId));
-            }
-            catch (Exception ex)
-            {
+        //}
+        //[HttpGet("{nIcon_Id}")]
+        //public async Task<IActionResult> GetByIdNIcon(int nIconId)
+        //{
+        //    try
+        //    {
+        //        var nicon = await _nIconRepository.GetByIdNIcon(nIconId);
+        //        if (!ModelState.IsValid) 
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(_nIconRepository.GetByIdNIcon(nIconId));
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(StatusCodes.Status404NotFound, ex.Message);
-            }
+        //        return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+        //    }
             
-        }
+        //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(NIconRegisterForm nIcon)
         {
@@ -81,58 +81,58 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpDelete("{nIcon_Id}")]
-        public async Task<IActionResult> DeleteNIcon(int nIconId)
-        {
-            try
-            {
-                var nicon = await _nIconRepository.DeleteNIcon(nIconId);
-                if (!ModelState.IsValid)
-                {
-                    await _nIconRepository.DeleteNIcon(nIconId);
-                }
-                return Ok("Deleted");
-            }
-            catch (Exception ex)
-            {
+        //[HttpDelete("{nIcon_Id}")]
+        //public async Task<IActionResult> DeleteNIcon(int nIconId)
+        //{
+        //    try
+        //    {
+        //        var nicon = await _nIconRepository.DeleteNIcon(nIconId);
+        //        if (!ModelState.IsValid)
+        //        {
+        //            await _nIconRepository.DeleteNIcon(nIconId);
+        //        }
+        //        return Ok("Deleted");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPut("{nIcon_Id}")]
-        public async Task<IActionResult> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIconId)
-        {
-            try
-            {
-                var nicon = await _nIconRepository.UpdateNIcon(nIconName, nIconDescription, nIconUrl, nIconId);
+        //}
+        //[HttpPut("{nIcon_Id}")]
+        //public async Task<IActionResult> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIconId)
+        //{
+        //    try
+        //    {
+        //        var nicon = await _nIconRepository.UpdateNIcon(nIconName, nIconDescription, nIconUrl, nIconId);
 
-                return Ok("Updated");
-            }
-            catch (Exception ex)
-            {
+        //        return Ok("Updated");
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return StatusCode(500, ex.Message);
-            }
+        //        return StatusCode(500, ex.Message);
+        //    }
             
-        }
-        [HttpPost("update")]
-        public async Task<IActionResult> ReceiveIconUpdate(Dictionary<string, NIconHub> newUpdate)
-        {
-            foreach (var item in newUpdate)
-            {
-                try
-                {
-                    _currentNIcon[item.Key] = item.Value;
-                }
-                catch (Exception ex)
-                {
+        //}
+        //[HttpPost("update")]
+        //public async Task<IActionResult> ReceiveIconUpdate(Dictionary<string, NIconHub> newUpdate)
+        //{
+        //    foreach (var item in newUpdate)
+        //    {
+        //        try
+        //        {
+        //            _currentNIcon[item.Key] = item.Value;
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    BadRequest(ex.Message);
-                }
+        //            BadRequest(ex.Message);
+        //        }
                 
-            }
-            return Ok(_currentNIcon);
-        }
+        //    }
+        //    return Ok(_currentNIcon);
+        //}
     }
 }
