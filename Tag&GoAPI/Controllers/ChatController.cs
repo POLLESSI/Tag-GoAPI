@@ -22,21 +22,21 @@ namespace Tag_GoAPI.Controllers
             _chatRepository = chatRepository;
             _chatHub = chatHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllMessages()
-        //{
-        //    try
-        //    {
-        //        var chat = await _chatRepository.GetAllMessages();
-        //        return Ok(chat);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllMessages()
+        {
+            try
+            {
+                var chat = await _chatRepository.GetAllMessages();
+                return Ok(chat);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{chat_Id}")]
         //public async Task<IActionResult> GetByIdChat(int chat_Id)
         //{
@@ -54,7 +54,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
         //    }
-            
+
         //}
         [HttpPost]
         public async Task<IActionResult> Create(MessageModel newMessage)

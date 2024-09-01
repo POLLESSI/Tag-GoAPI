@@ -24,21 +24,21 @@ namespace Tag_GoAPI.Controllers
             _mapRepository = mapRepository;
             _mapHub = mapHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllMaps()
-        //{
-        //    try
-        //    {
-        //        var maps = await _mapRepository.GetAllMaps();
-        //        return Ok(maps);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllMaps()
+        {
+            try
+            {
+                var maps = await _mapRepository.GetAllMaps();
+                return Ok(maps);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{map_Id}")]
         //public async Task<IActionResult> GetByIdMap(int map_Id)
         //{
@@ -56,7 +56,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
         //    }
-            
+
         //}
         [HttpPost]
         public async Task<IActionResult> Create(MapRegisterForm map)

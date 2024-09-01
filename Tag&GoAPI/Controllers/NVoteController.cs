@@ -23,20 +23,20 @@ namespace Tag_GoAPI.Controllers
             _nVoteRepository = nVoteRepository;
             _nVoteHub = nVoteHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllNVotes()
-        //{
-        //    try
-        //    {
-        //        var nvotes = await _nVoteRepository.GetAllNVotes();
-        //        return Ok(nvotes);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllNVotes()
+        {
+            try
+            {
+                var nvotes = await _nVoteRepository.GetAllNVotes();
+                return Ok(nvotes);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
+                return StatusCode(500, ex.Message);
+            }
+        }
         //[HttpGet("{nVote_Id}")]
         //public async Task<IActionResult> GetByIdNVote(int nVote_Id) 
         //{

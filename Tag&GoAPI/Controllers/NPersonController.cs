@@ -23,21 +23,21 @@ namespace Tag_GoAPI.Controllers
             _nPersonRepository = nPersonRepository;
             _nPersonHub = nPersonHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllNPersons()
-        //{
-        //    try
-        //    {
-        //        var npersons = await _nPersonRepository.GetAllNPersons();
-        //        return Ok(npersons);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllNPersons()
+        {
+            try
+            {
+                var npersons = await _nPersonRepository.GetAllNPersons();
+                return Ok(npersons);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{person_Id}")]
         //public async Task<IActionResult> GetByIdNPerson(int nPerson_Id)
         //{
@@ -55,7 +55,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
         //    }
-            
+
         //}
         //[Authorize("AdminPolicy")]
         [HttpPost("create")]

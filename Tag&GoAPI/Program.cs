@@ -81,8 +81,8 @@ builder.Services.AddScoped<IOrganisateurService, OrganisateurService>();
 builder.Services.AddScoped<IOrganisateurRepository, OrganisateurRepository>();
 builder.Services.AddScoped<IRecompenseService, RecompenseService>();
 builder.Services.AddScoped<IRecompenseRepository, RecompenseRepository>();
-//builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
-//builder.Services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
+builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
+builder.Services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
 
 // Add SignalR
 
@@ -103,7 +103,7 @@ builder.Services.AddSingleton<NUserHub>();
 builder.Services.AddSingleton<NVoteHub>();
 builder.Services.AddSingleton<OrganisateurHub>();
 builder.Services.AddSingleton<RecompenseHub>();
-//builder.Services.AddSingleton<WeatherForecastHub>();
+builder.Services.AddSingleton<WeatherForecastHub>();
 
 // Token Generator
 
@@ -183,7 +183,7 @@ app.MapHub<NUserHub>("/nuserhub");
 app.MapHub<NVoteHub>("/nvotehub");
 app.MapHub<OrganisateurHub>("/organisateurhub");
 app.MapHub<RecompenseHub>("/recompensehub");
-//app.MapHub<WeatherForecastHub>("/weatherforecast");
+app.MapHub<WeatherForecastHub>("/weatherforecast");
 
 //app.MapControllerRoute(
 //    name: "default",

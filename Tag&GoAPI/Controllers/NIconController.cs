@@ -23,21 +23,21 @@ namespace Tag_GoAPI.Controllers
             _nIconRepository = nIconRepository;
             _nIconHub = nIconHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllNIcons()
-        //{
-        //    try
-        //    {
-        //        var nicons = await _nIconRepository.GetAllNIcons();
-        //        return Ok(nicons);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllNIcons()
+        {
+            try
+            {
+                var nicons = await _nIconRepository.GetAllNIcons();
+                return Ok(nicons);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{nIcon_Id}")]
         //public async Task<IActionResult> GetByIdNIcon(int nIconId)
         //{
@@ -55,7 +55,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status404NotFound, ex.Message);
         //    }
-            
+
         //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(NIconRegisterForm nIcon)

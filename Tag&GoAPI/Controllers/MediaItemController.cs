@@ -23,21 +23,21 @@ namespace Tag_GoAPI.Controllers
             _mediaItemRepository = mediaItemRepository;
             _mediaItemHub = mediaItemHub;
         }
-        //[HttpGet]
-        //public async Task<ActionResult> GetAllMediaItems()
-        //{
-        //    try
-        //    {
-        //        var mediaitems = await _mediaItemRepository.GetAllMediaItems();
-        //        return Ok(mediaitems);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<ActionResult> GetAllMediaItems()
+        {
+            try
+            {
+                var mediaitems = await _mediaItemRepository.GetAllMediaItems();
+                return Ok(mediaitems);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{mediaItem_Id}")]
         //public async Task<ActionResult> GetById(int mediaItem_Id)
         //{
@@ -55,7 +55,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
         //    }
-            
+
         //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(MediaItemRegisterForm newMediaItem)

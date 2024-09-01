@@ -22,21 +22,21 @@ namespace Tag_GoAPI.Controllers
             _bonusRepository = bonusRepository;
             _bonusHub = bonusHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllBonuss()
-        //{
-        //    try
-        //    {
-        //        var bonus = await _bonusRepository.GetAllBonuss();
-        //        return Ok(_bonusRepository.GetAllBonuss());
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllBonuss()
+        {
+            try
+            {
+                var bonus = await _bonusRepository.GetAllBonuss();
+                return Ok(_bonusRepository.GetAllBonuss());
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{bonus_Id}")]
         //public async Task<IActionResult> GetById(int bonus_Id)
         //{
@@ -54,7 +54,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
         //    }
-            
+
         //}
         [HttpPost]
         public async Task<IActionResult> Create(BonusRegisterForm bonus)

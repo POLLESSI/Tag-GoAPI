@@ -25,21 +25,21 @@ namespace Tag_GoAPI.Controllers
             _activityRepository = activityRepository;
             _activityHub = activityHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllActivities()
-        //{
-        //    try
-        //    {
-        //        var activities = await _activityRepository.GetAllActivities();
-        //        return Ok(activities);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllActivities()
+        {
+            try
+            {
+                var activities = await _activityRepository.GetAllActivities();
+                return Ok(activities);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{activity_Id}")]
         //public async Task<IActionResult> GetByIdActivity(int activity_Id)
         //{

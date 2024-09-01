@@ -23,21 +23,21 @@ namespace Tag_GoAPI.Controllers
             _nEvenementRepository = nEvenementRepository;
             _nEvenementHub = nEvenementHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllNEvenements()
-        //{
-        //    try
-        //    {
-        //        var nevenements = await _nEvenementRepository.GetAllNEvenements();
-        //        return Ok(nevenements);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllNEvenements()
+        {
+            try
+            {
+                var nevenements = await _nEvenementRepository.GetAllNEvenements();
+                return Ok(nevenements);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{nEvenement_Id}")]
         //public async Task<IActionResult> GetByIdNEvenement(int nEvenement_Id)
         //{
@@ -55,7 +55,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
         //    }
-            
+
         //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(NEvenementRegisterForm nEvenement)

@@ -29,21 +29,21 @@ namespace Tag_GoAPI.Controllers
             _tokenGenerator = tokenGenerator;
             _nUserHub = nUserHub;
         }
-        //[HttpGet]
-        //public async Task<ActionResult> GetAllNUsers()
-        //{
-        //    try
-        //    {
-        //        var nusers = await _userRepository.GetAllNUsers();
-        //        return Ok(nusers);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<ActionResult> GetAllNUsers()
+        {
+            try
+            {
+                var nusers = await _userRepository.GetAllNUsers();
+                return Ok(nusers);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{nuser_Id}")]
         //public async Task<ActionResult> GetById(int nUser_Id)
         //{

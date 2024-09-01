@@ -23,21 +23,21 @@ namespace Tag_GoAPI.Controllers
             _avatarRepository = avatarRepository;
             _avatarHub = avatarHub;
         }
-        //[HttpGet]
-        //public async Task <IActionResult> GetAllAvatars()
-        //{
-        //    try
-        //    {
-        //        var avatars = await _avatarRepository.GetAllAvatars();
-        //        return Ok(avatars);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
+        [HttpGet]
+        public async Task<IActionResult> GetAllAvatars()
+        {
+            try
+            {
+                var avatars = await _avatarRepository.GetAllAvatars();
+                return Ok(avatars);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
 
-        //    }
-            
-        //}
+            }
+
+        }
         //[HttpGet("{avatar_Id}")]
         //public async Task<IActionResult> GetByIdAvatar(int avatar_Id)
         //{
@@ -55,7 +55,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status400BadRequest, ex.Message); 
         //    }
-            
+
         //}
         [HttpPost]
         public async Task<IActionResult> Create(AvatarRegisterForm avatar)

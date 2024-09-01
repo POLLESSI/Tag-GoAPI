@@ -23,21 +23,21 @@ namespace Tag_GoAPI.Controllers
             _organisateurRepository = organisateurRepository;
             _organisateurHub = organisateurHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllOrganisateurs()
-        //{
-        //    try
-        //    {
-        //        var organisateurs = await _organisateurRepository.GetAllOrganisateurs();
-        //        return Ok(organisateurs);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrganisateurs()
+        {
+            try
+            {
+                var organisateurs = await _organisateurRepository.GetAllOrganisateurs();
+                return Ok(organisateurs);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{organisateur_id}")]
         //public IActionResult GetByIdOrganisateur(int organisateur_Id)
         //{
@@ -55,7 +55,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
         //    }
-            
+
         //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(OrganisateurRegisterForm newOrganisateur)

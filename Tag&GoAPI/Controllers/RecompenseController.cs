@@ -23,21 +23,21 @@ namespace Tag_GoAPI.Controllers
             _recompenseRepository = recompenseRepository;
             _recompenseHub = recompenseHub;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllRecompenses()
-        //{
-        //    try
-        //    {
-        //        var recompenses = await _recompenseRepository.GetAllRecompenses();
-        //        return Ok(recompenses);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet]
+        public async Task<IActionResult> GetAllRecompenses()
+        {
+            try
+            {
+                var recompenses = await _recompenseRepository.GetAllRecompenses();
+                return Ok(recompenses);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpGet("{recompense_Id}")]
         //public async Task<IActionResult> GetByIdRecompense(int recompense_Id)
         //{
@@ -55,7 +55,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
         //    }
-            
+
         //}
         [HttpPost("create")]
         public async Task<IActionResult> Create(RecompenseRegisterForm recompense)
