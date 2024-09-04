@@ -28,7 +28,7 @@ namespace Tag_GoAPI.DTOs.Forms
         public string Description { get; set; }
         [Required(ErrorMessage = "Humidity is required ! ")]
         [MinLength(2)]
-        [MaxLength(4)]
+        [MaxLength(8)]
         [DisplayName("Humidity : ")]
         public string Humidity { get; set; }
         [Required(ErrorMessage = "Prescription is required ! ")]

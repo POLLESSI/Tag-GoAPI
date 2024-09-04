@@ -26,10 +26,11 @@ namespace Tag_Go.DAL.Repositories
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Date", wearherForecast.Date);
                 parameters.Add("@TemperatureC", wearherForecast.TemperatureC);
-                //parameters.Add("TemperatureF", wearherForecast.TemperatureF);
+                parameters.Add("TemperatureF", wearherForecast.TemperatureF);
                 parameters.Add("@Summary", wearherForecast.Summary);
                 parameters.Add("@Description", wearherForecast.Description);
-                parameters.Add("@Prescription", wearherForecast.Precipitation);
+                parameters.Add("@Humidity", wearherForecast.Humidity);
+                parameters.Add("@Precipitation", wearherForecast.Precipitation);
                 parameters.Add("@NEvenement_Id", wearherForecast.NEvenement_Id);
                 return _connection.Execute(sql, parameters) > 0;
             }
@@ -50,7 +51,7 @@ namespace Tag_Go.DAL.Repositories
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@date", weatherForecast.Date);
                 parameters.Add("@temperatureC", weatherForecast.TemperatureC);
-                //parameters.Add("@temperatureF", weatherForecast.TemperatureF);
+                parameters.Add("@temperatureF", weatherForecast.TemperatureF);
                 parameters.Add("@summary", weatherForecast.Summary);
                 parameters.Add("description", weatherForecast.Description);
                 parameters.Add("@humidity", weatherForecast.Humidity);

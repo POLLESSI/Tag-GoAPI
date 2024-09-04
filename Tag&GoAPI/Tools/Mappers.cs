@@ -156,6 +156,7 @@ namespace Tag_GoAPI.Tools
             {
                 Date = forecast.Date,
                 TemperatureC = forecast.TemperatureC,
+                TemperatureF = forecast.TemperatureF,
                 Summary = forecast.Summary,
                 Description = forecast.Description,
                 Humidity = forecast.Humidity,

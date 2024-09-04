@@ -15,6 +15,8 @@ namespace Tag_GoAPI.Models
         [MaxLength(64)]
         [DisplayName("Author : ")]
         public string Author { get; set; }
+        [DisplayName("Sending Date : ")]
+        public DateTime SendingDate {  get; set; }
         //[Required(ErrorMessage = "Event Id is required : ")]
         [DisplayName("Event Id : ")]
         public int Evenement_Id { get; set; }

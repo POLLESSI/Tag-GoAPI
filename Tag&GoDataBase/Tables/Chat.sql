@@ -2,6 +2,7 @@
 (
 	[Chat_Id] INT IDENTITY,
 	[NewMessage] NVARCHAR(64) NULL,
+	[Author] NVARCHAR(64) NULL,
 	[SendingDate] DATE DEFAULT GETDATE(),
 	[NEvenement_Id] INT NULL,
 	[Activity_Id] INT NULL,
