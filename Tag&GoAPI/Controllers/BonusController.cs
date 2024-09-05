@@ -28,7 +28,7 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var bonus = await _bonusRepository.GetAllBonuss();
-                return Ok(_bonusRepository.GetAllBonuss());
+                return Ok(bonus);
             }
             catch (Exception ex)
             {

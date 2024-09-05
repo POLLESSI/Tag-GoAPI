@@ -45,6 +45,7 @@ namespace Tag_GoAPI.Tools
             {
                 NewMessage = ch.NewMessage,
                 Author = ch.Author,
+                SendingDate = ch.SendingDate,
                 Evenement_Id = ch.Evenement_Id,
                 Activity_Id = ch.Activity_Id
             };

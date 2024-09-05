@@ -33,8 +33,8 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var activeWeatherForecasts = await _forecastRepository.GetAllWeatherForecasts();
-                return Ok(activeWeatherForecasts);
+                var weatherForecasts = await _forecastRepository.GetAllWeatherForecasts();
+                return Ok(weatherForecasts);
             }
             catch (Exception ex)
             {
