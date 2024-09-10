@@ -7,7 +7,7 @@
 	[PosLat] DECIMAL(8, 6) NOT NULL,
 	[PosLong] DECIMAL(9, 6) NOT NULL,
 	[Positif] BIT DEFAULT 1,
-	[Organisateur_Id] INT NULL UNIQUE,
+	[Organisateur_Id] INT NULL,
 	[NIcon_Id] INT NULL,
 	[Recompense_Id] INT NULL,
 	[Bonus_Id] INT NULL,
@@ -20,7 +20,6 @@
 	CONSTRAINT [FK_NEvenement_Recompense] FOREIGN KEY (Recompense_Id) REFERENCES [Recompense] ([Recompense_Id]),
 	CONSTRAINT [FK_NEvenement_Bonus] FOREIGN KEY (Bonus_Id) REFERENCES [Bonus] ([Bonus_Id]),
 	CONSTRAINT [FK_NEvenement_MediaItem] FOREIGN KEY (MediaItem_Id) REFERENCES [MediaItem] ([MediaItem_Id]),
-	CONSTRAINT [UK_Organisateur] UNIQUE ([Organisateur_Id])
 )
 
 GO 

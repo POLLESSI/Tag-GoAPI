@@ -7,11 +7,10 @@
 	[ComplementareInformation] NVARCHAR(64) NULL,
 	[PosLat] DECIMAL(8, 6) NOT NULL,
 	[PosLong] DECIMAL(9, 6) NOT NULL,
-	[Organisateur_Id] INT NOT NULL UNIQUE,
+	[Organisateur_Id] INT NOT NULL,
 	[Active] BIT DEFAULT 1
 
-	CONSTRAINT [PK_Activity] PRIMARY KEY ([Activity_Id]),
-	CONSTRAINT [FK_Activity_Organisateur] FOREIGN KEY (Organisateur_Id) REFERENCES [Organisateur] ([Organisateur_Id])
+	CONSTRAINT [PK_Activity] PRIMARY KEY ([Activity_Id])
 )
 
 GO
