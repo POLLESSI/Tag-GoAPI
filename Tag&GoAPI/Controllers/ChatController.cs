@@ -61,16 +61,20 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_chatRepository.Create(newMessage.ChatToDal()))
+                var chatDal = newMessage.ChatToDal();
+                var chatCreated = _chatRepository.Create(chatDal);
+
+                if (chatCreated)
                 {
                     await _chatHub.RefreshChat();
-                    return Ok(newMessage);
+
+                    return CreatedAtAction(nameof(Create), new { id = chatDal.Chat_Id}, chatDal);
                 }
-                return BadRequest("Registration error");
+                return BadRequest(new { message = "Registration error. Could not create chat" });
             }
             catch (Exception ex)
             {

@@ -62,13 +62,31 @@ namespace Tag_GoAPI.Controllers
         public async Task<IActionResult> Create(MapRegisterForm map)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
-            if (_mapRepository.Create(map.MapToDal()))
             {
-                await _mapHub.RefreshMap();
-                return Ok();
+                return BadRequest(ModelState);
             }
-            return BadRequest("Registration Error");
+
+            try
+            {
+                var mapDal = map.MapToDal();
+                var mapCrated = _mapRepository.Create(mapDal);
+
+                if (mapCrated)
+                {
+                    await _mapHub.RefreshMap();
+
+                    return CreatedAtAction(nameof(Create), new { id = mapDal.Map_Id }, mapDal);
+                }
+                return BadRequest(new { message = "Registration Error. Could not create map" });
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error creating Map; {ex}");
+                return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
+            }
+                
+            
         }
         //[HttpDelete("{map_Id}")]
         //public async Task<IActionResult> DeleteMap(int map_Id)

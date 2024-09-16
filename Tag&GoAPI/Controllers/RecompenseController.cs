@@ -62,22 +62,26 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_recompenseRepository.Create(recompense.RecompenseToDal()))
+                var recompenseDal = recompense.RecompenseToDal();
+                var recompenseCreated = _recompenseRepository.Create(recompenseDal);
+
+                if (recompenseCreated)
                 {
                     await _recompenseHub.RefreshRecompense();
-                    return Ok(recompense);
+
+                    return CreatedAtAction(nameof(Create), new { id = recompenseDal.Recompense_Id}, recompenseDal);
                 }
-                return BadRequest("Registration Error");
+                return BadRequest(new { message = "Registration Error. Could not create recompense" });
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating recompense: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }

@@ -62,16 +62,19 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_avatarRepository.Create(avatar.AvatarToDal()))
+                var avatarDal = avatar.AvatarToDal();
+                var avatarCreated = _avatarRepository.Create(avatarDal);
+
+                if (avatarCreated)
                 {
                     await _avatarHub.RefreshAvatar();
-                    return Ok();
+                    return CreatedAtAction(nameof(Create), new { id = avatarDal.Avatar_Id});
                 }
-                return BadRequest("Registration Error");
+                return BadRequest(new { message = "Registration Error. Could not create avatar" });
             }
             catch (Exception ex)
             {

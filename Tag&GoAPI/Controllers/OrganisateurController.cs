@@ -62,22 +62,26 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_organisateurRepository.Create(newOrganisateur.OrganisateurToDal()))
+                var organisateurDal = newOrganisateur.OrganisateurToDal();
+                var organisateurCreated = _organisateurRepository.Create(organisateurDal);
+
+                if (organisateurCreated)
                 {
                     await _organisateurHub.RefreshOrganisateur();
-                    return Ok(newOrganisateur);
+
+                    return CreatedAtAction(nameof(Create), new { id = organisateurDal.Organisateur_Id });
                 }
-                return BadRequest("Registration Error");
+                return BadRequest(new { message = "Registration Error. Could not create organisator" });
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating organisator: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }

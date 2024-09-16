@@ -62,22 +62,26 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_mediaItemRepository.Create(newMediaItem.MediaItemToDal()))
+                var mediaItemDal = newMediaItem.MediaItemToDal();
+                var mediaItemCreated = _mediaItemRepository.Create(mediaItemDal);
+
+                if (mediaItemCreated)
                 {
                     await _mediaItemHub.RefreshMediaItem();
-                    return Ok(newMediaItem);
+
+                    return CreatedAtAction(nameof(Created), new { id = mediaItemDal.MediaItem_Id }, mediaItemDal);
                 }
-                return BadRequest("Registration Horror");
+                return BadRequest(new { message = "Registration Horror. Could not create Media Item" });
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating media item: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }

@@ -66,13 +66,30 @@ namespace Tag_GoAPI.Controllers
         public async Task<IActionResult> Create(WeatherForecastRegisterForm weatherregisterform)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
-            if (_forecastRepository.Create(weatherregisterform.WeatherForecastToDal()))
             {
-                await _hub.RefreshWeatherForecast();
-                return Ok(weatherregisterform);
+                return BadRequest(ModelState);
             }
-            return BadRequest("Registration Error");
+
+            try
+            {
+                var weatherForecastDal = weatherregisterform.WeatherForecastToDal();
+                var weatherForecastCreated = _forecastRepository.Create(weatherForecastDal);
+
+                if (_forecastRepository.Create(weatherregisterform.WeatherForecastToDal()))
+                {
+                    await _hub.RefreshWeatherForecast();
+
+                    return CreatedAtAction(nameof(Create), new { id = weatherForecastDal.WeatherForecast_Id }, weatherForecastDal);
+                }
+                return BadRequest(new { message = "Registration Error. Could not create weather forecast" });
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error creating Weather Forecast; {ex}");
+                return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
+            }
+            
         }
         //[HttpDelete("{weatherForecast_Id}")]
         //public async Task<IActionResult> DeleteWeatherForecast(int weatherForecast_Id)

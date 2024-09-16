@@ -62,22 +62,26 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_nEvenementRepository.Create(nEvenement.NEvenementToDal()))
+                var nEvenementDal = nEvenement.NEvenementToDal();
+                var nEvenementCreated = _nEvenementRepository.Create(nEvenementDal);
+
+                if (nEvenementCreated)
                 {
                     await _nEvenementHub.RefreshEvenement();
-                    return Ok();
+
+                    return CreatedAtAction(nameof(Create), new { id = nEvenementDal.NEvenement_Id }, nEvenementDal);
                 }
-                return BadRequest("Registration Error");
+                return BadRequest(new { message = "Registration Error. Could not create event" });
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating event: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }

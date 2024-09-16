@@ -6,6 +6,7 @@ using Tag_GoAPI.DTOs.Forms;
 using Tag_GoAPI.Tools;
 using System.Security.Cryptography;
 using Tag_Go.DAL.Entities;
+using Tag_GoAPI.DTOs;
 //using System.Reflection.Metadata.Ecma335;
 
 namespace Tag_GoAPI.Controllers
@@ -63,25 +64,31 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);  // Renvoie les erreurs de validation du modèle
             }
+
             try
             {
-                if (_activityRepository.Create(activity.ActivityToDal()))
+                var activityDal = activity.ActivityToDal();
+                var activityCreated = _activityRepository.Create(activityDal);
+
+                if (activityCreated)
                 {
                     await _activityHub.RefreshActivity();
-                    return Ok();
+
+                    // Retourne l'objet créé avec un statut 201 (Created)
+                    return CreatedAtAction(nameof(Create), new { id = activityDal.Activity_Id }, activityDal);
                 }
-                return BadRequest("Registration Error");
+
+                return BadRequest(new { message = "Registration Error. Could not create activity" });  // Renvoie une erreur spécifique
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine($"Error creating Activity; {ex}");
-                return StatusCode(500, "Internal Server error");
+                return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });  // Renvoie un message d'erreur avec des détails
             }
-
         }
+
         //[HttpDelete("{activity_Id}")]
         //public async Task<IActionResult> DeleteActivity(int activity_Id)
         //{
@@ -99,7 +106,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
+
         //}
         //[HttpPut("{activity_Id}")]
         //public async Task<IActionResult> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string ComplementareInformation, string posLat, string posLong, int organisateur_Id)
@@ -115,7 +122,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
+
         //}
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveActivityUpdate(Dictionary<string, string> newUpdate)
@@ -131,7 +138,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentActivity);
         //}

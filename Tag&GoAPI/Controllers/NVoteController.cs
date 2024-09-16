@@ -60,22 +60,26 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_nVoteRepository.Create(nVote.NVoteToDal()))
+                var nVoteDal = nVote.NVoteToDal();
+                var nVoteCreated = _nVoteRepository.Create(nVoteDal);
+
+                if (nVoteCreated)
                 {
                     await _nVoteHub.RefreshVote();
-                    return Ok();
+
+                    return CreatedAtAction(nameof(Create), new { id = nVoteDal.NVote_Id }, nVoteDal);
                 }
-                return BadRequest("Registration Error");
+                return BadRequest(new { message = "Registration Error. Could not create new vote" });
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating vote: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }

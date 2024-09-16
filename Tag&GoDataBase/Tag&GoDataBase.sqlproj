@@ -69,7 +69,7 @@
     <Build Include="Tables\Activity.sql" />
     <Build Include="Tables\Avatar.sql" />
     <Build Include="Tables\Bonus.sql" />
-    <Build Include="Tables\Chat.sql" />
+    <Build Include="Tables\ChatActivity.sql" />
     <Build Include="Tables\Map.sql" />
     <Build Include="Tables\MediaItem.sql" />
     <Build Include="Tables\NEvenement.sql" />
@@ -80,6 +80,7 @@
     <Build Include="Tables\Organisateur.sql" />
     <Build Include="Tables\Recompense.sql" />
     <Build Include="Tables\WeatherForecast.sql" />
+    <Build Include="Tables\ChatEvenement.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tag&amp;GoDataBase.publish.xml" />

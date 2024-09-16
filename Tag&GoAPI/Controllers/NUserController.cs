@@ -98,24 +98,27 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_userRepository.Create(nUser.NUserToDal()))
+                var nUserDal = nUser.NUserToDal();
+                var nUserCreated = _userRepository.Create(nUserDal);
+
+                if (nUserCreated)
                 {
                     await _nUserHub.RefreshNUser();
-                    return Ok();
+
+                    return CreatedAtAction(nameof(Create), new { id = nUserDal.NUser_Id }, nUserDal);
                 }
-                return BadRequest("Registration Error");
+                return BadRequest(new { message = "Registration Error. Could not create new User" });
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating user: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
-
         }
         //[HttpDelete("{nuser_Id}")]
         //[Route("{nuser_Id: int}")]

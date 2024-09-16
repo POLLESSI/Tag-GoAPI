@@ -62,22 +62,26 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_nIconRepository.Create(nIcon.NIconToDal()))
+                var iconDal = nIcon.NIconToDal();
+                var iconCreated = _nIconRepository.Create(iconDal);
+
+                if (iconCreated)
                 {
                     await _nIconHub.RefreshIcon();
-                    return Ok(nIcon);
+
+                    return CreatedAtAction(nameof(Create), new { id = iconDal.NIcon_Id }, iconDal);
                 }
-                return BadRequest("Registration Error");
+                return BadRequest(new { message = "Registration Error" });
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating icon: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }

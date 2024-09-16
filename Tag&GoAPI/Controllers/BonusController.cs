@@ -61,16 +61,20 @@ namespace Tag_GoAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             try
             {
-                if (_bonusRepository.Create(bonus.BonusToDal()))
+                var bonusDal = bonus.BonusToDal();
+                var bonusCreated = _bonusRepository.Create(bonusDal);
+
+                if (bonusCreated)
                 {
                     await _bonusHub.RefreshBonus();
-                    return Ok();
+
+                    return CreatedAtAction(nameof(Create), new { id = bonusDal.Bonus_Id}, bonusDal);
                 }
-                return BadRequest("Registration Error");
+                return BadRequest(new { message = "Registration Error. Could not create activity" });
             }
             catch (Exception ex)
             {
