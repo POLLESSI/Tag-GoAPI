@@ -16,6 +16,6 @@ namespace Tag_Go.DAL.Interfaces
         Task <IEnumerable<Avatar?>> GetAllAvatars();
         Task<Avatar?> GetByIdAvatar(int avatar_Id);
         Task<Avatar?> DeleteAvatar(int avatar_Id);
-        Task<Avatar?> UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description);
+        Task<Avatar?> UpdateAvatar(Avatar avatar);
     }
 }

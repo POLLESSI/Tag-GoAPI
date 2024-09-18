@@ -81,11 +81,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<NIcon?> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id)
+        public Task<NIcon?> UpdateNIcon(NIcon nIcon)
         {
             try
             {
-                var UpdateNIcon = _nIconRepository.UpdateNIcon(nIconName, nIconDescription, nIconUrl, nIcon_Id);
+                var UpdateNIcon = _nIconRepository.UpdateNIcon(nIcon);
                 return UpdateNIcon;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

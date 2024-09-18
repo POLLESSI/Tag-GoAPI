@@ -16,6 +16,6 @@ namespace Tag_Go.BLL.Interfaces
         Task<IEnumerable<Organisateur?>> GetAllOrganisateurs();
         Task<Organisateur?> GetByIdOrganisateur(int organisateur_Id);
         Task<Organisateur?> DeleteOrganisateur(int organisateur_Id);
-        Task<Organisateur?> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id);
+        Task<Organisateur?> UpdateOrganisateur(Organisateur organisateur);
     }
 }

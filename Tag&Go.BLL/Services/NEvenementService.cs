@@ -81,11 +81,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<NEvenement?> UpdateNEvenement(DateTime nEvenementDate, string nEvenementName, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
+        public Task<NEvenement?> UpdateNEvenement(NEvenement nEvenement)
         {
             try
             {
-                var UpdateNEvenement = _nEvenementRepository.UpdateNEvenement(nEvenementDate, nEvenementDescription, posLat, posLong, positif, organisateur_Id, nIcon_Id, recompense_Id, bonus_Id, mediaItem_Id, nEvenement_Id);
+                var UpdateNEvenement = _nEvenementRepository.UpdateNEvenement(nEvenement);
                 return UpdateNEvenement;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

@@ -30,6 +30,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@Point", recompense.Point);
                 parameters.Add("@Implication", recompense.Implication);
                 parameters.Add("@Granted", recompense.Granted);
+
                 return _connection.Execute(sql, parameters) > 0;
             }
             catch (Exception ex)
@@ -100,17 +101,18 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<Recompense?> UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
+        public Task<Recompense?> UpdateRecompense(Recompense recompense)
         {
             try
             {
                 string sql = "UPDATE Recompense SET Definition = @definition, Point = @point, Implication = @implication, Granted = @granted WHERE Recompense_Id = @recompense_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@definition", definition);
-                parameters.Add("@point", point);
-                parameters.Add("@implication", implication);
-                parameters.Add("@granted", granted);
-                parameters.Add("@recompense_Id", recompense_Id);
+                parameters.Add("@definition", recompense.Definition);
+                parameters.Add("@point", recompense.Point);
+                parameters.Add("@implication", recompense.Implication);
+                parameters.Add("@granted", recompense.Granted);
+                parameters.Add("@recompense_Id", recompense.Recompense_Id);
+
                 return _connection.QueryFirstAsync<Recompense?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

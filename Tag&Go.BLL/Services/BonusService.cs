@@ -82,11 +82,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<Bonus?> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
+        public Task<Bonus?> UpdateBonus(Bonus bonus)
         {
             try
             {
-                var UpdateBonus = _bonusRepository.UpdateBonus(bonus_Id, bonusType, bonusDescription, application, granted);
+                var UpdateBonus = _bonusRepository.UpdateBonus(bonus);
                 return UpdateBonus;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

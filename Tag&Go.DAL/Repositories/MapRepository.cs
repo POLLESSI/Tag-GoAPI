@@ -99,15 +99,15 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<Map?> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
+        public Task<Map?> UpdateMap(Map map)
         {
             try
             {
                 string sql = "UPDATE Map SET DateCreation = @dateCreation, MapUrl = @mapUrl, Description = @dateDescription WHERE Map_Id = @map_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@dateCreation", dateCreation);
-                parameters.Add("@mapUrl", mapUrl);
-                parameters.Add("description", description);
+                parameters.Add("@dateCreation", map.DateCreation);
+                parameters.Add("@mapUrl", map.MapUrl);
+                parameters.Add("description", map.Description);
                 return _connection.QueryFirstAsync<Map?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

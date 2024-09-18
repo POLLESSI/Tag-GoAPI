@@ -138,23 +138,31 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
-        //}
-        //[HttpPut("nuser_Id")]
-        //public async Task<IActionResult> UpdateNUser(int nUser_Id, string email, string pwd, int nPerson_Id, string role_Id, int avatar_Id, string point)
-        //{
-        //    try
-        //    {
-        //        var nuser = await _userRepository.UpdateNUser(nUser_Id, email, pwd, nPerson_Id, role_Id, avatar_Id, point);
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
         //}
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateNUser(NUserUpdate nUserUpdate)
+        {
+            var nUserDal = nUserUpdate.NUserUpdateToDal();
+
+            try
+            {
+                var updateNUser = await _userRepository.UpdateNUser(nUserDal);
+
+                if (updateNUser == null)
+                {
+                    return NotFound($"User with ID {nUserDal.NUser_Id} not found.");
+                }
+
+                return Ok(updateNUser);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveNUserUpdate(Dictionary<string, string> newUpdate)
         //{
@@ -169,7 +177,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentNUser);
         //}

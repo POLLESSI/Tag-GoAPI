@@ -101,17 +101,18 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<Organisateur?> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
+        public Task<Organisateur?> UpdateOrganisateur(Organisateur organisateur)
         {
             try
             {
                 string sql = "UPDATE Organisateur SET CompanyName = @companyName, BusinessNumber = @businessNumber, NUser_Id = @nUser_Id, Point = @point WHERE Organisateur_Id = @organisateur_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@companyName", companyName);
-                parameters.Add("@businessNumber", businessNumber);
-                parameters.Add("@nUser_Id", nUser_Id);
-                parameters.Add("@point", point);
-                parameters.Add("@organisateur_Id", organisateur_Id);
+                parameters.Add("@companyName", organisateur.CompanyName);
+                parameters.Add("@businessNumber", organisateur.BusinessNumber);
+                parameters.Add("@nUser_Id", organisateur.NUser_Id);
+                parameters.Add("@point", organisateur.Point);
+                parameters.Add("@organisateur_Id", organisateur.Organisateur_Id);
+
                 return _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

@@ -16,6 +16,6 @@ namespace Tag_Go.BLL.Interfaces
         Task<IEnumerable<NPerson?>> GetAllNPersons();
         Task<NPerson?> GetByIdNPerson(int nPerson_Id);
         Task<NPerson?> DeleteNPerson(int nPerson_Id);
-        Task<NPerson?> UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id);
+        Task<NPerson?> UpdateNPerson(NPerson nPerson);
     }
 }

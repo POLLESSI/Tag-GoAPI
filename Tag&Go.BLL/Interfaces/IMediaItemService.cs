@@ -16,6 +16,6 @@ namespace Tag_Go.BLL.Interfaces
         Task<IEnumerable<MediaItem?>> GetAllMediaItems();
         Task<MediaItem?> GetByIdMediaItem(int mediaItem_Id);
         Task<MediaItem?> DeleteMediaItem(int mediaItem_Id);
-        Task<MediaItem?> UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description);
+        Task<MediaItem?> UpdateMediaItem(MediaItem mediaItem);
     }
 }

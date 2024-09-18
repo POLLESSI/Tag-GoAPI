@@ -7,6 +7,7 @@ using Tag_GoAPI.Tools;
 using System.Security.Cryptography;
 using Tag_Go.DAL.Entities;
 using Tag_GoAPI.DTOs;
+using System.Diagnostics;
 //using System.Reflection.Metadata.Ecma335;
 
 namespace Tag_GoAPI.Controllers
@@ -77,7 +78,7 @@ namespace Tag_GoAPI.Controllers
                     await _activityHub.RefreshActivity();
 
                     // Retourne l'objet créé avec un statut 201 (Created)
-                    return CreatedAtAction(nameof(Create), new { id = activityDal.Activity_Id }, activityDal);
+                    return CreatedAtAction(nameof(Create), new { activity_id = activityDal.Activity_Id }, activityDal);
                 }
 
                 return BadRequest(new { message = "Registration Error. Could not create activity" });  // Renvoie une erreur spécifique
@@ -108,22 +109,31 @@ namespace Tag_GoAPI.Controllers
         //    }
 
         //}
-        //[HttpPut("{activity_Id}")]
-        //public async Task<IActionResult> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string ComplementareInformation, string posLat, string posLong, int organisateur_Id)
-        //{
-        //    try
-        //    {
-        //        var activity = await _activityRepository.UpdateActivity(activity_Id, activityName, activityAddress, activityDescription, ComplementareInformation, posLat, posLong, organisateur_Id);
 
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateActivity(ActivityUpdate activityUpdate)
+        {
+            var activityDal = activityUpdate.ActivityUpdateToDal();
+            
+            try
+            {
+                // Mise à jour de l'activité dans le dépôt
+                var updatedActivity = await _activityRepository.UpdateActivity(activityDal);
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                // Vérifier si l'activité existe et a été mise à jour
+                if (updatedActivity == null)
+                {
+                    return NotFound($"Activity with ID {activityDal.Activity_Id} not found.");
+                }
 
-        //}
+                // Retourner l'activité mise à jour
+                return Ok(updatedActivity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveActivityUpdate(Dictionary<string, string> newUpdate)
         //{

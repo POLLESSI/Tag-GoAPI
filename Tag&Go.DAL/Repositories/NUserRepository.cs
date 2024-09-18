@@ -166,17 +166,17 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<NUser?> UpdateNUser(int nUser_Id, string? email, string? pwd, int nPerson_Id, string? role_Id, int avatar_Id, string? point)
+        public Task<NUser?> UpdateNUser(NUser nUser)
         {
             try
             {
                 string sql = "UPDATE NUser SET Email = @email, Pwd = CONVERT(varbinary(64), @pwd), NPerson_Id = @nPerson_Id, Role_Id = @role_Id WHERE NUser_Id = @nUser_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@nUser_Id", nUser_Id);
-                parameters.Add("@email", email);
-                parameters.Add("@pwd", pwd);
-                parameters.Add("@nPerson_Id", nPerson_Id);
-                parameters.Add("@role_Id", role_Id);
+                parameters.Add("@nUser_Id", nUser.NUser_Id);
+                parameters.Add("@email", nUser.Email);
+                parameters.Add("@pwd", nUser.Pwd);
+                parameters.Add("@nPerson_Id", nUser.NPerson_Id);
+                parameters.Add("@role_Id", nUser.Role_Id);
                 return _connection.QueryFirstAsync<NUser>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

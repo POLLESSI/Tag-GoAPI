@@ -81,11 +81,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<Recompense?> UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
+        public Task<Recompense?> UpdateRecompense(Recompense recompense)
         {
             try
             {
-                var UpdateRecompense = _recompenseRepository.UpdateRecompense(definition, point, implication, granted, recompense_Id);
+                var UpdateRecompense = _recompenseRepository.UpdateRecompense(recompense);
                 return UpdateRecompense;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

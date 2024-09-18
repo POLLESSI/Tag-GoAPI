@@ -81,11 +81,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<Map?> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
+        public Task<Map?> UpdateMap(Map map)
         {
             try
             {
-                var updateMap = _mapRepository.UpdateMap(map_Id, dateCreation, mapUrl, description);
+                var updateMap = _mapRepository.UpdateMap(map);
                 return updateMap;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

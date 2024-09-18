@@ -102,24 +102,31 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
-        //}
-        //[HttpPut("{nIcon_Id}")]
-        //public async Task<IActionResult> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIconId)
-        //{
-        //    try
-        //    {
-        //        var nicon = await _nIconRepository.UpdateNIcon(nIconName, nIconDescription, nIconUrl, nIconId);
 
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
         //}
+        [HttpPut("{nIcon_Id}")]
+        public async Task<IActionResult> UpdateNIcon(NIconUpdate nIconUpdate)
+        {
+            var nIconDal = nIconUpdate.NIconUpdateToDal();
+
+            try
+            {
+                var updateNIcon = await _nIconRepository.UpdateNIcon(nIconDal);
+
+                if (updateNIcon == null)
+                {
+                    return NotFound($"Icon with ID {nIconDal.NIcon_Id} not found.");
+                }
+
+                return Ok(updateNIcon);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveIconUpdate(Dictionary<string, NIconHub> newUpdate)
         //{
@@ -134,7 +141,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentNIcon);
         //}

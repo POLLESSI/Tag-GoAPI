@@ -15,6 +15,6 @@ namespace Tag_Go.DAL.Interfaces
         Task<IEnumerable<Recompense?>> GetAllRecompenses();
         Task<Recompense?> GetByIdRecompense(int recompense_Id);
         Task<Recompense?> DeleteRecompense(int recompense_Id);
-        Task<Recompense?> UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id);
+        Task<Recompense?> UpdateRecompense(Recompense recompense);
     }
 }

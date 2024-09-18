@@ -123,11 +123,11 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Task<NUser?> UpdateNUser(int nUser_Id, string? email, string? pwd, int nPerson_Id, string? role_Id, int avatar_Id, string? point)
+        public Task<NUser?> UpdateNUser(NUser nUser)
         {
             try
             {
-                var updateNUser = _nUserRepository.UpdateNUser(nUser_Id, email, pwd, nPerson_Id, role_Id, avatar_Id, point);
+                var updateNUser = _nUserRepository.UpdateNUser(nUser);
                 return updateNUser;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

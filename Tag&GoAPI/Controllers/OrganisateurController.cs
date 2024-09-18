@@ -102,24 +102,31 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
-        //}
-        //[HttpPut("{organisateur_Id}")]
-        //public async Task<IActionResult> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
-        //{
-        //    try
-        //    {
-        //        _organisateurRepository.UpdateOrganisateur(companyName, businessNumber, nUser_Id, point, organisateur_Id);
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-            
         //}
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateOrganisateur(OrganisateurUpdate organisateurUpdate)
+        {
+            var organisateurDal = organisateurUpdate.OrganisateurUpdateToDal();
+            try
+            {
+                var updateOrganisateur = await _organisateurRepository.UpdateOrganisateur(organisateurDal);
+
+                if (updateOrganisateur == null)
+                {
+                    return NotFound($"Organisator with ID {organisateurDal.Organisateur_Id} not found.");
+                }
+
+                return Ok(updateOrganisateur);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveOrganisateurUpdate(Dictionary<string, OrganisateurHub> newOrganisateur)
         //{
@@ -134,7 +141,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentOrganisateur);
         //}

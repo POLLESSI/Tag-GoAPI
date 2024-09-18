@@ -85,21 +85,28 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPut("{recompense_Id}")]
-        //public async Task<IActionResult> UpdateRecompense(string definition, string point, string implication, string granted, int recompense_Id)
-        //{
-        //    try
-        //    {
-        //        var recompense = await _recompenseRepository.UpdateRecompense(definition, point, implication, granted, recompense_Id);
-        //        return Ok(recompense);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateRecompense(RecompenseUpdate recompenseUpdate)
+        {
+            var recompenseDal = recompenseUpdate.RecompenseUpdateToDal();
+            try
+            {
+                var updateRecompense = await _recompenseRepository.UpdateRecompense(recompenseDal);
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                if (updateRecompense == null)
+                {
+                    return NotFound($"Recompense with ID {recompenseDal.Recompense_Id} not found");
+                }
+
+                return Ok(updateRecompense);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveRecompenseUpdate(Dictionary<string, RecompenseHub> newUpdate)
         //{
@@ -114,7 +121,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentRecompense);
         //}

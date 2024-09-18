@@ -72,7 +72,7 @@ namespace Tag_GoAPI.Controllers
                 if (avatarCreated)
                 {
                     await _avatarHub.RefreshAvatar();
-                    return CreatedAtAction(nameof(Create), new { id = avatarDal.Avatar_Id});
+                    return CreatedAtAction(nameof(Create), new { avatar_id = avatarDal.Avatar_Id}, avatarDal);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create avatar" });
             }
@@ -80,7 +80,7 @@ namespace Tag_GoAPI.Controllers
             {
 
                 Console.WriteLine($"Error creating avatar: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }
@@ -101,24 +101,30 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-           
-        //}
-        //[HttpPut("{avatar_Id}")]
-        //public async Task<IActionResult> UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description)
-        //{
-        //    try
-        //    {
-        //        var avatar = await _avatarRepository.UpdateAvatar(avatar_Id, avatarName, avatarUrl, description);
-                
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
         //}
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateAvatar(AvatarUpdate avatarUpdate)
+        {
+            var avatarDal = avatarUpdate.AvatarUpdateToDal();
+            try
+            {
+                var updateAvatar = await _avatarRepository.UpdateAvatar(avatarDal);
+
+                if (updateAvatar == null)
+                {
+                    return NotFound($"Avatar with ID {avatarDal.Avatar_Id} not found.");
+                }
+
+                return Ok(updateAvatar);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveAvatarUpdate(Dictionary<string, AvatarHub> newUpdate)
         //{
@@ -133,7 +139,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentAvatar);
         //}

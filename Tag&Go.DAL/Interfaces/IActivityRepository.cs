@@ -15,6 +15,6 @@ namespace Tag_Go.DAL.Interfaces
         Task <IEnumerable<Activity?>> GetAllActivities();
         Task<Activity?> GetByIdActivity(int activity_Id);
         Task<Activity?> DeleteActivity(int activity_Id);
-        Task<Activity?> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id);
+        Task<Activity?> UpdateActivity(Activity activity);
     }
 }

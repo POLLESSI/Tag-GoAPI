@@ -105,23 +105,31 @@ namespace Tag_GoAPI.Controllers
 
         //        throw;
         //    }
-            
-        //}
-        //[HttpPut("map_Id")]
-        //public async Task<IActionResult> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description)
-        //{
-        //    try
-        //    {
-        //        var map = await _mapRepository.UpdateMap(map_Id, dateCreation, mapUrl, description);
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
         //}
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateMap(MapUpdate mapUpdate)
+        {
+            var mapDal = mapUpdate.MapUpdateToDal();
+
+            try
+            {
+                var updateMap = await _mapRepository.UpdateMap(mapDal);
+
+                if (updateMap == null)
+                {
+                    return NotFound($"Map with ID {mapDal.Map_Id} not found");
+                }
+
+                return Ok(updateMap);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveMapUpdate(Dictionary<string, string> newUpdate)
         //{
@@ -136,7 +144,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentMap);
         //}

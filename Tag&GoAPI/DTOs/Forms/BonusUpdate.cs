@@ -26,6 +26,6 @@ namespace Tag_GoAPI.DTOs.Forms
         public string Application { get; set; }
         [Required]
         [DisplayName("Granted? ")]
-        public bool Granted { get; set; }
+        public string Granted { get; set; }
     }
 }

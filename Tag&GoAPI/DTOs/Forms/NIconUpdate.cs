@@ -23,6 +23,6 @@ namespace Tag_GoAPI.DTOs.Forms
         public string NIconUrl { get; set; }
         [Required]
         [DisplayName("Icon_Id : ")]
-        public int Icon_Id { get; set; }
+        public int NIcon_Id { get; set; }
     }
 }

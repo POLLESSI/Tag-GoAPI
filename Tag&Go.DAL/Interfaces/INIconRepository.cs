@@ -15,6 +15,6 @@ namespace Tag_Go.DAL.Interfaces
         Task<IEnumerable<NIcon?>> GetAllNIcons();
         Task<NIcon?> GetByIdNIcon(int nIcon_Id);
         Task<NIcon?> DeleteNIcon(int nIcon_Id);
-        Task<NIcon?> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id);
+        Task<NIcon?> UpdateNIcon(NIcon nIcon);
     }
 }

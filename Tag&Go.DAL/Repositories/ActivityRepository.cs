@@ -106,20 +106,23 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<Activity?> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id)
+        public Task<Activity?> UpdateActivity(Activity activity)
         {
             try
             {
                 string sql = "UPDATE Activity SET ActivityName = @activityName, ActivityAddress = @activityAddress, ActivityDescription = @activityDescription, ComplementareInformation = @complementareInformation, PosLat = @posLat, PosLong = @posLong, Organisateur_Id = @organisateur_Id WHERE Activity_Id = @activity_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@activityName", activityName);
-                parameters.Add("@activityAddress", activityAddress);
-                parameters.Add("@activityDescription", activityDescription);
-                parameters.Add("@complementareInformation", complementareInformation);
-                parameters.Add("@posLat", posLat);
-                parameters.Add("@posLong", posLong);
-                parameters.Add("@organisateur_Id", organisateur_Id);
-                return _connection.QueryFirstAsync<Activity?>(sql, parameters);
+
+                parameters.Add("@activityName", activity.ActivityName);
+                parameters.Add("@activityAddress", activity.ActivityAddress);
+                parameters.Add("@activityDescription", activity.ActivityDescription);
+                parameters.Add("@complementareInformation", activity.ComplementareInformation);
+                parameters.Add("@posLat", activity.PosLat);
+                parameters.Add("@posLong", activity.PosLong);
+                parameters.Add("@organisateur_Id", activity.Organisateur_Id);
+
+                return _connection.QueryFirstAsync<Activity?>(sql);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {

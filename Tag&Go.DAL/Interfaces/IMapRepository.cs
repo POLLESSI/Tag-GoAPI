@@ -15,6 +15,6 @@ namespace Tag_Go.DAL.Interfaces
         Task<IEnumerable<Map?>> GetAllMaps();
         Task<Map?> GetByIdMap(int map_Id);
         Task<Map?> DeleteMap(int map_Id);
-        Task<Map?> UpdateMap(int map_Id, DateTime dateCreation, string mapUrl, string description);
+        Task<Map?> UpdateMap(Map map);
     }
 }

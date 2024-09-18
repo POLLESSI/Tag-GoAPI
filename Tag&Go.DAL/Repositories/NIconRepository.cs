@@ -100,16 +100,18 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<NIcon?> UpdateNIcon(string nIconName, string nIconDescription, string nIconUrl, int nIcon_Id)
+        public Task<NIcon?> UpdateNIcon(NIcon nIcon)
         {
             try
             {
                 string sql = "UPDATE NIcon SET NIconName = @nIconName, NIconDescription = @nIconDescription, NIconUrl = @nIconUrl WHERE NIcon_Id = @nIcon_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@nIconName", nIconName);
-                parameters.Add("@nIconDescription", nIconDescription);
-                parameters.Add("@nIconUrl", nIconUrl);
-                parameters.Add("@nIcon_Id", nIcon_Id);
+                parameters.Add("@nIconName", nIcon.NIconName);
+                parameters.Add("@nIconDescription", nIcon.NIconDescription);
+                parameters.Add("@nIconUrl", nIcon.NIconUrl);
+                parameters.Add("@nIcon_Id", nIcon.NIcon_Id);
+
                 return _connection.QueryFirstAsync<NIcon?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

@@ -108,20 +108,28 @@ namespace Tag_GoAPI.Controllers
         //        return StatusCode(500, ex.Message);
         //    }
         //}
-        //[HttpPut("{weatherForecast_Id}")]
-        //public async Task<IActionResult> UpdateWeatherForecast(int weatherForecast_Id, DateTime Date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id)
-        //{
-        //    try
-        //    {
-        //        _forecastRepository.UpdateWeatherForecast(weatherForecast_Id, Date, temperatureC, temperatureF, summary, description, humidity, precipitation, nEvenement_Id);
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpPut("{weatherForecast_Id}")]
+        public async Task<IActionResult> UpdateWeatherForecast(WeatherForecastUpdate weatherForecastUpdate)
+        {
+            var weatherForecastDal = weatherForecastUpdate.WeatherForecastUpdateToDal();
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
+            try
+            {
+                var updateWeatherForecast = await _forecastRepository.UpdateWeatherForecast(weatherForecastDal);
+
+                if (updateWeatherForecast == null)
+                {
+                    return NotFound($"Weather Forecast with ID {weatherForecastDal.WeatherForecast_Id} not found.");
+                }
+
+                return Ok(updateWeatherForecast);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveWeatherForecastUpdate(Dictionary<string, WeatherForecastHub> newUpdate)
         //{

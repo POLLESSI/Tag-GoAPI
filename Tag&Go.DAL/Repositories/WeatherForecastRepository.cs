@@ -23,6 +23,7 @@ namespace Tag_Go.DAL.Repositories
             {
                 string sql = "INSERT INTO WeatherForecast (Date, TemperatureC, TemperatureF, Summary, Description, Humidity, Precipitation, NEvenement_Id) VALUES " +
                     "(@Date, @TemperatureC, @TemperatureF, @Summary, @Description, @Humidity, @Precipitation, @NEvenement_Id)";
+
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Date", wearherForecast.Date);
                 parameters.Add("@TemperatureC", wearherForecast.TemperatureC);
@@ -106,21 +107,21 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<WeatherForecast?> UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id)
+        public Task<WeatherForecast?> UpdateWeatherForecast(WeatherForecast weatherForecast)
         {
             try
             {
                 string sql = "UPDATE WeatherForecast SET WeatherForecast_Id = @weatherForecast_Id WHERE WeatherForecast_Id = @weatherForecast_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@weatherForecast_Id", weatherForecast_Id);
-                parameters.Add("@date", date);
-                parameters.Add("@temperatureC", temperatureC);
-                parameters.Add("@temperatureF", temperatureF);
-                parameters.Add("@summary", summary);
-                parameters.Add("@description", description);
-                parameters.Add("@humidity", humidity);
-                parameters.Add("@precipitation", precipitation);
-                parameters.Add("@nEvenement_Id", nEvenement_Id);
+                parameters.Add("@weatherForecast_Id", weatherForecast.WeatherForecast_Id);
+                parameters.Add("@date", weatherForecast.Date);
+                parameters.Add("@temperatureC", weatherForecast.TemperatureC);
+                parameters.Add("@temperatureF", weatherForecast.TemperatureF);
+                parameters.Add("@summary", weatherForecast.Summary);
+                parameters.Add("@description", weatherForecast.Description);
+                parameters.Add("@humidity", weatherForecast.Humidity);
+                parameters.Add("@precipitation", weatherForecast.Precipitation);
+                parameters.Add("@nEvenement_Id", weatherForecast.NEvenement_Id);
 
                 return _connection.QueryFirstAsync<WeatherForecast?>(sql, parameters);
             }

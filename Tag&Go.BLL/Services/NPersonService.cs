@@ -80,11 +80,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<NPerson?> UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
+        public Task<NPerson?> UpdateNPerson(NPerson nPerson)
         {
             try
             {
-                var updatePerson = _nPersonRepository.UpdateNPerson(lastname, firstname, email, address_Street, address_Nbr, postalCode, address_City, address_Country, telephone, gsm, nPerson_Id);
+                var updatePerson = _nPersonRepository.UpdateNPerson(nPerson);
                 return updatePerson;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

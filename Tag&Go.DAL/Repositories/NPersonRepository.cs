@@ -113,23 +113,25 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<NPerson> UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
+        public Task<NPerson> UpdateNPerson(NPerson nPerson)
         {
             try
             {
                 string sql = "Update NPerson SET Lastname = @lastname, Firstname = @firstname, Email = @email, Address_Street = @address_Street, Address_Nbr = @address_Nbr, PostalCode = @postalCode, Address_City = @address_City, Address_Country = @address_Country, Telephone = @telephone, Gsm = @gsm WHERE NPerson_Id = @nPerson_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@lastname", lastname);
-                parameters.Add("@firstname", firstname);
-                parameters.Add("@email", email);
-                parameters.Add("@address_Street", address_Street);
-                parameters.Add("@address_Nbr", address_Nbr);
-                parameters.Add("@postalCode", postalCode);
-                parameters.Add("@address_City", address_City);
-                parameters.Add("@address_Country", address_Country);
-                parameters.Add("@telephone", telephone);
-                parameters.Add("@gsm", gsm);
-                parameters.Add("@nPerson_Id", nPerson_Id);
+                parameters.Add("@lastname", nPerson.Lastname);
+                parameters.Add("@firstname", nPerson.Firstname);
+                parameters.Add("@email", nPerson.Email);
+                parameters.Add("@address_Street", nPerson.Address_Street);
+                parameters.Add("@address_Nbr", nPerson.Address_Nbr);
+                parameters.Add("@postalCode", nPerson.PostalCode);
+                parameters.Add("@address_City", nPerson.Address_City);
+                parameters.Add("@address_Country", nPerson.Address_Country);
+                parameters.Add("@telephone", nPerson.Telephone);
+                parameters.Add("@gsm", nPerson.Gsm);
+                parameters.Add("@nPerson_Id", nPerson.NPerson_Id);
+
                 return _connection.QueryFirstAsync<NPerson?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

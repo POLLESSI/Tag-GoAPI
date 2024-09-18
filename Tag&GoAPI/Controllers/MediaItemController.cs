@@ -102,23 +102,31 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
-        //}
-        //[HttpPut("{mediaItem_Id}")]
-        //public async Task<IActionResult> UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
-        //{
-        //    try
-        //    {
-        //        var mediaitem = await _mediaItemRepository.UpdateMediaItem(mediaItem_Id, mediaType, urlItem, description);
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
         //}
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateMediaItem(MediaItemUpdate mediaItemUpdate)
+        {
+            var mediaItemDal = mediaItemUpdate.MediaItemUpdateToDal();
+
+            try
+            {
+                var updateMediaitem = await _mediaItemRepository.UpdateMediaItem(mediaItemDal);
+
+                if (updateMediaitem == null)
+                {
+                    return NotFound($"Media Item with ID {mediaItemDal.MediaItem_Id} not found.");
+                }
+
+                return Ok(updateMediaitem);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveMediaItemUpdate(Dictionary<string, MediaItemHub> newUpdate)
         //{
@@ -133,7 +141,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentMediaItem);
         //}

@@ -99,15 +99,15 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<MediaItem?> UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
+        public Task<MediaItem?> UpdateMediaItem(MediaItem mediaItem)
         {
             try
             {
                 string sql = "UPDATE MediaItem SET MediaType = @mediaType, UrlItem = @urlItem, Description = @description WHERE MediaItem_Id = @mediaItem_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@mediaType", mediaType);
-                parameters.Add("@urlItem", urlItem);
-                parameters.Add("description", description);
+                parameters.Add("@mediaType", mediaItem.MediaType);
+                parameters.Add("@urlItem", mediaItem.UrlItem);
+                parameters.Add("description", mediaItem.Description);
                 return _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

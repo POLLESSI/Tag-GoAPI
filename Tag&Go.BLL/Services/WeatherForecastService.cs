@@ -81,11 +81,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<WeatherForecast?> UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id)
+        public Task<WeatherForecast?> UpdateWeatherForecast(WeatherForecast weatherForecast)
         {
             try
             {
-                var updateWeatherForecast = _weatherForecastRepository.UpdateWeatherForecast(weatherForecast_Id, date, temperatureC, temperatureF, summary, description, humidity, precipitation, nEvenement_Id);
+                var updateWeatherForecast = _weatherForecastRepository.UpdateWeatherForecast(weatherForecast);
                 return updateWeatherForecast;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

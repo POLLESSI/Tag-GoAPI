@@ -115,23 +115,23 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<NEvenement?> UpdateNEvenement(DateTime nEvenementDate, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
+        public Task<NEvenement?> UpdateNEvenement(NEvenement nEvenement)
         {
             try
             {
                 string sql = "UPDATE NEvenement SET NEvenementDate = @nEvenementDate, NEvenementDescription = @nEvenementDescription, PosLat = @posLat, PosLong = @posLong, Positif = @positif, Organisateur_Id = @organisateur_Id, NIcon_Id = @nIcon_Id, Recompense_Id = @recompense_Id, Bonus_Id = @bonus_Id, MediaItem_Id = @mediaItem_Id WHERE NEvenement_Id = @nEvenement_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@nEvenementDate", nEvenementDate);
-                parameters.Add("@nEvenementDescription", nEvenementDescription);
-                parameters.Add("@posLat", posLat);
-                parameters.Add("@posLong", posLong);
-                parameters.Add("@positif", positif);
-                parameters.Add("@organisateur_Id", organisateur_Id);
-                parameters.Add("@nIon_Id", nIcon_Id);
-                parameters.Add("@recompense_Id", recompense_Id);
-                parameters.Add("@bonus_Id", bonus_Id);
-                parameters.Add("@mediaItem", mediaItem_Id);
-                parameters.Add("@nEvenement_Id", nEvenement_Id);
+                parameters.Add("@nEvenementDate", nEvenement.NEvenementDate);
+                parameters.Add("@nEvenementDescription", nEvenement.NEvenementDescription);
+                parameters.Add("@posLat", nEvenement.PosLat);
+                parameters.Add("@posLong", nEvenement.PosLong);
+                parameters.Add("@positif", nEvenement.Positif);
+                parameters.Add("@organisateur_Id", nEvenement.Organisateur_Id);
+                parameters.Add("@nIon_Id", nEvenement.NIcon_Id);
+                parameters.Add("@recompense_Id", nEvenement.Recompense_Id);
+                parameters.Add("@bonus_Id", nEvenement.Bonus_Id);
+                parameters.Add("@mediaItem", nEvenement.MediaItem_Id);
+                parameters.Add("@nEvenement_Id", nEvenement.NEvenement_Id);
 
                 return _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
             }

@@ -82,11 +82,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<MediaItem?> UpdateMediaItem(int mediaItem_Id, string mediaType, string urlItem, string description)
+        public Task<MediaItem?> UpdateMediaItem(MediaItem mediaItem)
         {
             try
             {
-                var updateMediaItem = _mediaItemRepository.UpdateMediaItem(mediaItem_Id, mediaType, urlItem, description);
+                var updateMediaItem = _mediaItemRepository.UpdateMediaItem(mediaItem);
                 return updateMediaItem;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

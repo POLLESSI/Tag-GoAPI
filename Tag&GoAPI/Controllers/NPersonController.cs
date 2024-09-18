@@ -103,23 +103,31 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
-        //}
-        //[HttpPut("{nPerson_Id}")]
-        //public async Task<IActionResult> UpdateNPerson(string lastname, string firstname, string email, string address_Street, string address_Nbr, string postalCode, string address_City, string address_Country, string telephone, string gsm, int nPerson_Id)
-        //{
-        //    try
-        //    {
-        //        var nperson = await _nPersonRepository.UpdateNPerson(lastname, firstname, email, address_Street, address_Nbr, postalCode, address_City, address_Country, telephone, gsm, nPerson_Id);
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
         //}
+        [HttpPut("{nPerson_Id}")]
+        public async Task<IActionResult> UpdateNPerson(NPersonUpdate nPersonUpdate)
+        {
+            var nPersonDal = nPersonUpdate.NPersonUpdateToDal();
+
+            try
+            {
+                var updateNPerson = await _nPersonRepository.UpdateNPerson(nPersonDal);
+
+                if (updateNPerson == null)
+                {
+                    return NotFound($"Person with ID {nPersonDal.NPerson_Id} not found.");
+                }
+
+                return Ok(updateNPerson);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceivePersonUpdate(Dictionary<string, NPersonHub> newUpdate)
         //{
@@ -134,7 +142,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentNPerson);
         //}

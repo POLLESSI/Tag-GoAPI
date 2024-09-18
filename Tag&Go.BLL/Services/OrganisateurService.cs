@@ -81,11 +81,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<Organisateur?> UpdateOrganisateur(string companyName, string businessNumber, int nUser_Id, string point, int organisateur_Id)
+        public Task<Organisateur?> UpdateOrganisateur(Organisateur organisateur)
         {
             try
             {
-                var updateOrganisateur = _organisateurRepository.UpdateOrganisateur(companyName, businessNumber, nUser_Id, point, organisateur_Id);
+                var updateOrganisateur = _organisateurRepository.UpdateOrganisateur(organisateur);
                 return updateOrganisateur;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

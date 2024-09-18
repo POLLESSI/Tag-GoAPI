@@ -101,16 +101,16 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<Bonus?> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
+        public Task<Bonus?> UpdateBonus(Bonus bonus)
         {
             try
             {
                 string sql = "UPDATE Bonus SET BonusType = @bonusType, BonusDescription = @bonusDescription, Application = @application, Granted = @granted WHERE Bonus_Id = @bonus_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@bonusType", bonusType);
-                parameters.Add("@bonusDescription", bonusDescription);
-                parameters.Add("@application", application);
-                parameters.Add("@granted", granted);
+                parameters.Add("@bonusType", bonus.BonusType);
+                parameters.Add("@bonusDescription", bonus.BonusDescription);
+                parameters.Add("@application", bonus.Application);
+                parameters.Add("@granted", bonus.Granted);
                 return _connection.QueryFirstAsync<Bonus?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

@@ -102,23 +102,31 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
-        //}
-        //[HttpPut("{nEvenement_Id}")]
-        //public async Task<IActionResult> UpdateNEvenement(DateTime nEvenementDate, string nEvenementName, string nEvenementDescription, string posLat, string posLong, string positif, int organisateur_Id, int nIcon_Id, int recompense_Id, int bonus_Id, int mediaItem_Id, int nEvenement_Id)
-        //{
-        //    try
-        //    {
-        //        var nevenment = await _nEvenementRepository.UpdateNEvenement(nEvenementDate, nEvenementDescription, posLat, posLong, positif, organisateur_Id, nIcon_Id, recompense_Id, bonus_Id, mediaItem_Id, nEvenement_Id);
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
         //}
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateNEvenement(NEvenementUpdate nEvenementUpdate)
+        {
+            var nEvenementDal = nEvenementUpdate.NEvenementUpdateToDal();
+
+            try
+            {
+                var updatedNEvenment = await _nEvenementRepository.UpdateNEvenement(nEvenementDal);
+
+                if (updatedNEvenment == null)
+                {
+                    return NotFound($"Event with ID {nEvenementDal.NEvenement_Id} not found");
+                }
+
+                return Ok(updatedNEvenment);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task <IActionResult> ReceiveEvenementUpdate(Dictionary<string, NEvenementHub> newUpdate)
         //{
@@ -133,7 +141,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentNEvenement);
         //}

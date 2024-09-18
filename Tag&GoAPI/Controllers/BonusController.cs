@@ -79,7 +79,7 @@ namespace Tag_GoAPI.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"Error creating bonus: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }
@@ -101,23 +101,30 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
-        //}
-        //[HttpPut("{bonus_Id}")]
-        //public async Task<IActionResult> UpdateBonus(int bonus_Id, string bonusType, string bonusDescription, string application, string granted)
-        //{
-        //    try
-        //    {
-        //        var bonus = await _bonusRepository.UpdateBonus(bonus_Id, bonusType, bonusDescription, application, granted);
-        //        return Ok("Updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
         //}
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateBonus(BonusUpdate bonusUpdate)
+        {
+            var bonusDal = bonusUpdate.BonusUpdateToDal();
+
+            try
+            {
+                var updatedBonus = await _bonusRepository.UpdateBonus(bonusDal);
+
+                if (updatedBonus == null)
+                {
+                    return NotFound($"Bonus with ID {bonusDal.Bonus_Id} not found.");
+                }
+                return Ok(updatedBonus);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         //[HttpPost("update")]
         //public async Task <IActionResult> ReceiveBonusUpdate(Dictionary<string, string> newUpdate)
         //{
@@ -132,7 +139,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentBonus);
         //}

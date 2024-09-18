@@ -16,7 +16,7 @@ namespace Tag_Go.DAL.Interfaces
         Task<IEnumerable<NUser?>> GetAllNUsers();
         Task<NUser?> GetByIdNUser(int nUser_Id);
         Task<NUser?> DeleteNUser(int nUser_Id);
-        Task<NUser?> UpdateNUser(int nUser_Id, string? email, string? pwd, int nPerson_Id, string? role_Id, int avatar_Id, string? point);
+        Task<NUser?> UpdateNUser(NUser nUser);
         bool RegisterNUser(string? email, string? pwd, int nPerson_Id, string? role_Id, int avatar_Id, string? point);
         Task<NUser?> LoginNUser(string? email, string? pwd);
         void SetRole(int nUser_Id, string? role_Id);

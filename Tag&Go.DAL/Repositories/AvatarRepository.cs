@@ -99,15 +99,17 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<Avatar?> UpdateAvatar(int avatar_Id, string avatarName, string avatarUrl, string description)
+        public Task<Avatar?> UpdateAvatar(Avatar avatar)
         {
             try
             {
                 string sql = "UPDATE Avatar SET AvatarName = @avatarName, AvatarUrl = @avatarUrl, Description = @description WHERE Avatar_Id = @avatar_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@avatarName", avatarName);
-                parameters.Add("@avatarUrl", avatarUrl);
-                parameters.Add("@description", description);
+                parameters.Add("@avatarName", avatar.AvatarName);
+                parameters.Add("@avatarUrl", avatar.AvatarUrl);
+                parameters.Add("@description", avatar.Description);
+
                 return _connection.QueryFirstAsync<Avatar?>(sql, parameters);
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

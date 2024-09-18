@@ -85,11 +85,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<Activity?> UpdateActivity(int activity_Id, string activityName, string activityAddress, string activityDescription, string complementareInformation, string posLat, string posLong, int organisateur_Id)
+        public Task<Activity?> UpdateActivity(Activity activity)
         {
             try
             {
-                var UpdateActivity = _activityRepository.UpdateActivity(activity_Id, activityName, activityAddress, activityDescription, complementareInformation, posLat, posLong, organisateur_Id);
+                var UpdateActivity = _activityRepository.UpdateActivity(activity);
                 return UpdateActivity;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)

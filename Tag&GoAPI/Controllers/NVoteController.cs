@@ -89,10 +89,10 @@ namespace Tag_GoAPI.Controllers
         //    try
         //    {
         //        var nvote = await _nVoteRepository.DeleteNVote(nVote_Id);
-        //        if (!ModelState.IsValid) 
+        //        if (!ModelState.IsValid)
         //        {
         //            return NotFound();
-                    
+
         //        }
         //        return Ok("Deleted");
         //    }
@@ -101,7 +101,7 @@ namespace Tag_GoAPI.Controllers
 
         //        return StatusCode(500, ex.Message);
         //    }
-            
+
         //}
         //[HttpPost("update")]
         //public async Task<IActionResult> ReceiveVoteUpdate(Dictionary<string, NVoteHub> newUpdate)
@@ -117,7 +117,7 @@ namespace Tag_GoAPI.Controllers
 
         //            BadRequest(ex.Message);
         //        }
-                
+
         //    }
         //    return Ok(_currentNVote);
         //}

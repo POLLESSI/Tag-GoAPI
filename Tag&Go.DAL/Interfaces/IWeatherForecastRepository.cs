@@ -15,6 +15,6 @@ namespace Tag_Go.DAL.Interfaces
         Task<IEnumerable<WeatherForecast?>> GetAllWeatherForecasts();
         Task<WeatherForecast?> GetByIdWeatherForecast(int weatherForecast_Id);
         Task<WeatherForecast?> DeleteWeatherForecast(int weatherForecast_Id);
-        Task<WeatherForecast?> UpdateWeatherForecast(int weatherForecast_Id, DateTime date, string temperatureC, string temperatureF, string summary, string description, string humidity, string precipitation, int nEvenement_Id);
+        Task<WeatherForecast?> UpdateWeatherForecast(WeatherForecast weatherForecast);
     }
 }
