@@ -16,8 +16,7 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly IRecompenseRepository _recompenseRepository;
         private readonly RecompenseHub _recompenseHub;
-        private readonly Dictionary<string, RecompenseHub> _currentRecompense = new Dictionary<string, RecompenseHub>();
-
+        
         public RecompenseController(IRecompenseRepository recompenseRepository, RecompenseHub recompenseHub)
         {
             _recompenseRepository = recompenseRepository;
@@ -38,25 +37,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{recompense_Id}")]
-        //public async Task<IActionResult> GetByIdRecompense(int recompense_Id)
-        //{
-        //    try
-        //    {
-        //        var recompense = await _recompenseRepository.GetByIdRecompense(recompense_Id);
-        //        if (!ModelState.IsValid) 
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_recompenseRepository.GetByIdRecompense(recompense_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{recompense_Id}")]
+        public async Task<IActionResult> GetByIdRecompense(int recompense_Id)
+        {
+            try
+            {
+                var recompense = await _recompenseRepository.GetByIdRecompense(recompense_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_recompenseRepository.GetByIdRecompense(recompense_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+            }
 
-        //}
+        }
         [HttpPost("create")]
         public async Task<IActionResult> Create(RecompenseRegisterForm recompense)
         {
@@ -85,6 +84,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
+        [HttpDelete("{recompense_id}")]
+        public async Task<IActionResult> DeleteRecompense(int recompense_Id)
+        {
+            try
+            {
+                var recompense = await _recompenseRepository.DeleteRecompense(recompense_Id);
+
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+        }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateRecompense(RecompenseUpdate recompenseUpdate)
         {
@@ -107,23 +125,5 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceiveRecompenseUpdate(Dictionary<string, RecompenseHub> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentRecompense[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentRecompense);
-        //}
     }
 }

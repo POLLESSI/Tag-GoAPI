@@ -17,8 +17,7 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly IMapRepository _mapRepository;
         private readonly MapHub _mapHub;
-        private readonly Dictionary<string, string> _currentMap = new Dictionary<string, string>();
-
+        
         public MapController(IMapRepository mapRepository, MapHub mapHub)
         {
             _mapRepository = mapRepository;
@@ -39,25 +38,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{map_Id}")]
-        //public async Task<IActionResult> GetByIdMap(int map_Id)
-        //{
-        //    try
-        //    {
-        //        var map = await _mapRepository.GetByIdMap(map_Id);
-        //        if (!ModelState.IsValid) 
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_mapRepository.GetByIdMap(map_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{map_Id}")]
+        public async Task<IActionResult> GetByIdMap(int map_Id)
+        {
+            try
+            {
+                var map = await _mapRepository.GetByIdMap(map_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_mapRepository.GetByIdMap(map_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
 
-        //}
+        }
         [HttpPost]
         public async Task<IActionResult> Create(MapRegisterForm map)
         {
@@ -88,25 +87,25 @@ namespace Tag_GoAPI.Controllers
                 
             
         }
-        //[HttpDelete("{map_Id}")]
-        //public async Task<IActionResult> DeleteMap(int map_Id)
-        //{
-        //    try
-        //    {
-        //        var map = await _mapRepository.DeleteMap(map_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            await _mapRepository.DeleteMap(map_Id);
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpDelete("{map_Id}")]
+        public async Task<IActionResult> DeleteMap(int map_Id)
+        {
+            try
+            {
+                var map = await _mapRepository.DeleteMap(map_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _mapRepository.DeleteMap(map_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        throw;
-        //    }
+                throw;
+            }
 
-        //}
+        }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateMap(MapUpdate mapUpdate)
         {
@@ -130,23 +129,5 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceiveMapUpdate(Dictionary<string, string> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentMap[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentMap);
-        //}
     }
 }

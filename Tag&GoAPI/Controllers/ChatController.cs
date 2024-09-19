@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using Tag_GoAPI.Hubs;
 using Tag_GoAPI.Models;
 using Tag_GoAPI.Tools;
-//using System.Reflection.Metadata.Ecma335;
 
 namespace Tag_GoAPI.Controllers
 {
@@ -37,25 +36,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{chat_Id}")]
-        //public async Task<IActionResult> GetByIdChat(int chat_Id)
-        //{
-        //    try
-        //    {
-        //        var chat = await _chatRepository.GetByIdChat(chat_Id);
-        //        if (!ModelState.IsValid) 
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_chatRepository.GetByIdChat(chat_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{chat_Id}")]
+        public async Task<IActionResult> GetByIdChat(int chat_Id)
+        {
+            try
+            {
+                var chat = await _chatRepository.GetByIdChat(chat_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_chatRepository.GetByIdChat(chat_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+            }
 
-        //}
+        }
         [HttpPost]
         public async Task<IActionResult> Create(MessageModel newMessage)
         {
@@ -84,24 +83,24 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpDelete("{chat_Id}")]
-        //public async Task<IActionResult> DeleteMessage(int chat_Id)
-        //{
-        //    try
-        //    {
-        //        var message = await _chatRepository.DeleteMessage(chat_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            await _chatRepository.DeleteMessage(chat_Id);
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpDelete("{chat_Id}")]
+        public async Task<IActionResult> DeleteMessage(int chat_Id)
+        {
+            try
+            {
+                var message = await _chatRepository.DeleteMessage(chat_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _chatRepository.DeleteMessage(chat_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
-            
-        //}
+                return StatusCode(500, ex.Message);
+            }
+
+        }
     }
 }

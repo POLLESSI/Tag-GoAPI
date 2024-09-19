@@ -5,7 +5,6 @@ using Tag_Go.DAL.Interfaces;
 using Tag_GoAPI.DTOs.Forms;
 using Tag_GoAPI.Tools;
 using System.Security.Cryptography;
-//using System.Reflection.Metadata.Ecma335;
 
 namespace Tag_GoAPI.Controllers
 {
@@ -16,7 +15,6 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly IAvatarRepository _avatarRepository;
         private readonly AvatarHub _avatarHub;
-        private Dictionary<string, AvatarHub> _currentAvatar = new Dictionary<string, AvatarHub>();
 
         public AvatarController(IAvatarRepository avatarRepository, AvatarHub avatarHub)
         {
@@ -38,25 +36,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{avatar_Id}")]
-        //public async Task<IActionResult> GetByIdAvatar(int avatar_Id)
-        //{
-        //    try
-        //    {
-        //        var avatar = await _avatarRepository.GetByIdAvatar(avatar_Id);
-        //        if (!ModelState.IsValid) 
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_avatarRepository.GetByIdAvatar(avatar_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{avatar_Id}")]
+        public async Task<IActionResult> GetByIdAvatar(int avatar_Id)
+        {
+            try
+            {
+                var avatar = await _avatarRepository.GetByIdAvatar(avatar_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_avatarRepository.GetByIdAvatar(avatar_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status400BadRequest, ex.Message); 
-        //    }
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
 
-        //}
+        }
         [HttpPost]
         public async Task<IActionResult> Create(AvatarRegisterForm avatar)
         {
@@ -84,25 +82,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpDelete("{avatar_Id}")]
-        //public async Task<IActionResult> DeleteAvatar(int avatar_Id)
-        //{
-        //    try
-        //    {
-        //        var avatar = await _avatarRepository.DeleteAvatar(avatar_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            await _avatarRepository.DeleteAvatar(avatar_Id);
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpDelete("{avatar_Id}")]
+        public async Task<IActionResult> DeleteAvatar(int avatar_Id)
+        {
+            try
+            {
+                var avatar = await _avatarRepository.DeleteAvatar(avatar_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _avatarRepository.DeleteAvatar(avatar_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                return StatusCode(500, ex.Message);
+            }
 
-        //}
+        }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateAvatar(AvatarUpdate avatarUpdate)
         {
@@ -125,23 +123,5 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceiveAvatarUpdate(Dictionary<string, AvatarHub> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentAvatar[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentAvatar);
-        //}
     }
 }

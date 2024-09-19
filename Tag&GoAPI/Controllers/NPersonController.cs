@@ -16,8 +16,7 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly INPersonRepository _nPersonRepository;
         private readonly NPersonHub _nPersonHub;
-        private readonly Dictionary<string, NPersonHub> _currentNPerson = new Dictionary<string, NPersonHub>();
-
+        
         public NPersonController(INPersonRepository nPersonRepository, NPersonHub nPersonHub)
         {
             _nPersonRepository = nPersonRepository;
@@ -38,26 +37,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{person_Id}")]
-        //public async Task<IActionResult> GetByIdNPerson(int nPerson_Id)
-        //{
-        //    try
-        //    {
-        //        var nperson = await _nPersonRepository.GetByIdNPerson(nPerson_Id);
-        //        if (!ModelState.IsValid) 
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_nPersonRepository.GetByIdNPerson(nPerson_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{person_Id}")]
+        public async Task<IActionResult> GetByIdNPerson(int nPerson_Id)
+        {
+            try
+            {
+                var nperson = await _nPersonRepository.GetByIdNPerson(nPerson_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_nPersonRepository.GetByIdNPerson(nPerson_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+            }
 
-        //}
-        //[Authorize("AdminPolicy")]
+        }
         [HttpPost("create")]
         public async Task<IActionResult> Create(NPersonRegisterForm nPerson)
         {
@@ -86,25 +84,25 @@ namespace Tag_GoAPI.Controllers
 
 
         }
-        //[HttpDelete("{nPerson_Id}")]
-        //public async Task<IActionResult> DeleteNPerson(int nPerson_Id)
-        //{
-        //    try
-        //    {
-        //        var nperson = await _nPersonRepository.DeleteNPerson(nPerson_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            await _nPersonRepository.DeleteNPerson(nPerson_Id);
-        //        }
-        //        return Ok(nperson);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpDelete("{nPerson_Id}")]
+        public async Task<IActionResult> DeleteNPerson(int nPerson_Id)
+        {
+            try
+            {
+                var nperson = await _nPersonRepository.DeleteNPerson(nPerson_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _nPersonRepository.DeleteNPerson(nPerson_Id);
+                }
+                return Ok(nperson);
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                return StatusCode(500, ex.Message);
+            }
 
-        //}
+        }
         [HttpPut("{nPerson_Id}")]
         public async Task<IActionResult> UpdateNPerson(NPersonUpdate nPersonUpdate)
         {
@@ -128,23 +126,5 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceivePersonUpdate(Dictionary<string, NPersonHub> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentNPerson[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentNPerson);
-        //}
     }
 }

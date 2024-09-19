@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tag_GoAPI.DTOs.Forms
 {
-    public class ChangeRole
+    public class NUserChangeRole
     {
     #nullable disable
         [Required(ErrorMessage = "Id of user is required")]

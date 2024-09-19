@@ -16,8 +16,7 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly IMediaItemRepository _mediaItemRepository;
         private readonly MediaItemHub _mediaItemHub;
-        private readonly Dictionary<string, MediaItemHub> _currentMediaItem = new Dictionary<string, MediaItemHub>();
-
+        
         public MediaItemController(IMediaItemRepository mediaItemRepository, MediaItemHub mediaItemHub)
         {
             _mediaItemRepository = mediaItemRepository;
@@ -38,25 +37,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{mediaItem_Id}")]
-        //public async Task<ActionResult> GetById(int mediaItem_Id)
-        //{
-        //    try
-        //    {
-        //        var mediaItem = await _mediaItemRepository.GetByIdMediaItem(mediaItem_Id);
-        //        if (!ModelState.IsValid) 
-        //        { 
-        //            return NotFound();
-        //        }
-        //        return Ok(_mediaItemRepository.GetByIdMediaItem(mediaItem_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{mediaItem_Id}")]
+        public async Task<ActionResult> GetById(int mediaItem_Id)
+        {
+            try
+            {
+                var mediaItem = await _mediaItemRepository.GetByIdMediaItem(mediaItem_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_mediaItemRepository.GetByIdMediaItem(mediaItem_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
 
-        //}
+        }
         [HttpPost("create")]
         public async Task<IActionResult> Create(MediaItemRegisterForm newMediaItem)
         {
@@ -85,25 +84,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpDelete("{mediaItem_Id}")]
-        //public async Task<IActionResult> DeleteMediaItem(int mediaItem_Id)
-        //{
-        //    try
-        //    {
-        //        var mediaitem = await _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            await _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpDelete("{mediaItem_Id}")]
+        public async Task<IActionResult> DeleteMediaItem(int mediaItem_Id)
+        {
+            try
+            {
+                var mediaitem = await _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                return StatusCode(500, ex.Message);
+            }
 
-        //}
+        }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateMediaItem(MediaItemUpdate mediaItemUpdate)
         {
@@ -127,23 +126,5 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceiveMediaItemUpdate(Dictionary<string, MediaItemHub> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentMediaItem[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentMediaItem);
-        //}
     }
 }

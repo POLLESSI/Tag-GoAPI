@@ -4,12 +4,8 @@ using Tag_GoAPI.Tools;
 using Tag_GoAPI.DTOs.Forms;
 using Tag_Go.DAL.Interfaces;
 using Tag_Go.DAL.Entities;
-//using Tag_Go.BLL.Models;
-//using Microsoft.AspNetCore.Authorization;
 using Tag_GoAPI.Hubs;
 using System.Security.Cryptography;
-//using Microsoft.AspNetCore.Mvc.ModelBinding;
-//using System.Text.RegularExpressions;
 
 namespace Tag_GoAPI.Controllers
 {
@@ -21,8 +17,7 @@ namespace Tag_GoAPI.Controllers
         private readonly INUserRepository _userRepository;
         private readonly TokenGenerator _tokenGenerator;
         private readonly NUserHub _nUserHub;
-        private readonly Dictionary<string, string> _currentNUser = new Dictionary<string, string>();
-
+        
         public NUserController(INUserRepository userRepository, TokenGenerator tokenGenerator, NUserHub nUserHub)
         {
             _userRepository = userRepository;
@@ -44,55 +39,55 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{nuser_Id}")]
-        //public async Task<ActionResult> GetById(int nUser_Id)
-        //{
-        //    try
-        //    {
-        //        var nuser = await _userRepository.GetByIdNUser(nUser_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_userRepository.GetByIdNUser(nUser_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{nuser_Id}")]
+        public async Task<ActionResult> GetById(int nUser_Id)
+        {
+            try
+            {
+                var nuser = await _userRepository.GetByIdNUser(nUser_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_userRepository.GetByIdNUser(nUser_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
 
-        //}
-        //[HttpPost("login")]
-        //public IActionResult LoginNUser(NUserRegisterForm nUser)
-        //{
-        //    try
-        //    {
-        //        NUser connectedNUser = _userRepository.LoginNUser(nUser.Email, nUser.Pwd);
-        //        string MdpNUser = nUser.Pwd;
-        //        string hashpwd = connectedNUser.Pwd;
-        //        bool motDePassValide = BCrypt.Net.BCrypt.Verify(MdpNUser, hashpwd);
-        //        if (motDePassValide)
-        //        {
-        //            return Ok(_tokenGenerator.GenerateToken(connectedNUser));
-        //        }
-        //        else
-        //        {
-        //            return BadRequest();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginNUser(NUserLoginForm nUser)
+        {
+            try
+            {
+                NUser connectedNUser = await _userRepository.LoginNUser(nUser.Email, nUser.Pwd);
+                string MdpNUser = nUser.Pwd;
+                string hashpwd = connectedNUser.Pwd;
+                bool motDePassValide = BCrypt.Net.BCrypt.Verify(MdpNUser, hashpwd);
+                if (motDePassValide)
+                {
+                    return Ok(_tokenGenerator.GenerateToken(connectedNUser));
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
 
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-        //[HttpPost("register")]
-        //public IActionResult RegisterNUser(NewNUser nUser)
-        //{
-        //    _userRepository.RegisterNUser(nUser.Email, nUser.Pwd, nUser.NPerson_Id, nUser.Role_Id, nUser.Avatar_Id, nUser.Point);
-        //    return Ok();
-        //}
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterNUser(NUserRegisterForm nUser)
+        {
+            //NUser registredNUser = await _userRepository.RegisterNUser(nUser.Email, nUser.Pwd, nUser.NPerson_Id, nUser.Role_Id, nUser.Avatar_Id, nUser.Point);
+            return Ok();
+        }
         [HttpPost]
         public async Task<IActionResult> Create(NUserRegisterForm nUser)
         {
@@ -120,26 +115,25 @@ namespace Tag_GoAPI.Controllers
                 return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
-        //[HttpDelete("{nuser_Id}")]
-        //[Route("{nuser_Id: int}")]
-        //public async Task<IActionResult> DeleteNUser(int nUser_Id)
-        //{
-        //    try
-        //    {
-        //        var nuser = await _userRepository.DeleteNUser(nUser_Id);
-        //        if (ModelState.IsValid)
-        //        {
-        //            await _userRepository.DeleteNUser(nUser_Id);
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpDelete("{nuser_Id}")]
+        public async Task<IActionResult> DeleteNUser(int nUser_Id)
+        {
+            try
+            {
+                var nuser = await _userRepository.DeleteNUser(nUser_Id);
+                if (ModelState.IsValid)
+                {
+                    await _userRepository.DeleteNUser(nUser_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                return StatusCode(500, ex.Message);
+            }
 
-        //}
+        }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateNUser(NUserUpdate nUserUpdate)
         {
@@ -163,29 +157,11 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceiveNUserUpdate(Dictionary<string, string> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentNUser[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentNUser);
-        //}
-        //[HttpPatch("setRole")]
-        //public async Task<IActionResult> ChangeRole(ChangeRole role)
-        //{
-        //    _userRepository.SetRole(role.NUser_Id, role.Role_Id);
-        //    return Ok("Rôle Changed");
-        //}
+        [HttpPatch("setRole")]
+        public async Task<IActionResult> ChangeRole(NUserChangeRole role)
+        {
+            _userRepository.SetRole(role.NUser_Id, role.Role_Id);
+            return Ok("Rôle Changed");
+        }
     }
 }

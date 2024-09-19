@@ -20,8 +20,7 @@ namespace Tag_GoAPI.Controllers
         private readonly IWeatherForecastRepository _forecastRepository;
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly WeatherForecastHub _hub;
-        private readonly Dictionary<string, WeatherForecastHub> _currentWeatherForecast = new Dictionary<string, WeatherForecastHub>();
-
+        
         public WeatherForecastController(IWeatherForecastRepository forecastRepository, ILogger<WeatherForecastController> logger, WeatherForecastHub hub)
         {
             _forecastRepository = forecastRepository;
@@ -43,25 +42,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{weatherForecast_Id}")]
-        //public IActionResult GetByIdWeatherForecast(int weatherForecast_Id)
-        //{
-        //    try
-        //    {
-        //        var weatherforecast = _forecastRepository.GetByIdWeatherForecast(weatherForecast_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_forecastRepository.GetByIdWeatherForecast(weatherForecast_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{weatherForecast_Id}")]
+        public IActionResult GetByIdWeatherForecast(int weatherForecast_Id)
+        {
+            try
+            {
+                var weatherforecast = _forecastRepository.GetByIdWeatherForecast(weatherForecast_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_forecastRepository.GetByIdWeatherForecast(weatherForecast_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status404NotFound, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+            }
 
-        //}
+        }
         [HttpPost]
         public async Task<IActionResult> Create(WeatherForecastRegisterForm weatherregisterform)
         {
@@ -91,23 +90,23 @@ namespace Tag_GoAPI.Controllers
             }
             
         }
-        //[HttpDelete("{weatherForecast_Id}")]
-        //public async Task<IActionResult> DeleteWeatherForecast(int weatherForecast_Id)
-        //{
-        //    try
-        //    {
-        //        var weatherforecast = await _forecastRepository.DeleteWeatherForecast(weatherForecast_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
+        [HttpDelete("{weatherForecast_Id}")]
+        public async Task<IActionResult> DeleteWeatherForecast(int weatherForecast_Id)
+        {
+            try
+            {
+                var weatherforecast = await _forecastRepository.DeleteWeatherForecast(weatherForecast_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
         [HttpPut("{weatherForecast_Id}")]
         public async Task<IActionResult> UpdateWeatherForecast(WeatherForecastUpdate weatherForecastUpdate)
         {
@@ -130,23 +129,5 @@ namespace Tag_GoAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceiveWeatherForecastUpdate(Dictionary<string, WeatherForecastHub> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentWeatherForecast[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentWeatherForecast);
-        //}
     }
 }

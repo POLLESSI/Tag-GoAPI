@@ -16,8 +16,7 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly INEvenementRepository _nEvenementRepository;
         private readonly NEvenementHub _nEvenementHub;
-        private readonly Dictionary<string, NEvenementHub> _currentNEvenement = new Dictionary<string, NEvenementHub>();
-
+        
         public NEvenementController(INEvenementRepository nEvenementRepository, NEvenementHub nEvenementHub)
         {
             _nEvenementRepository = nEvenementRepository;
@@ -38,25 +37,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{nEvenement_Id}")]
-        //public async Task<IActionResult> GetByIdNEvenement(int nEvenement_Id)
-        //{
-        //    try
-        //    {
-        //        var nevenement = await _nEvenementRepository.GetByIdNEvenement(nEvenement_Id);
-        //        if (!ModelState.IsValid) 
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_nEvenementRepository.GetByIdNEvenement(nEvenement_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{nEvenement_Id}")]
+        public async Task<IActionResult> GetByIdNEvenement(int nEvenement_Id)
+        {
+            try
+            {
+                var nevenement = await _nEvenementRepository.GetByIdNEvenement(nEvenement_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_nEvenementRepository.GetByIdNEvenement(nEvenement_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+            }
 
-        //}
+        }
         [HttpPost("create")]
         public async Task<IActionResult> Create(NEvenementRegisterForm nEvenement)
         {
@@ -85,25 +84,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpDelete("{nEvenement_Id}")]
-        //public async Task<IActionResult> DeleteNEvenement(int nEvenement_Id)
-        //{
-        //    try
-        //    {
-        //        var nevenement = await _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
-        //        if (nevenement == null)
-        //        {
-        //            await _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpDelete("{nEvenement_Id}")]
+        public async Task<IActionResult> DeleteNEvenement(int nEvenement_Id)
+        {
+            try
+            {
+                var nevenement = await _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
+                if (nevenement == null)
+                {
+                    await _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                return StatusCode(500, ex.Message);
+            }
 
-        //}
+        }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateNEvenement(NEvenementUpdate nEvenementUpdate)
         {
@@ -127,23 +126,5 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPost("update")]
-        //public async Task <IActionResult> ReceiveEvenementUpdate(Dictionary<string, NEvenementHub> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentNEvenement[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentNEvenement);
-        //}
     }
 }

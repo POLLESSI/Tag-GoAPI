@@ -15,8 +15,7 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly IBonusRepository _bonusRepository;
         private readonly BonusHub _bonusHub;
-        private readonly Dictionary<string, string> _currentBonus = new Dictionary<string, string>();
-
+        
         public BonusController(IBonusRepository bonusRepository, BonusHub bonusHub)
         {
             _bonusRepository = bonusRepository;
@@ -37,25 +36,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{bonus_Id}")]
-        //public async Task<IActionResult> GetById(int bonus_Id)
-        //{
-        //    try
-        //    {
-        //        var bonus = await _bonusRepository.GetByIdBonus(bonus_Id);
-        //        if (!ModelState.IsValid) 
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_bonusRepository.GetByIdBonus(bonus_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{bonus_Id}")]
+        public async Task<IActionResult> GetById(int bonus_Id)
+        {
+            try
+            {
+                var bonus = await _bonusRepository.GetByIdBonus(bonus_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_bonusRepository.GetByIdBonus(bonus_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-        //    }
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+            }
 
-        //}
+        }
         [HttpPost]
         public async Task<IActionResult> Create(BonusRegisterForm bonus)
         {
@@ -83,26 +82,26 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpDelete("{bonus_Id}")]
-        //public async Task<IActionResult> DeleteBonus(int bonus_Id)
-        //{
-        //    try
-        //    {
-        //        var bonus = await _bonusRepository.DeleteBonus(bonus_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            await _bonusRepository.DeleteBonus(bonus_Id);
-        //        }
+        [HttpDelete("{bonus_Id}")]
+        public async Task<IActionResult> DeleteBonus(int bonus_Id)
+        {
+            try
+            {
+                var bonus = await _bonusRepository.DeleteBonus(bonus_Id);
+                if (!ModelState.IsValid)
+                {
+                    await _bonusRepository.DeleteBonus(bonus_Id);
+                }
 
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                return StatusCode(500, ex.Message);
+            }
 
-        //}
+        }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateBonus(BonusUpdate bonusUpdate)
         {
@@ -125,23 +124,5 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpPost("update")]
-        //public async Task <IActionResult> ReceiveBonusUpdate(Dictionary<string, string> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentBonus[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentBonus);
-        //}
     }
 }

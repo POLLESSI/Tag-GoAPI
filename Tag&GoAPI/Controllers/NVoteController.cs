@@ -16,8 +16,7 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly INVoteRepository _nVoteRepository;
         private readonly NVoteHub _nVoteHub;
-        private readonly Dictionary<string, NVoteHub> _currentNVote = new Dictionary<string, NVoteHub>();
-
+        
         public NVoteController(INVoteRepository nVoteRepository, NVoteHub nVoteHub)
         {
             _nVoteRepository = nVoteRepository;
@@ -37,24 +36,24 @@ namespace Tag_GoAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        //[HttpGet("{nVote_Id}")]
-        //public async Task<IActionResult> GetByIdNVote(int nVote_Id) 
-        //{
-        //    try
-        //    {
-        //        var nvote = await _nVoteRepository.GetByIdNVote(nVote_Id);
-        //        if (!ModelState.IsValid) 
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_nVoteRepository.GetByIdNVote(nVote_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{nVote_Id}")]
+        public async Task<IActionResult> GetByIdNVote(int nVote_Id)
+        {
+            try
+            {
+                var nvote = await _nVoteRepository.GetByIdNVote(nVote_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_nVoteRepository.GetByIdNVote(nVote_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-        //    }
-        //}
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+            }
+        }
         [HttpPost("create")]
         public async Task<IActionResult> Create(NVoteRegisterForm nVote)
         {
@@ -83,43 +82,25 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpDelete("{nVote_Id}")]
-        //public async Task<IActionResult> DeleteNVote(int nVote_Id)
-        //{
-        //    try
-        //    {
-        //        var nvote = await _nVoteRepository.DeleteNVote(nVote_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return NotFound();
+        [HttpDelete("{nVote_Id}")]
+        public async Task<IActionResult> DeleteNVote(int nVote_Id)
+        {
+            try
+            {
+                var nvote = await _nVoteRepository.DeleteNVote(nVote_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
 
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                return StatusCode(500, ex.Message);
+            }
 
-        //}
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceiveVoteUpdate(Dictionary<string, NVoteHub> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentNVote[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentNVote);
-        //}
+        }
     }
 }

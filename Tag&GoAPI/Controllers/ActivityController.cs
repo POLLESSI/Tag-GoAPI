@@ -8,7 +8,6 @@ using System.Security.Cryptography;
 using Tag_Go.DAL.Entities;
 using Tag_GoAPI.DTOs;
 using System.Diagnostics;
-//using System.Reflection.Metadata.Ecma335;
 
 namespace Tag_GoAPI.Controllers
 {
@@ -20,8 +19,7 @@ namespace Tag_GoAPI.Controllers
     #nullable disable
         private readonly IActivityRepository _activityRepository;
         private readonly ActivityHub _activityHub;
-        private readonly Dictionary<string, string> _currentActivity = new Dictionary<string, string>();
-
+        
         public ActivityController(IActivityRepository activityRepository, ActivityHub activityHub)
         {
             _activityRepository = activityRepository;
@@ -42,24 +40,24 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        //[HttpGet("{activity_Id}")]
-        //public async Task<IActionResult> GetByIdActivity(int activity_Id)
-        //{
-        //    try
-        //    {
-        //        var activity = await _activityRepository.GetByIdActivity(activity_Id);
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_activityRepository.GetByIdActivity(activity_Id));
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("{activity_Id}")]
+        public async Task<IActionResult> GetByIdActivity(int activity_Id)
+        {
+            try
+            {
+                var activity = await _activityRepository.GetByIdActivity(activity_Id);
+                if (!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                return Ok(_activityRepository.GetByIdActivity(activity_Id));
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
-        //    }
-        //}
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+            }
+        }
         [HttpPost("create")]
         public async Task<IActionResult> Create(ActivityRegisterForm activity)
         {
@@ -90,25 +88,25 @@ namespace Tag_GoAPI.Controllers
             }
         }
 
-        //[HttpDelete("{activity_Id}")]
-        //public async Task<IActionResult> DeleteActivity(int activity_Id)
-        //{
-        //    try
-        //    {
-        //        var activity = await _activityRepository.DeleteActivity(activity_Id);
-        //        if (ModelState.IsValid)
-        //        {
-        //            await _activityRepository.DeleteActivity(activity_Id);
-        //        }
-        //        return Ok("Deleted");
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpDelete("{activity_Id}")]
+        public async Task<IActionResult> DeleteActivity(int activity_Id)
+        {
+            try
+            {
+                var activity = await _activityRepository.DeleteActivity(activity_Id);
+                if (ModelState.IsValid)
+                {
+                    await _activityRepository.DeleteActivity(activity_Id);
+                }
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
 
-        //        return StatusCode(500, ex.Message);
-        //    }
+                return StatusCode(500, ex.Message);
+            }
 
-        //}
+        }
 
         [HttpPut("update")]
         public async Task<IActionResult> UpdateActivity(ActivityUpdate activityUpdate)
@@ -134,23 +132,5 @@ namespace Tag_GoAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        //[HttpPost("update")]
-        //public async Task<IActionResult> ReceiveActivityUpdate(Dictionary<string, string> newUpdate)
-        //{
-        //    foreach (var item in newUpdate)
-        //    {
-        //        try
-        //        {
-        //            _currentActivity[item.Key] = item.Value;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            BadRequest(ex.Message);
-        //        }
-
-        //    }
-        //    return Ok(_currentActivity);
-        //}
     }
 }
