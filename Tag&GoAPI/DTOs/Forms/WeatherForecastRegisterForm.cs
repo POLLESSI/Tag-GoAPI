@@ -10,10 +10,10 @@ namespace Tag_GoAPI.DTOs.Forms
         public DateTime Date { get; set; }
         [Required(ErrorMessage = "Celcius Temperatures are required ! ")]
         [MinLength(2)]
-        [MaxLength(4)]
+        [MaxLength(8)]
         [DisplayName("Temperature C° : ")]
         public string TemperatureC { get; set; }
-        [MaxLength(4)]
+        [MaxLength(8)]
         [DisplayName("Temperature F° : ")]
         public string TemperatureF { get; set; }
         [Required(ErrorMessage = "The Summary is required")]

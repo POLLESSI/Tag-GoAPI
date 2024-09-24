@@ -43,16 +43,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var recompense = await _recompenseRepository.GetByIdRecompense(recompense_Id);
-                if (!ModelState.IsValid)
+                if (recompense == null)
                 {
-                    return NotFound();
+                    return NotFound($"Recompense with ID {recompense_Id} not found");
                 }
-                return Ok(_recompenseRepository.GetByIdRecompense(recompense_Id));
+                return Ok(recompense);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving Recompense: {ex.Message}");
             }
 
         }
@@ -91,24 +91,24 @@ namespace Tag_GoAPI.Controllers
             {
                 var recompense = await _recompenseRepository.DeleteRecompense(recompense_Id);
 
-                if (!ModelState.IsValid)
+                if (recompense == null)
                 {
-                    return NotFound();
+                    return NotFound($"Recompense with ID {recompense_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("Recompense deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateRecompense(RecompenseUpdate recompenseUpdate)
         {
-            var recompenseDal = recompenseUpdate.RecompenseUpdateToDal();
             try
             {
+                var recompenseDal = recompenseUpdate.RecompenseUpdateToDal();
                 var updateRecompense = await _recompenseRepository.UpdateRecompense(recompenseDal);
 
                 if (updateRecompense == null)

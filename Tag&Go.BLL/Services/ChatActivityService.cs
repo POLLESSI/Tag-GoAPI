@@ -11,21 +11,21 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Tag_Go.BLL.Services
 {
-    public class ChatService : IChatService
+    public class ChatActivityService : IChatActivityService
     {
     #nullable disable
-        private readonly IChatRepository _chatRepository;
+        private readonly IChatActivityRepository _chatActivityRepository;
 
-        public ChatService(IChatRepository chatRepository)
+        public ChatActivityService(IChatActivityRepository chatActivityRepository)
         {
-            _chatRepository = chatRepository;
+            _chatActivityRepository = chatActivityRepository;
         }
 
-        public bool Create(Chat chat)
+        public bool Create(ChatActivity chat)
         {
             try
             {
-                return _chatRepository.Create(chat);
+                return _chatActivityRepository.Create(chat);
             }
             catch (Exception ex)
             {
@@ -35,11 +35,11 @@ namespace Tag_Go.BLL.Services
             return false;
         }
 
-        public void CreateChat(Chat chat)
+        public void CreateChat(ChatActivity chat)
         {
             try
             {
-                _chatRepository.CreateChat(chat);
+                _chatActivityRepository.CreateChat(chat);
             }
             catch (Exception ex)
             {
@@ -48,11 +48,11 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Task<Chat?> DeleteMessage(int chat_Id)
+        public Task<ChatActivity?> DeleteMessage(int chat_Id)
         {
             try
             {
-                return _chatRepository.DeleteMessage(chat_Id);
+                return _chatActivityRepository.DeleteMessage(chat_Id);
             }
             catch (Exception ex)
             {
@@ -62,16 +62,16 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<Chat?>> GetAllMessages()
+        public Task<IEnumerable<ChatActivity?>> GetAllMessages()
         {
-            return _chatRepository.GetAllMessages();
+            return _chatActivityRepository.GetAllMessages();
         }
 
-        public Task<Chat?> GetByIdChat(int chat_Id)
+        public Task<ChatActivity?> GetByIdChat(int chat_Id)
         {
             try
             {
-                return _chatRepository.GetByIdChat(chat_Id);
+                return _chatActivityRepository.GetByIdChat(chat_Id);
             }
             catch (Exception ex)
             {

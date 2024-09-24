@@ -30,6 +30,7 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@avatarName", avatar.AvatarName);
                 parameters.Add("@avatarUrl", avatar.AvatarUrl);
                 parameters.Add("@description", avatar.Description);
+
                 return _connection.Execute(sql, parameters) > 0;
             }
             catch (Exception ex)
@@ -59,21 +60,34 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<Avatar?> DeleteAvatar(int avatar_Id)
+        public async Task<Avatar?> DeleteAvatar(int avatar_Id)
         {
             try
             {
-                string sql = "DELETE FROM Avatar WHERE Avatar_Id = @avatar_Id";
+                string sql = "SELECT * FROM Avatar WHERE Avatar_Id = @avatar_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@avatar_Id", avatar_Id);
-                return _connection.QueryFirstAsync<Avatar?>(sql, parameters);
+
+                var avatar = await _connection.QueryFirstOrDefaultAsync<Avatar>(sql, new { avatar_Id });
+
+                if (avatar == null) 
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM Avatar WHERE Avatar_Id = @avatar_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+
+                return avatar;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting avatar : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public async Task <IEnumerable<Avatar?>> GetAllAvatars()
@@ -82,46 +96,61 @@ namespace Tag_Go.DAL.Repositories
             return await _connection.QueryAsync<Avatar?>(sql);
         }
 
-        public Task<Avatar?> GetByIdAvatar(int avatar_Id)
+        public async Task<Avatar?> GetByIdAvatar(int avatar_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Avatar WHERE Avatar_Id = @avatar_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@avatar_Id", avatar_Id);
-                return _connection.QueryFirstAsync<Avatar?>(sql, parameters);
+
+                var avatar = await _connection.QueryFirstAsync<Avatar?>(sql, parameters);
+                return avatar ?? new Avatar();
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Avatar : {ex.ToString}");
+                return null;
             }
             return null;
         }
 
-        public Task<Avatar?> UpdateAvatar(Avatar avatar)
+        public async Task<Avatar?> UpdateAvatar(Avatar avatar)
         {
             try
             {
-                string sql = "UPDATE Avatar SET AvatarName = @avatarName, AvatarUrl = @avatarUrl, Description = @description WHERE Avatar_Id = @avatar_Id";
+                string sql = @"
+                    UPDATE Avatar 
+                    SET 
+                        AvatarName = @avatarName, 
+                        AvatarUrl = @avatarUrl, 
+                        Description = @description 
+                    WHERE 
+                        Avatar_Id = @avatar_Id";
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@avatarName", avatar.AvatarName);
                 parameters.Add("@avatarUrl", avatar.AvatarUrl);
                 parameters.Add("@description", avatar.Description);
+                parameters.Add("@avatar_Id", avatar.Avatar_Id);
 
-                return _connection.QueryFirstAsync<Avatar?>(sql, parameters);
+                await _connection.QueryFirstAsync<Avatar?>(sql, parameters);
+
+                return avatar;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating avatar : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

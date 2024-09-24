@@ -43,16 +43,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nevenement = await _nEvenementRepository.GetByIdNEvenement(nEvenement_Id);
-                if (!ModelState.IsValid)
+                if (nevenement == null)
                 {
-                    return NotFound();
+                    return NotFound($"Event with ID {nEvenement_Id} don't found");
                 }
-                return Ok(_nEvenementRepository.GetByIdNEvenement(nEvenement_Id));
+                return Ok(nevenement);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving Event: {ex.Message}");
             }
 
         }
@@ -92,24 +92,23 @@ namespace Tag_GoAPI.Controllers
                 var nevenement = await _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
                 if (nevenement == null)
                 {
-                    await _nEvenementRepository.DeleteNEvenement(nEvenement_Id);
+                    return NotFound($"Event with ID {nEvenement_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("Event deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateNEvenement(NEvenementUpdate nEvenementUpdate)
         {
-            var nEvenementDal = nEvenementUpdate.NEvenementUpdateToDal();
-
             try
             {
+                var nEvenementDal = nEvenementUpdate.NEvenementUpdateToDal();
                 var updatedNEvenment = await _nEvenementRepository.UpdateNEvenement(nEvenementDal);
 
                 if (updatedNEvenment == null)

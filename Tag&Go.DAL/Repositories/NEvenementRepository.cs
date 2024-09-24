@@ -75,21 +75,33 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<NEvenement?> DeleteNEvenement(int nEvenement_Id)
+        public async Task<NEvenement?> DeleteNEvenement(int nEvenement_Id)
         {
             try
             {
-                string sql = "DELETE FROM NEvenement WHERE NEvenement_Id = @nEvenement_Id";
+                string sql = "SELECT * FROM NEvenement WHERE NEvenement_Id = @nEvenement_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nEvenement_Id", nEvenement_Id);
-                return _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
+
+                var nEvenement = await _connection.QueryFirstOrDefaultAsync<NEvenement?>(sql, new { nEvenement_Id });
+
+                if (nEvenement == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM NEvenement WHERE NEvenement_Id = @nEvenement_Id";
+
+                await _connection.ExecuteAsync(sql, parameters);
+                return nEvenement;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting evenement : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public Task<IEnumerable<NEvenement?>> GetAllNEvenements()
@@ -98,29 +110,49 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<NEvenement?>(sql);
         }
 
-        public Task<NEvenement?> GetByIdNEvenement(int nEvenement_Id)
+        public async Task<NEvenement?> GetByIdNEvenement(int nEvenement_Id)
         {
             try
             {
                 string sql = "SELECT * FROM NEvenement WHERE NEvenement_Id = @nEvenement_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nEvenement_Id", nEvenement_Id);
-                return _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
+
+                var nEvenement = await _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
+
+                return nEvenement ?? null;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Event : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<NEvenement?> UpdateNEvenement(NEvenement nEvenement)
+        public async Task<NEvenement?> UpdateNEvenement(NEvenement nEvenement)
         {
             try
             {
-                string sql = "UPDATE NEvenement SET NEvenementDate = @nEvenementDate, NEvenementDescription = @nEvenementDescription, PosLat = @posLat, PosLong = @posLong, Positif = @positif, Organisateur_Id = @organisateur_Id, NIcon_Id = @nIcon_Id, Recompense_Id = @recompense_Id, Bonus_Id = @bonus_Id, MediaItem_Id = @mediaItem_Id WHERE NEvenement_Id = @nEvenement_Id";
+                string sql = @"
+                    UPDATE NEvenement 
+                    SET 
+                        NEvenementDate = @nEvenementDate, 
+                        NEvenementDescription = @nEvenementDescription, 
+                        PosLat = @posLat, 
+                        PosLong = @posLong, 
+                        Positif = @positif, 
+                        Organisateur_Id = @organisateur_Id, 
+                        NIcon_Id = @nIcon_Id, 
+                        Recompense_Id = @recompense_Id, 
+                        Bonus_Id = @bonus_Id, 
+                        MediaItem_Id = @mediaItem_Id 
+                    WHERE 
+                        NEvenement_Id = @nEvenement_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@nEvenementDate", nEvenement.NEvenementDate);
                 parameters.Add("@nEvenementDescription", nEvenement.NEvenementDescription);
                 parameters.Add("@posLat", nEvenement.PosLat);
@@ -133,18 +165,22 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@mediaItem", nEvenement.MediaItem_Id);
                 parameters.Add("@nEvenement_Id", nEvenement.NEvenement_Id);
 
-                return _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
+                await _connection.QueryFirstAsync<NEvenement?>(sql, parameters);
+
+                return nEvenement;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating event : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

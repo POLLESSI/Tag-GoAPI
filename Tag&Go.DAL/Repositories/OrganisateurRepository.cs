@@ -61,21 +61,34 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<Organisateur?> DeleteOrganisateur(int organisateur_Id)
+        public async Task<Organisateur?> DeleteOrganisateur(int organisateur_Id)
         {
             try
             {
-                string sql = "DELETE FROM Organisateur WHERE Organisateur_Id = @organisateur_Id";
+                string sql = "SELECT * FROM Organisateur WHERE Organisateur_Id = @organisateur_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@organisateur_Id", organisateur_Id);
-                return _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
+
+                var organisateur = await _connection.QueryFirstOrDefaultAsync<Organisateur?>(sql, new { organisateur_Id });
+
+                if (organisateur == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM Organisateur WHERE Organisateur_Id = @organisateur_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+
+                return organisateur;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting Organisateur : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public Task<IEnumerable<Organisateur?>> GetAllOrganisateurs()
@@ -84,47 +97,65 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<Organisateur?>(sql);
         }
 
-        public Task<Organisateur?> GetByIdOrganisateur(int organisateur_Id)
+        public async Task<Organisateur?> GetByIdOrganisateur(int organisateur_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Organisateur WHERE Organisateur_Id = @organisateur_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@organisateur_Id", organisateur_Id);
-                return _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
+
+                var organisateur = await _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
+
+                return organisateur ?? null;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Organisator : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<Organisateur?> UpdateOrganisateur(Organisateur organisateur)
+        public async Task<Organisateur?> UpdateOrganisateur(Organisateur organisateur)
         {
             try
             {
-                string sql = "UPDATE Organisateur SET CompanyName = @companyName, BusinessNumber = @businessNumber, NUser_Id = @nUser_Id, Point = @point WHERE Organisateur_Id = @organisateur_Id";
+                string sql = @"
+                    UPDATE Organisateur 
+                    SET 
+                        CompanyName = @companyName, 
+                        BusinessNumber = @businessNumber, 
+                        NUser_Id = @nUser_Id, 
+                        Point = @point 
+                    WHERE 
+                        Organisateur_Id = @organisateur_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@companyName", organisateur.CompanyName);
                 parameters.Add("@businessNumber", organisateur.BusinessNumber);
                 parameters.Add("@nUser_Id", organisateur.NUser_Id);
                 parameters.Add("@point", organisateur.Point);
                 parameters.Add("@organisateur_Id", organisateur.Organisateur_Id);
 
-                return _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
+                await _connection.QueryFirstAsync<Organisateur?>(sql, parameters);
+
+                return organisateur;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating Organisator : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

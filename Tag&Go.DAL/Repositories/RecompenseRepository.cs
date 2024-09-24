@@ -61,21 +61,33 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<Recompense?> DeleteRecompense(int recompense_Id)
+        public async Task<Recompense?> DeleteRecompense(int recompense_Id)
         {
             try
             {
-                string sql = "DELETE FROM Recompense WHERE Recompense_Id = @recompense_Id";
+                string sql = "SELECT * Recompense WHERE Recompense_Id = @recompense_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@recompense_Id", recompense_Id);
-                return _connection.QueryFirstAsync<Recompense?>(sql, parameters);
+
+                var recompense = await _connection.QueryFirstOrDefaultAsync<Recompense?>(sql, new { recompense_Id });
+
+                if (recompense == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM Recompense WHERE Recompense_Id = @recompense_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+                return recompense;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting Recompense : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public Task<IEnumerable<Recompense?>> GetAllRecompenses()
@@ -84,47 +96,65 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<Recompense?>(sql);
         }
 
-        public Task<Recompense?> GetByIdRecompense(int recompense_Id)
+        public async Task<Recompense?> GetByIdRecompense(int recompense_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Recompense WHERE Recompense_Id = @recompense_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@recompense_Id", recompense_Id);
-                return _connection.QueryFirstAsync<Recompense?>(sql, parameters);
+
+                var recompense = await _connection.QueryFirstAsync<Recompense?>(sql, parameters);
+
+                return recompense ?? null;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Recompense : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<Recompense?> UpdateRecompense(Recompense recompense)
+        public async Task<Recompense?> UpdateRecompense(Recompense recompense)
         {
             try
             {
-                string sql = "UPDATE Recompense SET Definition = @definition, Point = @point, Implication = @implication, Granted = @granted WHERE Recompense_Id = @recompense_Id";
+                string sql = @"
+                    UPDATE Recompense 
+                    SET 
+                        Definition = @definition, 
+                        Point = @point, 
+                        Implication = @implication, 
+                        Granted = @granted 
+                    WHERE 
+                        Recompense_Id = @recompense_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@definition", recompense.Definition);
                 parameters.Add("@point", recompense.Point);
                 parameters.Add("@implication", recompense.Implication);
                 parameters.Add("@granted", recompense.Granted);
                 parameters.Add("@recompense_Id", recompense.Recompense_Id);
 
-                return _connection.QueryFirstAsync<Recompense?>(sql, parameters);
+                await _connection.QueryFirstAsync<Recompense?>(sql, parameters);
+
+                return recompense;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating Recompense : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

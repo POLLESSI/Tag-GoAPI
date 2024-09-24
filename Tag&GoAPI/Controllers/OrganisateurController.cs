@@ -43,16 +43,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var organisateur = _organisateurRepository.GetByIdOrganisateur(organisateur_Id);
-                if (!ModelState.IsValid)
+                if (organisateur == null)
                 {
-                    return NotFound();
+                    return NotFound($"Organisateur with ID {organisateur_Id} not found");
                 }
-                return Ok(_organisateurRepository.GetByIdOrganisateur(organisateur_Id));
+                return Ok(organisateur);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving Organisateur: {ex.Message}");
             }
 
         }
@@ -90,25 +90,25 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var organisateur = await _organisateurRepository.DeleteOrganisateur(organisateur_Id);
-                if (!ModelState.IsValid)
+                if (organisateur == null)
                 {
-                    return NotFound();
+                    return NotFound($"Organisateur with ID {organisateur_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("Organisateur deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateOrganisateur(OrganisateurUpdate organisateurUpdate)
         {
-            var organisateurDal = organisateurUpdate.OrganisateurUpdateToDal();
             try
             {
+                var organisateurDal = organisateurUpdate.OrganisateurUpdateToDal();
                 var updateOrganisateur = await _organisateurRepository.UpdateOrganisateur(organisateurDal);
 
                 if (updateOrganisateur == null)

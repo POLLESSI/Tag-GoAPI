@@ -48,16 +48,17 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var weatherforecast = _forecastRepository.GetByIdWeatherForecast(weatherForecast_Id);
-                if (!ModelState.IsValid)
+                if (weatherforecast == null)
                 {
-                    return NotFound();
+                    return NotFound($"Weather Forecast with ID {weatherForecast_Id} not found");
                 }
-                return Ok(_forecastRepository.GetByIdWeatherForecast(weatherForecast_Id));
+                return Ok(weatherforecast);
             }
+
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving Weather Forecast: {ex.Message}");
             }
 
         }
@@ -96,24 +97,23 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var weatherforecast = await _forecastRepository.DeleteWeatherForecast(weatherForecast_Id);
-                if (!ModelState.IsValid)
+                if (weatherforecast == null)
                 {
-                    return NotFound();
+                    return NotFound($"Weather Forecast with ID {weatherForecast_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("Weather Forecast deleted successfully");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
         }
         [HttpPut("{weatherForecast_Id}")]
         public async Task<IActionResult> UpdateWeatherForecast(WeatherForecastUpdate weatherForecastUpdate)
         {
-            var weatherForecastDal = weatherForecastUpdate.WeatherForecastUpdateToDal();
-
             try
             {
+                var weatherForecastDal = weatherForecastUpdate.WeatherForecastUpdateToDal();
                 var updateWeatherForecast = await _forecastRepository.UpdateWeatherForecast(weatherForecastDal);
 
                 if (updateWeatherForecast == null)

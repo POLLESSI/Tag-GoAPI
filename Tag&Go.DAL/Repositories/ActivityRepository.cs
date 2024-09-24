@@ -66,21 +66,34 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<Activity?> DeleteActivity(int activity_Id)
+        public async Task<Activity?> DeleteActivity(int activity_Id)
         {
             try
             {
-                string sql = "DELETE FROM Activity WHERE Activity_Id = @activity_Id";
+                string sql = "SELECT * FROM Activity WHERE Activity_Id = @activity_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@activity_Id", activity_Id);
-                return _connection.QueryFirstAsync<Activity?>(sql, parameters);
+
+                var activity = await _connection.QueryFirstOrDefaultAsync<Activity>(sql, new { activity_Id });
+
+                if (activity == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM Activity WHERE Activity_Id = @activity_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+
+                return activity;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting activity : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public async Task <IEnumerable<Activity?>> GetAllActivities()
@@ -89,28 +102,43 @@ namespace Tag_Go.DAL.Repositories
             return await _connection.QueryAsync<Activity?>(sql);
         }
 
-        public Task<Activity?> GetByIdActivity(int activity_Id)
+        public async Task<Activity?> GetByIdActivity(int activity_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Activity WHERE Activity_Id = @activity_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@activity_Id", activity_Id);
-                return _connection.QueryFirstAsync<Activity?>(sql, parameters);
+
+                var activity = await _connection.QueryFirstAsync<Activity?>(sql, parameters);
+
+                return activity ;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Activity : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<Activity?> UpdateActivity(Activity activity)
+        public async Task<Activity?> UpdateActivity(Activity activity)
         {
             try
             {
-                string sql = "UPDATE Activity SET ActivityName = @activityName, ActivityAddress = @activityAddress, ActivityDescription = @activityDescription, ComplementareInformation = @complementareInformation, PosLat = @posLat, PosLong = @posLong, Organisateur_Id = @organisateur_Id WHERE Activity_Id = @activity_Id";
+                string sql = @"
+                    UPDATE Activity 
+                    SET 
+                        ActivityName = @activityName, 
+                        ActivityAddress = @activityAddress, 
+                        ActivityDescription = @activityDescription, 
+                        ComplementareInformation = @complementareInformation, 
+                        PosLat = @posLat, 
+                        PosLong = @posLong, 
+                        Organisateur_Id = @organisateur_Id 
+                    WHERE 
+                        Activity_Id = @activity_Id";
 
                 DynamicParameters parameters = new DynamicParameters();
 
@@ -121,19 +149,24 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@posLat", activity.PosLat);
                 parameters.Add("@posLong", activity.PosLong);
                 parameters.Add("@organisateur_Id", activity.Organisateur_Id);
+                parameters.Add("@activity_Id", activity.Activity_Id);
 
-                return _connection.QueryFirstAsync<Activity?>(sql);
+                await _connection.ExecuteAsync(sql, parameters);
+
+                return activity;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating activity : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

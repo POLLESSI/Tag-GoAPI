@@ -44,16 +44,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var map = await _mapRepository.GetByIdMap(map_Id);
-                if (!ModelState.IsValid)
+                if (map == null)
                 {
-                    return NotFound();
+                    return NotFound($"Map with ID {map_Id} not found");
                 }
-                return Ok(_mapRepository.GetByIdMap(map_Id));
+                return Ok(map);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving map: {ex.Message}");
             }
 
         }
@@ -93,26 +93,25 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var map = await _mapRepository.DeleteMap(map_Id);
-                if (!ModelState.IsValid)
+                if (map == null)
                 {
-                    await _mapRepository.DeleteMap(map_Id);
+                    return NotFound($"Map with ID {map_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("Map deleted successfully");
             }
             catch (Exception ex)
             {
 
-                throw;
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateMap(MapUpdate mapUpdate)
         {
-            var mapDal = mapUpdate.MapUpdateToDal();
-
             try
             {
+                var mapDal = mapUpdate.MapUpdateToDal();
                 var updateMap = await _mapRepository.UpdateMap(mapDal);
 
                 if (updateMap == null)

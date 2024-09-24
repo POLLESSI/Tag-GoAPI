@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Tag_GoAPI.Models
 {
-    public class MessageModel
+    public class MessageActivityModel
     {
     #nullable disable
         [Required(ErrorMessage = "The message is required")]
@@ -17,9 +17,7 @@ namespace Tag_GoAPI.Models
         public string Author { get; set; }
         [DisplayName("Sending Date : ")]
         public DateTime SendingDate {  get; set; }
-        //[Required(ErrorMessage = "Event Id is required : ")]
-        [DisplayName("Event Id : ")]
-        public int Evenement_Id { get; set; }
+        
         [DisplayName("Activity : ")]
         public int Activity_Id { get; set; }
     }

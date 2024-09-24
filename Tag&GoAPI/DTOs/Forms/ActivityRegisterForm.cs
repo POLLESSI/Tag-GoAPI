@@ -28,12 +28,12 @@ namespace Tag_GoAPI.DTOs.Forms
         public string ComplementareInformation { get; set; }
         [Required]
         [MinLength(2)]
-        [MaxLength(8)]
+        [MaxLength(10)]
         [DisplayName("Latitude : ")]
         public string PosLat { get; set; }
         [Required]
         [MinLength(3)]
-        [MaxLength(9)]
+        [MaxLength(10)]
         [DisplayName("Longitude : ")]
         public string PosLong { get; set; }
         [Required]

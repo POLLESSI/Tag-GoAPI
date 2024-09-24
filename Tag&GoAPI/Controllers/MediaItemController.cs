@@ -43,16 +43,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var mediaItem = await _mediaItemRepository.GetByIdMediaItem(mediaItem_Id);
-                if (!ModelState.IsValid)
+                if (mediaItem == null)
                 {
-                    return NotFound();
+                    return NotFound($"Media Item with ID {mediaItem_Id} not found");
                 }
-                return Ok(_mediaItemRepository.GetByIdMediaItem(mediaItem_Id));
+                return Ok(mediaItem);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving media Item: {ex.Message}");
             }
 
         }
@@ -90,26 +90,25 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var mediaitem = await _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
-                if (!ModelState.IsValid)
+                if (mediaitem == null)
                 {
-                    await _mediaItemRepository.DeleteMediaItem(mediaItem_Id);
+                    return NotFound($"Media Item with ID {mediaItem_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("Media Item deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateMediaItem(MediaItemUpdate mediaItemUpdate)
         {
-            var mediaItemDal = mediaItemUpdate.MediaItemUpdateToDal();
-
             try
             {
+                var mediaItemDal = mediaItemUpdate.MediaItemUpdateToDal();
                 var updateMediaitem = await _mediaItemRepository.UpdateMediaItem(mediaItemDal);
 
                 if (updateMediaitem == null)

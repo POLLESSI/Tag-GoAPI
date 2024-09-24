@@ -46,16 +46,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var activity = await _activityRepository.GetByIdActivity(activity_Id);
-                if (!ModelState.IsValid)
+                if (activity == null)
                 {
-                    return NotFound();
+                    return NotFound($"Activity with ID {activity_Id} not found");
                 }
-                return Ok(_activityRepository.GetByIdActivity(activity_Id));
+                return Ok(activity);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving activity: {ex.Message}");
             }
         }
         [HttpPost("create")]
@@ -94,16 +94,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var activity = await _activityRepository.DeleteActivity(activity_Id);
-                if (ModelState.IsValid)
+                if (activity == null)
                 {
-                    await _activityRepository.DeleteActivity(activity_Id);
+                    return NotFound($"Activity with ID {activity_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("Activity deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
@@ -111,10 +111,11 @@ namespace Tag_GoAPI.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> UpdateActivity(ActivityUpdate activityUpdate)
         {
-            var activityDal = activityUpdate.ActivityUpdateToDal();
+            
             
             try
             {
+                var activityDal = activityUpdate.ActivityUpdateToDal();
                 // Mise à jour de l'activité dans le dépôt
                 var updatedActivity = await _activityRepository.UpdateActivity(activityDal);
 
@@ -123,7 +124,6 @@ namespace Tag_GoAPI.Controllers
                 {
                     return NotFound($"Activity with ID {activityDal.Activity_Id} not found.");
                 }
-
                 // Retourner l'activité mise à jour
                 return Ok(updatedActivity);
             }

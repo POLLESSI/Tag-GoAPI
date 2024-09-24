@@ -74,15 +74,24 @@ namespace Tag_GoAPI.Tools
                 Granted = bonus.Granted,
             };
         }
-        public static Chat ChatToDal(this MessageModel ch)
+        public static ChatActivity ChatActivityToDal(this MessageActivityModel cha)
         {
-            return new Chat
+            return new ChatActivity
             {
-                NewMessage = ch.NewMessage,
-                Author = ch.Author,
-                SendingDate = ch.SendingDate,
-                Evenement_Id = ch.Evenement_Id,
-                Activity_Id = ch.Activity_Id
+                NewMessage = cha.NewMessage,
+                Author = cha.Author,
+                SendingDate = cha.SendingDate,
+                Activity_Id = cha.Activity_Id
+            };
+        }
+        public static ChatEvenement ChatEvenementToDal(this MessageEvenementModel che)
+        {
+            return new ChatEvenement
+            {
+                NewMessage = che.NewMessage,
+                Author = che.Author,
+                SendingDate = che.SendingDate,
+                Evenement_Id = che.Evenement_Id
             };
         }
         public static Map MapToDal(this MapRegisterForm map)

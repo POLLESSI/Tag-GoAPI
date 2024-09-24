@@ -42,16 +42,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var avatar = await _avatarRepository.GetByIdAvatar(avatar_Id);
-                if (!ModelState.IsValid)
+                if (avatar == null)
                 {
-                    return NotFound();
+                    return NotFound($"Avatar with ID {avatar_Id} not found");
                 }
-                return Ok(_avatarRepository.GetByIdAvatar(avatar_Id));
+                return Ok(avatar);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving avatar: {ex.Message}");
             }
 
         }
@@ -88,25 +88,26 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var avatar = await _avatarRepository.DeleteAvatar(avatar_Id);
-                if (!ModelState.IsValid)
+                if (avatar == null)
                 {
-                    await _avatarRepository.DeleteAvatar(avatar_Id);
+                    return NotFound($"Avatar with ID {avatar_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("Avatar deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateAvatar(AvatarUpdate avatarUpdate)
         {
-            var avatarDal = avatarUpdate.AvatarUpdateToDal();
+            
             try
             {
+                var avatarDal = avatarUpdate.AvatarUpdateToDal();
                 var updateAvatar = await _avatarRepository.UpdateAvatar(avatarDal);
 
                 if (updateAvatar == null)

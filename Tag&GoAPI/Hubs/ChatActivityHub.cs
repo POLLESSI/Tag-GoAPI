@@ -5,15 +5,15 @@ using Tag_GoAPI.Models;
 
 namespace Tag_GoAPI.Hubs
 {
-    public class ChatHub : Hub
+    public class ChatActivityHub : Hub
     {
     #nullable disable
-        private static List<Chat> _chats = new List<Chat>();
-        public async Task RefreshChat()
+        private static List<ChatActivity> _chats = new List<ChatActivity>();
+        public async Task RefreshChatActivity()
         {
             if (Clients is not null)
             {
-                await Clients.All.SendAsync("notifynewchat");
+                await Clients.All.SendAsync("notifynewchatactivity");
             }
         }
     }

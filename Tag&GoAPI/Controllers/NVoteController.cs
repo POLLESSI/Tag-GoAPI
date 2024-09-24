@@ -88,17 +88,17 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nvote = await _nVoteRepository.DeleteNVote(nVote_Id);
-                if (!ModelState.IsValid)
+                if (nvote == null)
                 {
-                    return NotFound();
+                    return NotFound($"Vote with ID {nVote_Id} not found");
 
                 }
-                return Ok("Deleted");
+                return Ok("vote deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }

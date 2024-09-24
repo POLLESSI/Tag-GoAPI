@@ -59,21 +59,33 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<Map?> DeleteMap(int map_Id)
+        public async Task<Map?> DeleteMap(int map_Id)
         {
             try
             {
-                string sql = "DELETE FROM Map WHERE Map_Id = @map_Id";
+                string sql = "SELECT * FROM Map WHERE Map_Id = @map_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@map_Id", map_Id);
-                return _connection.QueryFirstAsync<Map?>(sql, parameters);
+
+                var map = await _connection.QueryFirstOrDefaultAsync<Map?>(sql, new { map_Id });
+
+                if (map == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM Map WHERE Map_Id = @map_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+
+                return map;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting Map : {ex.ToString}");
+                return null;
             }
-            return null;
         }
 
         public Task<IEnumerable<Map?>> GetAllMaps()
@@ -82,44 +94,63 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<Map?>(sql);
         }
 
-        public Task<Map?> GetByIdMap(int map_Id)
+        public async Task<Map?> GetByIdMap(int map_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Map WHERE Map_Id = @map_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@map_Id", map_Id);
-                return _connection.QueryFirstAsync<Map?>(sql, parameters);
+
+                var map = await _connection.QueryFirstAsync<Map?>(sql, parameters);
+
+                return map ?? new Map();
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Map : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<Map?> UpdateMap(Map map)
+        public async Task<Map?> UpdateMap(Map map)
         {
             try
             {
-                string sql = "UPDATE Map SET DateCreation = @dateCreation, MapUrl = @mapUrl, Description = @dateDescription WHERE Map_Id = @map_Id";
+                string sql = @"
+                    UPDATE Map  
+                    SET 
+                        DateCreation = @dateCreation, 
+                        MapUrl = @mapUrl,   
+                        Description = @description 
+                    WHERE 
+                        Map_Id = @map_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@dateCreation", map.DateCreation);
                 parameters.Add("@mapUrl", map.MapUrl);
-                parameters.Add("description", map.Description);
-                return _connection.QueryFirstAsync<Map?>(sql, parameters);
+                parameters.Add("@description", map.Description);
+                parameters.Add("@map_Id", map.Map_Id);
+
+                await _connection.QueryFirstAsync<Map?>(sql, parameters);
+
+                return map;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error Updating Map : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

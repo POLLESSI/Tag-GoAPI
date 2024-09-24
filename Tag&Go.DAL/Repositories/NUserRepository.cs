@@ -67,21 +67,33 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<NUser?> DeleteNUser(int nUser_Id)
+        public async Task<NUser?> DeleteNUser(int nUser_Id)
         {
             try
             {
-                string sql = "DELETE FROM NUser WHERE NUser_Id = @nUser_Id";
+                string sql = "SELECT * FROM NUser WHERE NUser_Id = @nUser_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nUser_Id", nUser_Id);
-                return _connection.QueryFirstAsync<NUser?>(sql, parameters);
+
+                var nUser = await _connection.QueryFirstOrDefaultAsync<NUser?>(sql, new{ nUser_Id });
+
+                if (nUser == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM NUser WHERE NUser_Id = @nUser_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+                return nUser;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Erro deleting User : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public Task<IEnumerable<NUser?>> GetAllNUsers()
@@ -90,39 +102,47 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<NUser?>(sql);
         }
 
-        public Task<NUser?> GetByIdNUser(int nUser_Id)
+        public async Task<NUser?> GetByIdNUser(int nUser_Id)
         {
             try
             {
                 string sql = "SELECT Email, NPerson_Id, Role_Id, Avatar_Id, Point FROM NUser WHERE NUser_Id = @nUser_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nUser_Id", nUser_Id);
-                return _connection.QueryFirstAsync<NUser?>(sql, parameters);
+
+                var nUser = await _connection.QueryFirstAsync<NUser?>(sql, parameters);
+
+                return nUser ?? null;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting User : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<NUser?> LoginNUser(string? email, string? pwd)
+        public async Task<NUser?> LoginNUser(string? email, string? pwd)
         {
             try
             {
-                string sqlCheckPassword = "SELECT Email, NPerson_Id, Role_Id, Avatar_Id, Point FROM NUser WHERE Email = @email, Pwd = CONVERT(varbinary(64), @pwd)";
+                string sqlCheckPassword = @"SELECT Email, NPerson_Id, Role_Id, Avatar_Id, Point FROM NUser WHERE Email = @email, Pwd = CONVERT(varbinary(64), @pwd)";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@email", email);
                 parameters.Add("@pwd", pwd);
-                return _connection.QueryFirstAsync<NUser?>(sqlCheckPassword, parameters);
+
+                await _connection.QueryFirstAsync<NUser?>(sqlCheckPassword, parameters);
+
+                return null;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Non-existent user : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public bool RegisterNUser(string? email, string? pwd, int nPerson_Id, string? role_Id, int avatar_Id, string? point)
@@ -153,7 +173,7 @@ namespace Tag_Go.DAL.Repositories
         {
             try
             {
-                string sql = "UPDATE NUser SET Role_Id = @role_Id WHERE NUser_Id = @nUser_Id";
+                string sql = @"UPDATE NUser SET Role_Id = @role_Id WHERE NUser_Id = @nUser_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nUser_Id", nUser_Id);
                 parameters.Add("@role_Id", role_Id);
@@ -166,29 +186,45 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<NUser?> UpdateNUser(NUser nUser)
+        public async Task<NUser?> UpdateNUser(NUser nUser)
         {
             try
             {
-                string sql = "UPDATE NUser SET Email = @email, Pwd = CONVERT(varbinary(64), @pwd), NPerson_Id = @nPerson_Id, Role_Id = @role_Id WHERE NUser_Id = @nUser_Id";
+                string sql = @"
+                    UPDATE NUser 
+                    SET 
+                        Email = @email, 
+                        Pwd = CONVERT(varbinary(64), @pwd), 
+                        NPerson_Id = @nPerson_Id, 
+                        Role_Id = @role_Id 
+                    WHERE 
+                        NUser_Id = @nUser_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@nUser_Id", nUser.NUser_Id);
                 parameters.Add("@email", nUser.Email);
                 parameters.Add("@pwd", nUser.Pwd);
                 parameters.Add("@nPerson_Id", nUser.NPerson_Id);
                 parameters.Add("@role_Id", nUser.Role_Id);
-                return _connection.QueryFirstAsync<NUser>(sql, parameters);
+                parameters.Add("@nUser_Id", nUser.Avatar_Id);
+
+                await _connection.QueryFirstAsync<NUser>(sql, parameters);
+
+                return nUser;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating user : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

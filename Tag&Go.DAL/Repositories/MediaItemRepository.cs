@@ -59,21 +59,34 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<MediaItem?> DeleteMediaItem(int mediaItem_Id)
+        public async Task<MediaItem?> DeleteMediaItem(int mediaItem_Id)
         {
             try
             {
-                string sql = "DELETE FROM MediaItem WHERE MediaItem_Id = @mediaItem_Id";
+                string sql = "SELECT * FROM MediaItem WHERE MediaItem_Id = @mediaItem_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@mediaItem_Id", mediaItem_Id);
-                return _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
+
+                var mediaItem = await _connection.QueryFirstOrDefaultAsync<MediaItem?>(sql, new { mediaItem_Id });
+
+                if (mediaItem == null) 
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM MediaItem WHERE MediaItem_Id = @mediaItem_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+
+                return mediaItem;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting Media Item : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public Task<IEnumerable<MediaItem?>> GetAllMediaItems()
@@ -82,33 +95,49 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<MediaItem?>(sql);
         }
 
-        public Task<MediaItem?> GetByIdMediaItem(int mediaItem_Id)
+        public async Task<MediaItem?> GetByIdMediaItem(int mediaItem_Id)
         {
             try
             {
                 string sql = "SELECT * FROM MediaItem WHERE MediaItem_Id = @mediaItem_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@mediaItem_Id", mediaItem_Id);
-                return _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
+
+                var mediaItem = await _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
+
+                return mediaItem ?? new MediaItem();
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Media Item : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<MediaItem?> UpdateMediaItem(MediaItem mediaItem)
+        public async Task<MediaItem?> UpdateMediaItem(MediaItem mediaItem)
         {
             try
             {
-                string sql = "UPDATE MediaItem SET MediaType = @mediaType, UrlItem = @urlItem, Description = @description WHERE MediaItem_Id = @mediaItem_Id";
+                string sql = @"
+                    UPDATE MediaItem 
+                    SET 
+                        MediaType = @mediaType, 
+                        UrlItem = @urlItem, 
+                        Description = @description 
+                    WHERE 
+                        MediaItem_Id = @mediaItem_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@mediaType", mediaItem.MediaType);
                 parameters.Add("@urlItem", mediaItem.UrlItem);
-                parameters.Add("description", mediaItem.Description);
-                return _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
+                parameters.Add("@description", mediaItem.Description);
+                parameters.Add("@mediaItem_Id", mediaItem.MediaItem_Id);
+
+                await _connection.QueryFirstAsync<MediaItem?>(sql, parameters);
+
+                return mediaItem;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {

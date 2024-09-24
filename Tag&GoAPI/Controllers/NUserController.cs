@@ -45,16 +45,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nuser = await _userRepository.GetByIdNUser(nUser_Id);
-                if (!ModelState.IsValid)
+                if (nuser == null)
                 {
-                    return NotFound();
+                    return NotFound($"User with ID {nUser_Id} not found");
                 }
-                return Ok(_userRepository.GetByIdNUser(nUser_Id));
+                return Ok(nuser);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving User: {ex.Message}");
             }
 
         }
@@ -121,26 +121,25 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nuser = await _userRepository.DeleteNUser(nUser_Id);
-                if (ModelState.IsValid)
+                if (nuser == null)
                 {
-                    await _userRepository.DeleteNUser(nUser_Id);
+                    return NotFound($"User with ID {nUser_Id} not found");
                 }
-                return Ok("Deleted");
+                return Ok("User deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateNUser(NUserUpdate nUserUpdate)
         {
-            var nUserDal = nUserUpdate.NUserUpdateToDal();
-
             try
             {
+                var nUserDal = nUserUpdate.NUserUpdateToDal();
                 var updateNUser = await _userRepository.UpdateNUser(nUserDal);
 
                 if (updateNUser == null)

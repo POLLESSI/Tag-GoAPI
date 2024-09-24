@@ -73,21 +73,34 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<NPerson?> DeleteNPerson(int nPerson_Id)
+        public async Task<NPerson?> DeleteNPerson(int nPerson_Id)
         {
             try
             {
-                string sql = "DELETE FROM NPerson WHERE NPerson_Id = @nPerson_Id";
+                string sql = "SELECT * FROM NPerson WHERE NPerson_Id = @nPerson_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nPerson_Id", nPerson_Id);
-                return _connection.QueryFirstAsync<NPerson?>(sql, parameters);
+
+                var nPerson = await _connection.QueryFirstOrDefaultAsync<NPerson?>(sql, new { nPerson_Id });
+
+                if (nPerson == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM NPerson WHERE NPerson_Id = @nPerson_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+
+                return nPerson;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting Person : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public Task<IEnumerable<NPerson?>> GetAllNPersons()
@@ -96,30 +109,48 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<NPerson?>(sql);
         }
 
-        public Task<NPerson?> GetByIdNPerson(int nPerson_Id)
+        public async Task<NPerson?> GetByIdNPerson(int nPerson_Id)
         {
             try
             {
                 string sql = "SELECT * FROM NPerson WHERE NPerson_Id = @nPerson_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nPerson_Id", nPerson_Id);
-                return _connection.QueryFirstAsync<NPerson?>(sql, parameters);
+
+                var nPerson = await _connection.QueryFirstAsync<NPerson?>(sql, parameters);
+                return nPerson;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Person : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<NPerson> UpdateNPerson(NPerson nPerson)
+        public async Task<NPerson> UpdateNPerson(NPerson nPerson)
         {
             try
             {
-                string sql = "Update NPerson SET Lastname = @lastname, Firstname = @firstname, Email = @email, Address_Street = @address_Street, Address_Nbr = @address_Nbr, PostalCode = @postalCode, Address_City = @address_City, Address_Country = @address_Country, Telephone = @telephone, Gsm = @gsm WHERE NPerson_Id = @nPerson_Id";
+                string sql = @"
+                    UPDATE NPerson 
+                    SET 
+                        Lastname = @lastname, 
+                        Firstname = @firstname, 
+                        Email = @email, 
+                        Address_Street = @address_Street, 
+                        Address_Nbr = @address_Nbr, 
+                        PostalCode = @postalCode, 
+                        Address_City = @address_City, 
+                        Address_Country = @address_Country, 
+                        Telephone = @telephone, 
+                        Gsm = @gsm 
+                    WHERE 
+                        NPerson_Id = @nPerson_Id";
 
                 DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@lastname", nPerson.Lastname);
                 parameters.Add("@firstname", nPerson.Firstname);
                 parameters.Add("@email", nPerson.Email);
@@ -132,18 +163,22 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@gsm", nPerson.Gsm);
                 parameters.Add("@nPerson_Id", nPerson.NPerson_Id);
 
-                return _connection.QueryFirstAsync<NPerson?>(sql, parameters);
+                await _connection.QueryFirstAsync<NPerson?>(sql, parameters);
+
+                return nPerson;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating Person : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

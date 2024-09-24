@@ -61,21 +61,34 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<Bonus?> DeleteBonus(int bonus_Id)
+        public async Task<Bonus?> DeleteBonus(int bonus_Id)
         {
             try
             {
-                string sql = "DELETE FROM Bonus WHERE Bonus_Id = @bonus_Id";
+                string sql = "SELECT * FROM Bonus WHERE Bonus_Id = @bonus_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@bonus_Id", bonus_Id);
-                return _connection.QueryFirstAsync<Bonus?>(sql, parameters);
+
+                var bonus = await _connection.QueryFirstOrDefaultAsync<Bonus>(sql, new { bonus_Id });
+
+                if (bonus == null) 
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM Bonus WHERE Bonus_Id = @bonus_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+
+                return bonus;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting Bonus : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public Task<IEnumerable<Bonus?>> GetAllBonuss()
@@ -84,14 +97,18 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<Bonus?>(sql);
         }
 
-        public Task<Bonus?> GetByIdBonus(int bonus_Id)
+        public async Task<Bonus?> GetByIdBonus(int bonus_Id)
         {
             try
             {
                 string sql = "SELECT * FROM Bonus WHERE Bonus_Id = @bonus_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@bonus_Id", bonus_Id);
-                return _connection.QueryFirstAsync<Bonus?>(sql, parameters);
+
+                var bonus = await _connection.QueryFirstAsync<Bonus?>(sql, parameters);
+
+                return bonus ?? new Bonus();
             }
             catch (Exception ex)
             {
@@ -101,28 +118,44 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<Bonus?> UpdateBonus(Bonus bonus)
+        public async Task<Bonus?> UpdateBonus(Bonus bonus)
         {
             try
             {
-                string sql = "UPDATE Bonus SET BonusType = @bonusType, BonusDescription = @bonusDescription, Application = @application, Granted = @granted WHERE Bonus_Id = @bonus_Id";
+                string sql = @"
+                    UPDATE Bonus 
+                    SET 
+                        BonusType = @bonusType, 
+                        BonusDescription = @bonusDescription, 
+                        Application = @application, 
+                        Granted = @granted 
+                    WHERE 
+                        Bonus_Id = @bonus_Id";
+
                 DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@bonusType", bonus.BonusType);
                 parameters.Add("@bonusDescription", bonus.BonusDescription);
                 parameters.Add("@application", bonus.Application);
                 parameters.Add("@granted", bonus.Granted);
-                return _connection.QueryFirstAsync<Bonus?>(sql, parameters);
+                parameters.Add("@bonus_Id", bonus.Bonus_Id);
+
+                await _connection.QueryFirstAsync<Bonus?>(sql, parameters);
+
+                return bonus;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating Bonus : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

@@ -43,16 +43,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nperson = await _nPersonRepository.GetByIdNPerson(nPerson_Id);
-                if (!ModelState.IsValid)
+                if (nperson == null)
                 {
-                    return NotFound();
+                    return NotFound($"Person with ID {nPerson_Id} not found");
                 }
-                return Ok(_nPersonRepository.GetByIdNPerson(nPerson_Id));
+                return Ok(nperson);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving person: {ex.Message}");
             }
 
         }
@@ -90,26 +90,25 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nperson = await _nPersonRepository.DeleteNPerson(nPerson_Id);
-                if (!ModelState.IsValid)
+                if (nperson == null)
                 {
-                    await _nPersonRepository.DeleteNPerson(nPerson_Id);
+                    return NotFound($"Person with ID {nPerson_Id} not found");
                 }
-                return Ok(nperson);
+                return Ok("Person deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("{nPerson_Id}")]
         public async Task<IActionResult> UpdateNPerson(NPersonUpdate nPersonUpdate)
         {
-            var nPersonDal = nPersonUpdate.NPersonUpdateToDal();
-
             try
             {
+                var nPersonDal = nPersonUpdate.NPersonUpdateToDal();
                 var updateNPerson = await _nPersonRepository.UpdateNPerson(nPersonDal);
 
                 if (updateNPerson == null)

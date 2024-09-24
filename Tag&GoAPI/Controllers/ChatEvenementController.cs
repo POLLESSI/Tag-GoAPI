@@ -10,23 +10,23 @@ namespace Tag_GoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChatController : ControllerBase
+    public class ChatEvenementController : ControllerBase
     {
-    #nullable disable
-        private readonly IChatRepository _chatRepository;
-        private readonly ChatHub _chatHub;
+#nullable disable
+        private readonly IChatEvenementRepository _chatEvenementRepository;
+        private readonly ChatEvenementHub _chatEvenementHub;
 
-        public ChatController(IChatRepository chatRepository, ChatHub chatHub)
+        public ChatEvenementController(IChatEvenementRepository chatEvenementRepository, ChatEvenementHub chatEvenementHub)
         {
-            _chatRepository = chatRepository;
-            _chatHub = chatHub;
+            _chatEvenementRepository = chatEvenementRepository;
+            _chatEvenementHub = chatEvenementHub;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllMessages()
         {
             try
             {
-                var chat = await _chatRepository.GetAllMessages();
+                var chat = await _chatEvenementRepository.GetAllMessages();
                 return Ok(chat);
             }
             catch (Exception ex)
@@ -41,22 +41,22 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var chat = await _chatRepository.GetByIdChat(chat_Id);
-                if (!ModelState.IsValid)
+                var chat = await _chatEvenementRepository.GetByIdChat(chat_Id);
+                if (chat == null)
                 {
-                    return NotFound();
+                    return NotFound($"Chat With ID {chat_Id} not found");
                 }
-                return Ok(_chatRepository.GetByIdChat(chat_Id));
+                return Ok(chat);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving chat event: {ex.Message}");
             }
 
         }
         [HttpPost]
-        public async Task<IActionResult> Create(MessageModel newMessage)
+        public async Task<IActionResult> Create(MessageEvenementModel newMessage)
         {
             if (!ModelState.IsValid)
             {
@@ -64,14 +64,14 @@ namespace Tag_GoAPI.Controllers
             }
             try
             {
-                var chatDal = newMessage.ChatToDal();
-                var chatCreated = _chatRepository.Create(chatDal);
+                var chatEvenementDal = newMessage.ChatEvenementToDal();
+                var chatCreated = _chatEvenementRepository.Create(chatEvenementDal);
 
                 if (chatCreated)
                 {
-                    await _chatHub.RefreshChat();
+                    await _chatEvenementHub.RefreshChatEvenement();
 
-                    return CreatedAtAction(nameof(Create), new { id = chatDal.Chat_Id}, chatDal);
+                    return CreatedAtAction(nameof(Create), new { id = chatEvenementDal.Chat_Id }, chatEvenementDal);
                 }
                 return BadRequest(new { message = "Registration error. Could not create chat" });
             }
@@ -88,10 +88,10 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var message = await _chatRepository.DeleteMessage(chat_Id);
+                var message = await _chatEvenementRepository.DeleteMessage(chat_Id);
                 if (!ModelState.IsValid)
                 {
-                    await _chatRepository.DeleteMessage(chat_Id);
+                    await _chatEvenementRepository.DeleteMessage(chat_Id);
                 }
                 return Ok("Deleted");
             }

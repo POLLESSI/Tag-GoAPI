@@ -60,21 +60,33 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<NIcon?> DeleteNIcon(int nIcon_Id)
+        public async Task<NIcon?> DeleteNIcon(int nIcon_Id)
         {
             try
             {
-                string sql = "DELETE FROM NIcon WHERE NIcon_Id = @nIcon_Id";
+                string sql = "SELECT * FROM NIcon WHERE NIcon_Id = @nIcon_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nIcon_Id", nIcon_Id);
-                return _connection.QueryFirstAsync<NIcon?>(sql, parameters);
+
+                var nIcon = await _connection.QueryFirstOrDefaultAsync<NIcon?>(sql, new { nIcon_Id });
+
+                if (nIcon == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM NIcon WHERE NIcon_Id = @nIcon_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+
+                return nIcon;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting Icon : {ex.ToString}");
+                return null;
             }
-            return null;
         }
 
         public Task<IEnumerable<NIcon?>> GetAllNIcons()
@@ -83,47 +95,62 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<NIcon?>(sql);
         }
 
-        public Task<NIcon?> GetByIdNIcon(int nIcon_Id)
+        public async Task<NIcon?> GetByIdNIcon(int nIcon_Id)
         {
             try
             {
                 string sql = "SELECT * FROM NIcon WHERE NIcon_Id = @nIcon_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nIcon_Id", nIcon_Id);
-                return _connection.QueryFirstAsync<NIcon?>(sql, parameters);
+
+                var nIcon = await _connection.QueryFirstAsync<NIcon?>(sql, parameters);
+                return nIcon;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Icon : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
-        public Task<NIcon?> UpdateNIcon(NIcon nIcon)
+        public async Task<NIcon?> UpdateNIcon(NIcon nIcon)
         {
             try
             {
-                string sql = "UPDATE NIcon SET NIconName = @nIconName, NIconDescription = @nIconDescription, NIconUrl = @nIconUrl WHERE NIcon_Id = @nIcon_Id";
+                string sql = @"
+                    UPDATE NIcon 
+                    SET 
+                        NIconName = @nIconName, 
+                        NIconDescription = @nIconDescription, 
+                        NIconUrl = @nIconUrl 
+                    WHERE 
+                        NIcon_Id = @nIcon_Id";
 
                 DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@nIconName", nIcon.NIconName);
                 parameters.Add("@nIconDescription", nIcon.NIconDescription);
                 parameters.Add("@nIconUrl", nIcon.NIconUrl);
                 parameters.Add("@nIcon_Id", nIcon.NIcon_Id);
 
-                return _connection.QueryFirstAsync<NIcon?>(sql, parameters);
+                await _connection.QueryFirstAsync<NIcon?>(sql, parameters);
+
+                return nIcon;
             }
             catch (System.ComponentModel.DataAnnotations.ValidationException ex)
             {
 
                 Console.WriteLine($"Validation error : {ex.Message}");
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error Updating Icon : {ex}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

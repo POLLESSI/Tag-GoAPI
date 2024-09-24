@@ -59,21 +59,32 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<NVote?> DeleteNVote(int nVote_Id)
+        public async Task<NVote?> DeleteNVote(int nVote_Id)
         {
             try
             {
-                string sql = "DELETE FROM NVote WHERE NVote_Id = @nVote_Id";
+                string sql = "SELECT * FROM NVote WHERE NVote_Id = @nVote_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nVote_Id", nVote_Id);
-                return _connection.QueryFirstAsync<NVote?>(sql, parameters);
+
+                var nVote = await _connection.QueryFirstAsync<NVote?>(sql, new { nVote_Id });
+                if (nVote == null)
+                {
+                    return null;
+                }
+
+                string deleteSql = "DELETE FROM NVote WHERE NVote_Id = @nVote_Id";
+
+                await _connection.ExecuteAsync(deleteSql, parameters);
+                return nVote;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error deleting vote : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
 
         public Task<IEnumerable<NVote?>> GetAllNVotes()
@@ -82,21 +93,23 @@ namespace Tag_Go.DAL.Repositories
             return _connection.QueryAsync<NVote?>(sql);
         }
 
-        public Task<NVote?> GetByIdNVote(int nVote_Id)
+        public async Task<NVote?> GetByIdNVote(int nVote_Id)
         {
             try
             {
                 string sql = "SELECT * FROM NVote WHERE NVote_Id = @nVote_Id";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nVote_Id", nVote_Id);
-                return _connection.QueryFirstAsync<NVote?>(sql, parameters);
+                var nVote = await _connection.QueryFirstAsync<NVote?>(sql, parameters);
+                return nVote;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error geting Vote : {ex.ToString}");
+                return null;
             }
-            return null;
+            
         }
     }
 }

@@ -38,21 +38,21 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpGet("{nIcon_Id}")]
-        public async Task<IActionResult> GetByIdNIcon(int nIconId)
+        public async Task<IActionResult> GetByIdNIcon(int nIcon_Id)
         {
             try
             {
-                var nicon = await _nIconRepository.GetByIdNIcon(nIconId);
-                if (!ModelState.IsValid)
+                var nicon = await _nIconRepository.GetByIdNIcon(nIcon_Id);
+                if (nicon == null)
                 {
-                    return NotFound();
+                    return NotFound($"Icon with ID {nIcon_Id}");
                 }
-                return Ok(_nIconRepository.GetByIdNIcon(nIconId));
+                return Ok(nicon);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving Icon: {ex.Message}");
             }
 
         }
@@ -90,26 +90,25 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nicon = await _nIconRepository.DeleteNIcon(nIconId);
-                if (!ModelState.IsValid)
+                if (nicon == null)
                 {
-                    await _nIconRepository.DeleteNIcon(nIconId);
+                    return NotFound($"Icon with ID {nIconId} not found");
                 }
-                return Ok("Deleted");
+                return Ok("icon deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("{nIcon_Id}")]
         public async Task<IActionResult> UpdateNIcon(NIconUpdate nIconUpdate)
         {
-            var nIconDal = nIconUpdate.NIconUpdateToDal();
-
             try
             {
+                var nIconDal = nIconUpdate.NIconUpdateToDal();
                 var updateNIcon = await _nIconRepository.UpdateNIcon(nIconDal);
 
                 if (updateNIcon == null)

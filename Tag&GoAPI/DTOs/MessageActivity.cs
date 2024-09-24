@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tag_GoAPI.DTOs
 {
-    public class Message
+    public class MessageActivity
     {
-#nullable disable
+    #nullable disable
         [Required]
         [MinLength(2)]
         [MaxLength(64)]
@@ -17,9 +17,6 @@ namespace Tag_GoAPI.DTOs
         [DisplayName("Author : ")]
         public string Author { get; set; }
         public DateTime SendingDate { get; set; } = DateTime.UtcNow;
-        [Required]
-        [DisplayName("Event Id : ")]
-        public int Evenement_Id { get; set; }
         [Required]
         [DisplayName("Activity Id : ")]
         public int Activity_Id { get; set; }

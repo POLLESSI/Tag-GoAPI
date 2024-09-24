@@ -42,16 +42,16 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var bonus = await _bonusRepository.GetByIdBonus(bonus_Id);
-                if (!ModelState.IsValid)
+                if (bonus == null)
                 {
-                    return NotFound();
+                    return NotFound($"Bonus with ID {bonus_Id} not found");
                 }
-                return Ok(_bonusRepository.GetByIdBonus(bonus_Id));
+                return Ok(bonus);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving bonus: {ex.Message}");
             }
 
         }
@@ -88,27 +88,28 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var bonus = await _bonusRepository.DeleteBonus(bonus_Id);
-                if (!ModelState.IsValid)
+                if (bonus == null)
                 {
-                    await _bonusRepository.DeleteBonus(bonus_Id);
+                    return NotFound($"Bonus with ID {bonus_Id} not found");
                 }
 
-                return Ok("Deleted");
+                return Ok("Bonus deleted successfully");
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error {ex.Message}");
             }
 
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateBonus(BonusUpdate bonusUpdate)
         {
-            var bonusDal = bonusUpdate.BonusUpdateToDal();
+            
 
             try
             {
+                var bonusDal = bonusUpdate.BonusUpdateToDal();
                 var updatedBonus = await _bonusRepository.UpdateBonus(bonusDal);
 
                 if (updatedBonus == null)
