@@ -91,7 +91,7 @@ namespace Tag_GoAPI.Tools
                 NewMessage = che.NewMessage,
                 Author = che.Author,
                 SendingDate = che.SendingDate,
-                Evenement_Id = che.Evenement_Id
+                NEvenement_Id = che.NEvenement_Id
             };
         }
         public static Map MapToDal(this MapRegisterForm map)

@@ -24,13 +24,13 @@ namespace Tag_Go.DAL.Repositories
         {
             try
             {
-                string sql = "INSERT INTO ChatEvenement (NewMessage, Author, SendingDate, Evenement_Id) VALUES " +
-                    "(@NewMessage, @Author, @SendingDate, @Evenement_Id)";
+                string sql = "INSERT INTO ChatEvenement (NewMessage, Author, SendingDate, NEvenement_Id) VALUES " +
+                    "(@NewMessage, @Author, @SendingDate, @NEvenement_Id)";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@NewMessage", chat.NewMessage);
                 parameters.Add("@Author", chat.Author);
                 parameters.Add("@SendingDate", chat.SendingDate);
-                parameters.Add("@Evenement_Id", chat.Evenement_Id);
+                parameters.Add("@NEvenement_Id", chat.NEvenement_Id);
                 return _connection.Execute(sql, parameters) > 0;
             }
             catch (Exception ex)
@@ -45,13 +45,13 @@ namespace Tag_Go.DAL.Repositories
         {
             try
             {
-                string sql = "INSERT INTO ChatEvenement (NewMessage, Author, SendingDate, Evenement_Id) " +
-                    "VALUES (@newMessage, @author, @sendingDate, @evenement_Id)";
+                string sql = "INSERT INTO ChatEvenement (NewMessage, Author, SendingDate, NEvenement_Id) " +
+                    "VALUES (@newMessage, @author, @sendingDate, @nEvenement_Id)";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@newMessage", chat.NewMessage);
                 parameters.Add("@author", chat.Author);
                 parameters.Add("@sendingDate", chat.SendingDate);
-                parameters.Add("@evenement_Id", chat.Evenement_Id);
+                parameters.Add("@nEvenement_Id", chat.NEvenement_Id);
  
                 _connection.Execute(sql, parameters);
             }

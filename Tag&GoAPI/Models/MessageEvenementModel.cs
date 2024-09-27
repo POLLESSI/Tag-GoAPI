@@ -19,6 +19,6 @@ namespace Tag_GoAPI.Models
         public DateTime SendingDate { get; set; }
         //[Required(ErrorMessage = "Event Id is required : ")]
         [DisplayName("Event Id : ")]
-        public int Evenement_Id { get; set; }
+        public int NEvenement_Id { get; set; }
     }
 }

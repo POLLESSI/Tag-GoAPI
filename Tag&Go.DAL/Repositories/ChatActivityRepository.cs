@@ -25,7 +25,7 @@ namespace Tag_Go.DAL.Repositories
             try
             {
                 string sql = "INSERT INTO ChatActivity (NewMessage, Author, SendingDate, Activity_Id) VALUES " +
-                    "(@NewMessage, @Author, @SendingDate, @Evenement_Id, @Activity_Id)";
+                    "(@NewMessage, @Author, @SendingDate, @Activity_Id)";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@NewMessage", chat.NewMessage);
                 parameters.Add("@Author", chat.Author);
