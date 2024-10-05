@@ -70,11 +70,11 @@ namespace Tag_Go.DAL.Repositories
         {
             try
             {
-                string sql = "SELECT * FROM Activity WHERE Activity_Id = @activity_Id";
+                string sql = "SELECT * FROM Activity WHERE Activity_Id = @activity_Id AND Active = 1";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@activity_Id", activity_Id);
 
-                var activity = await _connection.QueryFirstOrDefaultAsync<Activity>(sql, new { activity_Id });
+                var activity = await _connection.QueryFirstOrDefaultAsync<Activity>(sql, parameters);
 
                 if (activity == null)
                 {
@@ -90,7 +90,7 @@ namespace Tag_Go.DAL.Repositories
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error deleting activity : {ex.ToString}");
+                Console.WriteLine($"Error deleting activity : {ex.Message}");
                 return null;
             }
             
@@ -98,15 +98,27 @@ namespace Tag_Go.DAL.Repositories
 
         public async Task <IEnumerable<Activity?>> GetAllActivities()
         {
-            string sql = "SELECT * FROM Activity";
-            return await _connection.QueryAsync<Activity?>(sql);
+            try
+            {
+                string sql = "SELECT * FROM Activity WHERE Active = 1";
+
+                var activities = await _connection.QueryAsync<Activity?>(sql);
+                return activities;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving activities: {ex.Message}");
+                return Enumerable.Empty<Activity>();
+            }
+            
         }
 
         public async Task<Activity?> GetByIdActivity(int activity_Id)
         {
             try
             {
-                string sql = "SELECT * FROM Activity WHERE Activity_Id = @activity_Id";
+                string sql = "SELECT * FROM Activity WHERE Activity_Id = @activity_Id AND Active = 1";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@activity_Id", activity_Id);
 

@@ -31,12 +31,18 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var activities = await _activityRepository.GetAllActivities();
+
+                if (activities == null || !activities.Any()) 
+                {
+                    return NotFound("No active activies found.");
+                }
+
                 return Ok(activities);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
         }

@@ -22,11 +22,11 @@ namespace Tag_GoAPI.Controllers
             _chatActivityHub = chatActivityHub;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllMessages()
+        public async Task<IActionResult> GetAllMessagesActivities()
         {
             try
             {
-                var chat = await _chatActivityRepository.GetAllMessages();
+                var chat = await _chatActivityRepository.GetAllMessagesActivities();
                 return Ok(chat);
             }
             catch (Exception ex)
@@ -37,11 +37,11 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpGet("{chat_Id}")]
-        public async Task<IActionResult> GetByIdChat(int chat_Id)
+        public async Task<IActionResult> GetByIdChatActivity(int chat_Id)
         {
             try
             {
-                var chat = await _chatActivityRepository.GetByIdChat(chat_Id);
+                var chat = await _chatActivityRepository.GetByIdChatActivity(chat_Id);
                 if (chat == null)
                 {
                     return NotFound($"Chat Activity with ID {chat_Id} not found");
@@ -56,7 +56,7 @@ namespace Tag_GoAPI.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> Create(MessageActivityModel newMessage)
+        public async Task<IActionResult> CreateChatActivity(MessageActivityModel newMessage)
         {
             if (!ModelState.IsValid)
             {
@@ -65,33 +65,33 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var chatActivityDal = newMessage.ChatActivityToDal();
-                var chatCreated = _chatActivityRepository.Create(chatActivityDal);
+                var chatActivityCreated = _chatActivityRepository.CreateChatActivity(chatActivityDal);
 
-                if (chatCreated)
+                if (chatActivityCreated)
                 {
                     await _chatActivityHub.RefreshChatActivity();
 
-                    return CreatedAtAction(nameof(Create), new { id = chatActivityDal.Chat_Id}, chatActivityDal);
+                    return CreatedAtAction(nameof(CreateChatActivity), new { id = chatActivityDal.ChatActivity_Id}, chatActivityDal);
                 }
-                return BadRequest(new { message = "Registration error. Could not create chat" });
+                return BadRequest(new { message = "Registration error. Could not create chat Activity" });
             }
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error creating chat: {ex}");
+                Console.WriteLine($"Error creating chat Activity: {ex}");
                 return StatusCode(500, "Internal server error");
             }
 
         }
-        [HttpDelete("{chat_Id}")]
-        public async Task<IActionResult> DeleteMessage(int chat_Id)
+        [HttpDelete("{chatActivity_Id}")]
+        public async Task<IActionResult> DeleteMessageActivity(int chatActivity_Id)
         {
             try
             {
-                var message = await _chatActivityRepository.DeleteMessage(chat_Id);
+                var message = await _chatActivityRepository.DeleteMessageActivity(chatActivity_Id);
                 if (!ModelState.IsValid)
                 {
-                    await _chatActivityRepository.DeleteMessage(chat_Id);
+                    await _chatActivityRepository.DeleteMessageActivity(chatActivity_Id);
                 }
                 return Ok("Deleted");
             }

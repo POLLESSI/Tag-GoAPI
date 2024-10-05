@@ -4,7 +4,7 @@ namespace Tag_Go.DAL.Entities
     public class ChatActivity
     {
     #nullable disable
-        public int Chat_Id { get; set; }
+        public int ChatActivity_Id { get; set; }
         public string NewMessage { get; set; }
         public string Author { get; set; }
         public DateTime SendingDate { get; set; }

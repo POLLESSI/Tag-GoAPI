@@ -9,8 +9,8 @@ namespace Tag_Go.DAL.Entities
         public string ActivityAddress { get; set; }
         public string ActivityDescription { get; set; }
         public string ComplementareInformation { get; set; }
-        public string PosLat { get; set; }
-        public string PosLong { get; set; }
+        public float PosLat { get; set; }
+        public float PosLong { get; set; }
         public int Organisateur_Id { get; set; }
         public bool Active { get; set; }
     }

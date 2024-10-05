@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(ChatEvenement chat)
+        public bool CreateChatEvenement(ChatEvenement chat)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Tag_Go.DAL.Repositories
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error encoding chat : {ex.ToString}");
+                Console.WriteLine($"Error encoding chat Event: {ex.ToString}");
             }
             return false;
         }
@@ -58,40 +58,40 @@ namespace Tag_Go.DAL.Repositories
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error CreateChat : {ex.ToString}");
+                Console.WriteLine($"Error CreateChat Event : {ex.ToString}");
             }
         }
 
-        public Task<ChatEvenement?> DeleteMessage(int chat_Id)
+        public Task<ChatEvenement?> DeleteMessageEvenement(int chatEvenement_Id)
         {
             try
             {
-                string sql = "DELETE FROM ChatEvenement WHERE Chat_Id = @chat_Id";
+                string sql = "DELETE FROM ChatEvenement WHERE ChatEvenement_Id = @chatEvenement_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@chat_Id", chat_Id);
+                parameters.Add("@chatEvenement_Id", chatEvenement_Id);
                 return _connection.QueryFirstAsync<ChatEvenement?>(sql, parameters);
             }
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error deleting Chat : {ex.ToString}");
+                Console.WriteLine($"Error deleting Chat Event : {ex.ToString}");
             }
             return null;
         }
 
-        public Task<IEnumerable<ChatEvenement?>> GetAllMessages()
+        public Task<IEnumerable<ChatEvenement?>> GetAllMessagesEvenements()
         {
             string sql = "SELECT * FROM ChatEvenement";
             return _connection.QueryAsync<ChatEvenement?>(sql);
         }
 
-        public async Task<ChatEvenement?> GetByIdChat(int chat_Id)
+        public async Task<ChatEvenement?> GetByIdChatEvenement(int chatEvenement_Id)
         {
             try
             {
-                string sql = "SELECT * FROM ChatEvenement WHERE Chat_Id = @chat_Id";
+                string sql = "SELECT * FROM ChatEvenement WHERE ChatEvenement_Id = @chatEvenement_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@chat_Id", chat_Id);
+                parameters.Add("@chat_Id", chatEvenement_Id);
 
                 var chatEvenement = await _connection.QueryFirstAsync<ChatEvenement?>(sql, parameters);
                 return chatEvenement;
@@ -99,7 +99,7 @@ namespace Tag_Go.DAL.Repositories
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error geting ChatEvenement : {ex.ToString}");
+                Console.WriteLine($"Error geting Chat Event : {ex.ToString}");
                 return null;
             }
             

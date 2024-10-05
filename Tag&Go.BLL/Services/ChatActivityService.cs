@@ -21,11 +21,11 @@ namespace Tag_Go.BLL.Services
             _chatActivityRepository = chatActivityRepository;
         }
 
-        public bool Create(ChatActivity chat)
+        public bool CreateChatActivity(ChatActivity chatActivity)
         {
             try
             {
-                return _chatActivityRepository.Create(chat);
+                return _chatActivityRepository.CreateChatActivity(chatActivity);
             }
             catch (Exception ex)
             {
@@ -48,11 +48,11 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Task<ChatActivity?> DeleteMessage(int chat_Id)
+        public Task<ChatActivity?> DeleteMessageActivity(int chatActivity_Id)
         {
             try
             {
-                return _chatActivityRepository.DeleteMessage(chat_Id);
+                return _chatActivityRepository.DeleteMessageActivity(chatActivity_Id);
             }
             catch (Exception ex)
             {
@@ -62,16 +62,16 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<ChatActivity?>> GetAllMessages()
+        public Task<IEnumerable<ChatActivity?>> GetAllMessagesActivities()
         {
-            return _chatActivityRepository.GetAllMessages();
+            return _chatActivityRepository.GetAllMessagesActivities();
         }
 
-        public Task<ChatActivity?> GetByIdChat(int chat_Id)
+        public Task<ChatActivity?> GetByIdChatActivity(int chat_Id)
         {
             try
             {
-                return _chatActivityRepository.GetByIdChat(chat_Id);
+                return _chatActivityRepository.GetByIdChatActivity(chat_Id);
             }
             catch (Exception ex)
             {

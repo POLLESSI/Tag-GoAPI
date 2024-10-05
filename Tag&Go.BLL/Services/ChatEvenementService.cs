@@ -24,11 +24,11 @@ namespace Tag_Go.BLL.Services
             _chatEvenementRepository = chatEvenementRepository;
         }
 
-        public bool Create(ChatEvenement chat)
+        public bool CreateChatEvenement(ChatEvenement chat)
         {
             try
             {
-                return _chatEvenementRepository.Create(chat);
+                return _chatEvenementRepository.CreateChatEvenement(chat);
             }
             catch (Exception ex)
             {
@@ -51,11 +51,11 @@ namespace Tag_Go.BLL.Services
             }
         }
 
-        public Task<ChatEvenement?> DeleteMessage(int chat_Id)
+        public Task<ChatEvenement?> DeleteMessageEvenement(int chat_Id)
         {
             try
             {
-                return _chatEvenementRepository.DeleteMessage(chat_Id);
+                return _chatEvenementRepository.DeleteMessageEvenement(chat_Id);
             }
             catch (Exception ex)
             {
@@ -65,16 +65,16 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<ChatEvenement?>> GetAllMessages()
+        public Task<IEnumerable<ChatEvenement?>> GetAllMessagesEvenements()
         {
-            return _chatEvenementRepository.GetAllMessages();
+            return _chatEvenementRepository.GetAllMessagesEvenements();
         }
 
-        public Task<ChatEvenement?> GetByIdChat(int chat_Id)
+        public Task<ChatEvenement?> GetByIdChatEvenement(int chat_Id)
         {
             try
             {
-                return _chatEvenementRepository.GetByIdChat(chat_Id);
+                return _chatEvenementRepository.GetByIdChatEvenement(chat_Id);
             }
             catch (Exception ex)
             {

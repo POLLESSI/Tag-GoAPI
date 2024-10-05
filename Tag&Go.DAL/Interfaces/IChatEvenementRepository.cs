@@ -11,10 +11,10 @@ namespace Tag_Go.DAL.Interfaces
     public interface IChatEvenementRepository
     {
 #nullable disable
-        bool Create(ChatEvenement chat);
+        bool CreateChatEvenement(ChatEvenement chat);
         void CreateChat(ChatEvenement chat);
-        Task<IEnumerable<ChatEvenement?>> GetAllMessages();
-        Task<ChatEvenement?> GetByIdChat(int chat_Id);
-        Task<ChatEvenement?> DeleteMessage(int chat_Id);
+        Task<IEnumerable<ChatEvenement?>> GetAllMessagesEvenements();
+        Task<ChatEvenement?> GetByIdChatEvenement(int chat_Id);
+        Task<ChatEvenement?> DeleteMessageEvenement(int chat_Id);
     }
 }

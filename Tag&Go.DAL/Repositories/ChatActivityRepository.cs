@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(ChatActivity chat)
+        public bool CreateChatActivity(ChatActivity chat)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Tag_Go.DAL.Repositories
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error encoding chat : {ex.ToString}");
+                Console.WriteLine($"Error encoding chat Activity : {ex.ToString}");
             }
             return false;
         }
@@ -58,41 +58,41 @@ namespace Tag_Go.DAL.Repositories
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error CreateChat : {ex.ToString}");
+                Console.WriteLine($"Error CreateChat Activity : {ex.ToString}");
             }
         }
 
-        public Task<ChatActivity?> DeleteMessage(int chat_Id)
+        public Task<ChatActivity?> DeleteMessageActivity(int chatActivity_Id)
         {
             try
             {
-                string sql = "DELETE FROM ChatActivity WHERE Chat_Id = @chat_Id";
+                string sql = "DELETE FROM ChatActivity WHERE ChatActivity_Id = @chatActivity_Id";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@chat_Id", chat_Id);
+                parameters.Add("@chatActivity_Id", chatActivity_Id);
                 return _connection.QueryFirstAsync<ChatActivity?>(sql, parameters);
             }
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error deleting Chat : {ex.ToString}");
+                Console.WriteLine($"Error deleting Chat Activity : {ex.ToString}");
             }
             return null;
         }
 
-        public Task<IEnumerable<ChatActivity?>> GetAllMessages()
+        public Task<IEnumerable<ChatActivity?>> GetAllMessagesActivities()
         {
             string sql = "SELECT * FROM ChatActivity";
             return _connection.QueryAsync<ChatActivity?>(sql);
         }
 
-        public async Task<ChatActivity?> GetByIdChat(int chat_Id)
+        public async Task<ChatActivity?> GetByIdChatActivity(int chatActivity_Id)
         {
             try
             {
-                string sql = "SELECT * FROM ChatActivity WHERE Chat_Id = @chat_Id";
+                string sql = "SELECT * FROM ChatActivity WHERE ChatActivity_Id = @chatActivity_Id";
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@chat_Id", chat_Id);
+                parameters.Add("@chatActivity_Id", chatActivity_Id);
 
                 var chatActivity = await _connection.QueryFirstAsync<ChatActivity?>(sql, parameters);
                 return chatActivity;
@@ -100,7 +100,7 @@ namespace Tag_Go.DAL.Repositories
             catch (Exception ex)
             {
 
-                Console.WriteLine($"Error geting Chat : {ex.ToString}");
+                Console.WriteLine($"Error geting Chat Activity : {ex.ToString}");
                 return null;
             }
             
