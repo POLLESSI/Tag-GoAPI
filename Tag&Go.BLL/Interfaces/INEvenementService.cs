@@ -11,9 +11,9 @@ namespace Tag_Go.BLL.Interfaces
     public interface INEvenementService
     {
     #nullable disable
-        bool Create(NEvenement nEvenement);
+        Task<NEvenement> Create(NEvenement nEvenement);
         void CreateEvenement(NEvenement nEvenement);
-        Task<IEnumerable<NEvenement?>> GetAllNEvenements();
+        Task<IEnumerable<NEvenement?>> GetAllNEvenements(bool includeInactive = false);
         Task<NEvenement?> GetByIdNEvenement(int nEvenement_Id);
         Task<NEvenement?> DeleteNEvenement(int nEvenement_Id);
         Task<NEvenement?> UpdateNEvenement(NEvenement nEvenement);

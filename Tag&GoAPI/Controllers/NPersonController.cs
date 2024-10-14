@@ -27,13 +27,20 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var npersons = await _nPersonRepository.GetAllNPersons();
+                bool isAdmin = User.IsInRole("Admin");
+                var npersons = await _nPersonRepository.GetAllNPersons(isAdmin);
+
+                if (!npersons.Any()) 
+                {
+                    return NotFound("No active Persons found.");
+                }
+
                 return Ok(npersons);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}" );
             }
 
         }
@@ -66,13 +73,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nPersonDal = nPerson.NPersonToDal();
-                var nPersonCreated = _nPersonRepository.Create(nPersonDal);
+                Tag_Go.DAL.Entities.NPerson nPersonCreated = await _nPersonRepository.Create(nPersonDal);
 
-                if (nPersonCreated)
+                if (nPersonCreated != null)
                 {
                     await _nPersonHub.RefreshPerson();
 
-                    return CreatedAtAction(nameof(Create), new { id = nPersonDal.NPerson_Id }, nPersonDal);
+                    return CreatedAtAction(nameof(Create), new { id = nPersonCreated.NPerson_Id }, nPersonCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create new person" });
             }

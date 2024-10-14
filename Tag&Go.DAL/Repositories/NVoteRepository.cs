@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(NVote nVote)
+        public async Task<NVote> Create(NVote nVote)
         {
             try
             {
@@ -30,14 +30,20 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@NEvenement_Id", nVote.NEvenement_Id);
                 parameters.Add("@FunOrNot", nVote.FunOrNot);
                 parameters.Add("@Comment", nVote.Comment);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+                nVote.NVote_Id = newId;
+
+                return nVote;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error encoding New Vote : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateVote(NVote nVote)
@@ -87,10 +93,22 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<NVote?>> GetAllNVotes()
+        public async Task<IEnumerable<NVote?>> GetAllNVotes(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM NVote";
-            return _connection.QueryAsync<NVote?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM NVote": "SELECT * FROM NVote WHERE Active = 1";
+
+                var nvotes = await _connection.QueryAsync<NVote?>(sql);
+                return nvotes;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving Votes: {ex.Message}");
+                return Enumerable.Empty<NVote>();
+            }
+            
         }
 
         public async Task<NVote?> GetByIdNVote(int nVote_Id)

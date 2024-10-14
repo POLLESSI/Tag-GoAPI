@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using Tag_Go.DAL.Entities;
 using Tag_GoAPI.DTOs;
 using System.Diagnostics;
+using Tag_Go.DAL.Entities;
 
 namespace Tag_GoAPI.Controllers
 {
@@ -30,9 +31,10 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var activities = await _activityRepository.GetAllActivities();
+                bool isAdmin = User.IsInRole("Admin");
+                var activities = await _activityRepository.GetAllActivities(isAdmin);
 
-                if (activities == null || !activities.Any()) 
+                if (!activities.Any()) 
                 {
                     return NotFound("No active activies found.");
                 }
@@ -75,14 +77,14 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var activityDal = activity.ActivityToDal();
-                var activityCreated = _activityRepository.Create(activityDal);
+                Tag_Go.DAL.Entities.Activity activityCreated = await _activityRepository.Create(activityDal);
 
-                if (activityCreated)
+                if (activityCreated != null)
                 {
                     await _activityHub.RefreshActivity();
 
                     // Retourne l'objet créé avec un statut 201 (Created)
-                    return CreatedAtAction(nameof(Create), new { activity_id = activityDal.Activity_Id }, activityDal);
+                    return CreatedAtAction(nameof(Create), new { activity_id = activityCreated.Activity_Id }, activityCreated);
                 }
 
                 return BadRequest(new { message = "Registration Error. Could not create activity" });  // Renvoie une erreur spécifique

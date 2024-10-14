@@ -21,18 +21,19 @@ namespace Tag_Go.BLL.Services
             _nEvenementRepository = nEvenementRepository;
         }
 
-        public bool Create(NEvenement nEvenement)
+        public async Task<NEvenement> Create(NEvenement nEvenement)
         {
             try
             {
-                return _nEvenementRepository.Create(nEvenement);
+                return await _nEvenementRepository.Create(nEvenement);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating New Event : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateEvenement(NEvenement nEvenement)
@@ -62,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<NEvenement?>> GetAllNEvenements()
+        public Task<IEnumerable<NEvenement?>> GetAllNEvenements(bool includeInactive = false)
         {
-            return _nEvenementRepository.GetAllNEvenements();
+            try
+            {
+                return _nEvenementRepository.GetAllNEvenements();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Events : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<NEvenement?> GetByIdNEvenement(int nEvenement_Id)

@@ -21,7 +21,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(NUser nUser)
+        public async Task<NUser> Create(NUser nUser)
         {
             try
             {
@@ -34,14 +34,19 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@Role_Id", nUser.Role_Id);
                 parameters.Add("@Avatar_Id", nUser.Avatar_Id);
                 parameters.Add("@Point", nUser.Point);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+                nUser.NUser_Id = newId;
+
+                return nUser;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error Encoding New User : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateNUser(NUser nUser)
@@ -96,10 +101,22 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<NUser?>> GetAllNUsers()
+        public async Task<IEnumerable<NUser?>> GetAllNUsers(bool includeInactive = false)
         {
-            string sql = "SELECT Email, NPerson_Id, Role_Id, Avatar_Id, Point FROM NUser";
-            return _connection.QueryAsync<NUser?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT Email, NPerson_Id, Role_Id, Avatar_Id, Point FROM NUser" : "SELECT Email, NPerson_Id, Role_Id, Avatar_Id, Point FROM NUser WHERE Active = 1";
+
+                var nUsers = await _connection.QueryAsync<NUser?>(sql);
+                return nUsers;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving users: {ex.Message}");
+                return Enumerable.Empty<NUser>();
+            }
+            
         }
 
         public async Task<NUser?> GetByIdNUser(int nUser_Id)

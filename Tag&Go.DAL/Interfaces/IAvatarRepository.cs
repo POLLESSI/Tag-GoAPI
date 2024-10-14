@@ -11,9 +11,9 @@ namespace Tag_Go.DAL.Interfaces
     public interface IAvatarRepository
     {
     #nullable disable
-        bool Create(Avatar avatar);
+        Task<Avatar> Create(Avatar avatar);
         void CreateAvatar(Avatar avatar);
-        Task <IEnumerable<Avatar?>> GetAllAvatars();
+        Task <IEnumerable<Avatar?>> GetAllAvatars(bool includeInactive = false);
         Task<Avatar?> GetByIdAvatar(int avatar_Id);
         Task<Avatar?> DeleteAvatar(int avatar_Id);
         Task<Avatar?> UpdateAvatar(Avatar avatar);

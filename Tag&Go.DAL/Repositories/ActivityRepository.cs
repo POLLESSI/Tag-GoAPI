@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(Activity activity)
+        public async Task <Activity> Create(Activity activity)
         {
             try
             {
@@ -34,14 +34,19 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@posLat", activity.PosLat);
                 parameters.Add("@posLong", activity.PosLong);
                 parameters.Add("@organisateur_Id", activity.Organisateur_Id);
-                return _connection.Execute(sql, parameters) > 0;
+                // Exécute la requête et récupère l'ID
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+                // Assigne l'ID généré à l'objet activity
+                activity.Activity_Id = newId;
+                // Retourne l'objet activity avec l'ID assigné
+                return activity;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error Encoding New Activity : {ex.ToString}");
+                return null;
             }
-            return false;
         }
 
         public void CreateActivity(Activity activity)
@@ -96,11 +101,11 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public async Task <IEnumerable<Activity?>> GetAllActivities()
+        public async Task <IEnumerable<Activity?>> GetAllActivities(bool includeInactive = false)
         {
             try
             {
-                string sql = "SELECT * FROM Activity WHERE Active = 1";
+                string sql = includeInactive ? "SELECT * FROM Activity": "SELECT * FROM Activity WHERE Active = 1";
 
                 var activities = await _connection.QueryAsync<Activity?>(sql);
                 return activities;
@@ -113,6 +118,8 @@ namespace Tag_Go.DAL.Repositories
             }
             
         }
+
+        
 
         public async Task<Activity?> GetByIdActivity(int activity_Id)
         {

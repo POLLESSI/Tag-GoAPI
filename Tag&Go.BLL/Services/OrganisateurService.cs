@@ -21,18 +21,19 @@ namespace Tag_Go.BLL.Services
             _organisateurRepository = organisateurRepository;
         }
 
-        public bool Create(Organisateur organisateur)
+        public async Task<Organisateur> Create(Organisateur organisateur)
         {
             try
             {
-                return _organisateurRepository.Create(organisateur);
+                return await _organisateurRepository.Create(organisateur);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating organisateur : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateOrganisateur(Organisateur organisateur)
@@ -62,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<Organisateur?>> GetAllOrganisateurs()
+        public Task<IEnumerable<Organisateur?>> GetAllOrganisateurs(bool includeInactive = false)
         {
-            return _organisateurRepository.GetAllOrganisateurs();
+            try
+            {
+                return _organisateurRepository.GetAllOrganisateurs();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Organisators : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<Organisateur?> GetByIdOrganisateur(int organisateur_Id)

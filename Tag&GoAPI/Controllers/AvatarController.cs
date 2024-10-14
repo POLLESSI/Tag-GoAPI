@@ -26,7 +26,12 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var avatars = await _avatarRepository.GetAllAvatars();
+                bool isAdmin = User.IsInRole("Admin");
+                var avatars = await _avatarRepository.GetAllAvatars(isAdmin);
+                if (!avatars.Any()) 
+                {
+                    return NotFound("No active avatars found.");
+                }
                 return Ok(avatars);
             }
             catch (Exception ex)
@@ -55,7 +60,7 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create(AvatarRegisterForm avatar)
         {
             if (!ModelState.IsValid)
@@ -65,12 +70,12 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var avatarDal = avatar.AvatarToDal();
-                var avatarCreated = _avatarRepository.Create(avatarDal);
+                Tag_Go.DAL.Entities.Avatar avatarCreated = await _avatarRepository.Create(avatarDal);
 
-                if (avatarCreated)
+                if (avatarCreated != null)
                 {
                     await _avatarHub.RefreshAvatar();
-                    return CreatedAtAction(nameof(Create), new { avatar_id = avatarDal.Avatar_Id}, avatarDal);
+                    return CreatedAtAction(nameof(Create), new { avatar_id = avatarCreated.Avatar_Id}, avatarCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create avatar" });
             }

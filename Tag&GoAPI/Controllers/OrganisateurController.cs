@@ -27,13 +27,20 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var organisateurs = await _organisateurRepository.GetAllOrganisateurs();
+                bool isAdmin = User.IsInRole("Admin");
+                var organisateurs = await _organisateurRepository.GetAllOrganisateurs(isAdmin);
+
+                if (!organisateurs.Any()) 
+                {
+                    return NotFound("No active Organisators found.");
+                }
+
                 return Ok(organisateurs);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
         }
@@ -66,13 +73,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var organisateurDal = newOrganisateur.OrganisateurToDal();
-                var organisateurCreated = _organisateurRepository.Create(organisateurDal);
+                Tag_Go.DAL.Entities.Organisateur organisateurCreated = await _organisateurRepository.Create(organisateurDal);
 
-                if (organisateurCreated)
+                if (organisateurCreated != null)
                 {
                     await _organisateurHub.RefreshOrganisateur();
 
-                    return CreatedAtAction(nameof(Create), new { id = organisateurDal.Organisateur_Id });
+                    return CreatedAtAction(nameof(Create), new { id = organisateurCreated.Organisateur_Id }, organisateurCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create organisator" });
             }

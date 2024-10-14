@@ -11,9 +11,9 @@ namespace Tag_Go.BLL.Interfaces
     public interface IChatActivityService
     {
     #nullable disable
-        bool CreateChatActivity(ChatActivity chat);
+        Task<ChatActivity> CreateChatActivity(ChatActivity chat);
         void CreateChat(ChatActivity chat);
-        Task<IEnumerable<ChatActivity?>> GetAllMessagesActivities();
+        Task<IEnumerable<ChatActivity?>> GetAllMessagesActivities(bool includeInactive = false);
         Task<ChatActivity?> GetByIdChatActivity(int chat_Id);
         Task<ChatActivity?> DeleteMessageActivity(int chat_Id);
     }

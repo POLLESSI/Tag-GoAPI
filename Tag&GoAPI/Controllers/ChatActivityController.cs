@@ -26,13 +26,18 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var chat = await _chatActivityRepository.GetAllMessagesActivities();
+                bool isAdmin = User.IsInRole("Admin");
+                var chat = await _chatActivityRepository.GetAllMessagesActivities(isAdmin);
+                if (!chat.Any())
+                {
+                    return NotFound("No active activities found.");
+                }
                 return Ok(chat);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}" );
             }
 
         }
@@ -55,7 +60,7 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateChatActivity(MessageActivityModel newMessage)
         {
             if (!ModelState.IsValid)
@@ -65,13 +70,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var chatActivityDal = newMessage.ChatActivityToDal();
-                var chatActivityCreated = _chatActivityRepository.CreateChatActivity(chatActivityDal);
+                Tag_Go.DAL.Entities.ChatActivity chatActivityCreated = await _chatActivityRepository.CreateChatActivity(chatActivityDal);
 
-                if (chatActivityCreated)
+                if (chatActivityCreated != null)
                 {
                     await _chatActivityHub.RefreshChatActivity();
 
-                    return CreatedAtAction(nameof(CreateChatActivity), new { id = chatActivityDal.ChatActivity_Id}, chatActivityDal);
+                    return CreatedAtAction(nameof(CreateChatActivity), new { id = chatActivityCreated.ChatActivity_Id}, chatActivityCreated);
                 }
                 return BadRequest(new { message = "Registration error. Could not create chat Activity" });
             }
@@ -79,7 +84,7 @@ namespace Tag_GoAPI.Controllers
             {
 
                 Console.WriteLine($"Error creating chat Activity: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }

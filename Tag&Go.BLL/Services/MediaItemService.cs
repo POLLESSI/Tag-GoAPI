@@ -22,18 +22,18 @@ namespace Tag_Go.BLL.Services
             _mediaItemRepository = mediaItemRepository;
         }
 
-        public bool Create(MediaItem mediaItem)
+        public async Task<MediaItem> Create(MediaItem mediaItem)
         {
             try
             {
-                return _mediaItemRepository.Create(mediaItem);
+                return await _mediaItemRepository.Create(mediaItem);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating Media Item : {ex.ToString}");
+                return null;
             }
-            return false;
         }
 
         public void CreateMediaItem(MediaItem mediaItem)
@@ -63,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<MediaItem?>> GetAllMediaItems()
+        public Task<IEnumerable<MediaItem?>> GetAllMediaItems(bool includeInactive = false)
         {
-            return _mediaItemRepository.GetAllMediaItems();
+            try
+            {
+                return _mediaItemRepository.GetAllMediaItems();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Medias Items : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<MediaItem?> GetByIdMediaItem(int mediaItem_Id)

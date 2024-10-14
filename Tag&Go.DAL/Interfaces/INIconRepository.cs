@@ -10,9 +10,9 @@ namespace Tag_Go.DAL.Interfaces
     public interface INIconRepository
     {
     #nullable disable
-        bool Create(NIcon nIcon);
+        Task<NIcon> Create(NIcon nIcon);
         void CreateIcon(NIcon nIcon);
-        Task<IEnumerable<NIcon?>> GetAllNIcons();
+        Task<IEnumerable<NIcon?>> GetAllNIcons(bool includeInactive = false);
         Task<NIcon?> GetByIdNIcon(int nIcon_Id);
         Task<NIcon?> DeleteNIcon(int nIcon_Id);
         Task<NIcon?> UpdateNIcon(NIcon nIcon);

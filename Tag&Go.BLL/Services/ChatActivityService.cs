@@ -21,18 +21,19 @@ namespace Tag_Go.BLL.Services
             _chatActivityRepository = chatActivityRepository;
         }
 
-        public bool CreateChatActivity(ChatActivity chatActivity)
+        public async Task<ChatActivity> CreateChatActivity(ChatActivity chatActivity)
         {
             try
             {
-                return _chatActivityRepository.CreateChatActivity(chatActivity);
+                return await _chatActivityRepository.CreateChatActivity(chatActivity);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating chat : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateChat(ChatActivity chat)
@@ -62,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<ChatActivity?>> GetAllMessagesActivities()
+        public Task<IEnumerable<ChatActivity?>> GetAllMessagesActivities(bool includeInactive = false)
         {
-            return _chatActivityRepository.GetAllMessagesActivities();
+            try
+            {
+                return _chatActivityRepository.GetAllMessagesActivities();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Messages activities");
+                return null;
+            }
+            
         }
 
         public Task<ChatActivity?> GetByIdChatActivity(int chat_Id)

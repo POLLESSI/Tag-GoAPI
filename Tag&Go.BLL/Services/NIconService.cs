@@ -21,18 +21,19 @@ namespace Tag_Go.BLL.Services
             _nIconRepository = nIconRepository;
         }
 
-        public bool Create(NIcon nIcon)
+        public async Task<NIcon> Create(NIcon nIcon)
         {
             try
             {
-                return _nIconRepository.Create(nIcon);
+                return await _nIconRepository.Create(nIcon);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating Icon : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateIcon(NIcon nIcon)
@@ -62,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<NIcon?>> GetAllNIcons()
+        public Task<IEnumerable<NIcon?>> GetAllNIcons(bool includeInactive = false)
         {
-            return _nIconRepository.GetAllNIcons();
+            try
+            {
+                return _nIconRepository.GetAllNIcons();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Icons : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<NIcon?> GetByIdNIcon(int nIcon_Id)

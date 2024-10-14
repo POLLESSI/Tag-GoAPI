@@ -21,18 +21,18 @@ namespace Tag_Go.BLL.Services
             _nVoteRepository = nVoteRepository;
         }
 
-        public bool Create(NVote nVote)
+        public async Task<NVote> Create(NVote nVote)
         {
             try
             {
-                return _nVoteRepository.Create(nVote);
+                return await _nVoteRepository.Create(nVote);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating new vote : {ex.ToString}");
+                return null;
             }
-            return false;
         }
 
         public void CreateVote(NVote nVote)
@@ -62,9 +62,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<NVote?>> GetAllNVotes()
+        public Task<IEnumerable<NVote?>> GetAllNVotes(bool includeInactive = false)
         {
-            return _nVoteRepository.GetAllNVotes();
+            try
+            {
+                return _nVoteRepository.GetAllNVotes();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Votes : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<NVote?> GetByIdNVote(int nVote_Id)

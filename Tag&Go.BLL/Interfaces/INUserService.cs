@@ -11,9 +11,9 @@ namespace Tag_Go.BLL.Interfaces
     public interface INUserService
     {
     #nullable disable
-        bool Create(NUser nUser);
+        Task<NUser> Create(NUser nUser);
         void CreateNUser(NUser nUser);
-        Task<IEnumerable<NUser?>> GetAllNUsers();
+        Task<IEnumerable<NUser?>> GetAllNUsers(bool includeInactive = false);
         Task<NUser?> GetByIdNUser(int nUser_Id);
         Task<NUser?> DeleteNUser(int nUser_Id);
         Task<NUser?> UpdateNUser(NUser nUser);

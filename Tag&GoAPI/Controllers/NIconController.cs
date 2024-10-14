@@ -27,13 +27,20 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var nicons = await _nIconRepository.GetAllNIcons();
+                bool isAdmin = User.IsInRole("Admin");
+                var nicons = await _nIconRepository.GetAllNIcons(isAdmin);
+
+                if (!nicons.Any()) 
+                {
+                    return NotFound("No active icons found.");
+                }
+
                 return Ok(nicons);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
         }
@@ -66,15 +73,15 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var iconDal = nIcon.NIconToDal();
-                var iconCreated = _nIconRepository.Create(iconDal);
+                Tag_Go.DAL.Entities.NIcon iconCreated = await _nIconRepository.Create(iconDal);
 
-                if (iconCreated)
+                if (iconCreated != null)
                 {
                     await _nIconHub.RefreshIcon();
 
-                    return CreatedAtAction(nameof(Create), new { id = iconDal.NIcon_Id }, iconDal);
+                    return CreatedAtAction(nameof(Create), new { id = iconCreated.NIcon_Id }, iconCreated);
                 }
-                return BadRequest(new { message = "Registration Error" });
+                return BadRequest(new { message = "Registration Error. Could not create icon" });
             }
             catch (Exception ex)
             {

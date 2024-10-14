@@ -27,15 +27,20 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var recompenses = await _recompenseRepository.GetAllRecompenses();
+                bool isAdmin = User.IsInRole("Admin");
+                var recompenses = await _recompenseRepository.GetAllRecompenses(isAdmin);
+
+                if (!recompenses.Any()) 
+                {
+                    return NotFound("No active recompenses found.");
+                }
                 return Ok(recompenses);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}" );
             }
-
         }
         [HttpGet("{recompense_Id}")]
         public async Task<IActionResult> GetByIdRecompense(int recompense_Id)
@@ -66,13 +71,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var recompenseDal = recompense.RecompenseToDal();
-                var recompenseCreated = _recompenseRepository.Create(recompenseDal);
+                Tag_Go.DAL.Entities.Recompense recompenseCreated = await _recompenseRepository.Create(recompenseDal);
 
-                if (recompenseCreated)
+                if (recompenseCreated != null)
                 {
                     await _recompenseHub.RefreshRecompense();
 
-                    return CreatedAtAction(nameof(Create), new { id = recompenseDal.Recompense_Id}, recompenseDal);
+                    return CreatedAtAction(nameof(Create), new { id = recompenseCreated.Recompense_Id}, recompenseCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create recompense" });
             }

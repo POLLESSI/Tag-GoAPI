@@ -26,7 +26,12 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var chatEvenement = await _chatEvenementRepository.GetAllMessagesEvenements();
+                bool isAdmin = User.IsInRole("Admin");
+                var chatEvenement = await _chatEvenementRepository.GetAllMessagesEvenements(isAdmin);
+                if (!chatEvenement.Any()) 
+                {
+                    return NotFound("No active chat event found.");
+                }
                 return Ok(chatEvenement);
             }
             catch (Exception ex)
@@ -55,7 +60,7 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateChatEvenement(MessageEvenementModel newMessage)
         {
             if (!ModelState.IsValid)
@@ -65,13 +70,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var chatEvenementDal = newMessage.ChatEvenementToDal();
-                var chatCreatedEvenement = _chatEvenementRepository.CreateChatEvenement(chatEvenementDal);
+                Tag_Go.DAL.Entities.ChatEvenement chatCreatedEvenement = await _chatEvenementRepository.CreateChatEvenement(chatEvenementDal);
 
-                if (chatCreatedEvenement)
+                if (chatCreatedEvenement != null)
                 {
                     await _chatEvenementHub.RefreshChatEvenement();
 
-                    return CreatedAtAction(nameof(CreateChatEvenement), new { id = chatEvenementDal.ChatEvenement_Id }, chatEvenementDal);
+                    return CreatedAtAction(nameof(CreateChatEvenement), new { id = chatCreatedEvenement.ChatEvenement_Id }, chatCreatedEvenement);
                 }
                 return BadRequest(new { message = "Registration error. Could not create chat" });
             }
@@ -79,7 +84,7 @@ namespace Tag_GoAPI.Controllers
             {
 
                 Console.WriteLine($"Error creating chat: {ex}");
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
 
         }

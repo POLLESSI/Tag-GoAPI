@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(Map map)
+        public async Task <Map> Create(Map map)
         {
             try
             {
@@ -30,14 +30,19 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@DateCreation", map.DateCreation);
                 parameters.Add("@MapUrl", map.MapUrl);
                 parameters.Add("@Description", map.Description);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+                map.Map_Id = newId;
+
+                return map;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating Map : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateMap(Map map)
@@ -88,10 +93,22 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<IEnumerable<Map?>> GetAllMaps()
+        public async Task<IEnumerable<Map?>> GetAllMaps(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM Map";
-            return _connection.QueryAsync<Map?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM Map": "SELECT * FROM Map WHERE Active = 1";
+
+                var maps = await _connection.QueryAsync<Map?>(sql);
+                return maps;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving maps: {ex.Message}");
+                return Enumerable.Empty<Map>();
+            }
+            
         }
 
         public async Task<Map?> GetByIdMap(int map_Id)

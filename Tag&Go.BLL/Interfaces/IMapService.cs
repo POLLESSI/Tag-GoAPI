@@ -11,9 +11,9 @@ namespace Tag_Go.BLL.Interfaces
     public interface IMapService
     {
     #nullable disable
-        bool Create(Map map);
+        Task<Map> Create(Map map);
         void CreateMap(Map map);
-        Task<IEnumerable<Map?>> GetAllMaps();
+        Task<IEnumerable<Map?>> GetAllMaps(bool includeInactive = false);
         Task<Map?> GetByIdMap(int map_Id);
         Task<Map?> DeleteMap(int map_Id);
         Task<Map?> UpdateMap(Map map);

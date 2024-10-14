@@ -11,9 +11,9 @@ namespace Tag_Go.BLL.Interfaces
     public interface IWeatherForecastService
     {
     #nullable disable
-        bool Create(WeatherForecast wearherForecast);
+        Task<WeatherForecast> Create(WeatherForecast wearherForecast);
         void CreateWearherForecast(WeatherForecast weatherForecast);
-        Task<IEnumerable<WeatherForecast>> GetAllWeatherForecasts();
+        Task<IEnumerable<WeatherForecast>> GetAllWeatherForecasts(bool includeInactive = false);
         Task<WeatherForecast?> GetByIdWeatherForecast(int weatherForecast_Id);
         Task<WeatherForecast?> DeleteWeatherForecast(int weatherForecast_Id);
         Task<WeatherForecast?> UpdateWeatherForecast(WeatherForecast weatherForecast);

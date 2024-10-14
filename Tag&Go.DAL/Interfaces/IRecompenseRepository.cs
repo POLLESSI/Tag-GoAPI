@@ -10,9 +10,9 @@ namespace Tag_Go.DAL.Interfaces
     public interface IRecompenseRepository
     {
     #nullable disable
-        bool Create(Recompense recompense);
+        Task<Recompense> Create(Recompense recompense);
         void CreateRecompense(Recompense recompense);
-        Task<IEnumerable<Recompense?>> GetAllRecompenses();
+        Task<IEnumerable<Recompense?>> GetAllRecompenses(bool includeInactive = false);
         Task<Recompense?> GetByIdRecompense(int recompense_Id);
         Task<Recompense?> DeleteRecompense(int recompense_Id);
         Task<Recompense?> UpdateRecompense(Recompense recompense);

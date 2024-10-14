@@ -26,7 +26,14 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var bonus = await _bonusRepository.GetAllBonuss();
+                bool isAdmin = User.IsInRole("admin");
+                var bonus = await _bonusRepository.GetAllBonuss(isAdmin);
+
+                if (!bonus.Any()) 
+                {
+                    return NotFound("No active bonus found.");
+                }
+
                 return Ok(bonus);
             }
             catch (Exception ex)
@@ -55,7 +62,7 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create(BonusRegisterForm bonus)
         {
             if (!ModelState.IsValid)
@@ -65,13 +72,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var bonusDal = bonus.BonusToDal();
-                var bonusCreated = _bonusRepository.Create(bonusDal);
+                Tag_Go.DAL.Entities.Bonus bonusCreated = await _bonusRepository.Create(bonusDal);
 
-                if (bonusCreated)
+                if (bonusCreated != null)
                 {
                     await _bonusHub.RefreshBonus();
 
-                    return CreatedAtAction(nameof(Create), new { id = bonusDal.Bonus_Id}, bonusDal);
+                    return CreatedAtAction(nameof(Create), new { id = bonusCreated.Bonus_Id}, bonusCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create activity" });
             }

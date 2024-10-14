@@ -28,13 +28,18 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var maps = await _mapRepository.GetAllMaps();
+                bool isAdmin = User.IsInRole("Admin");
+                var maps = await _mapRepository.GetAllMaps(isAdmin);
+                if (!maps.Any())
+                {
+                    return NotFound("No active maps found.");
+                }
                 return Ok(maps);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
         }
@@ -57,7 +62,7 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create(MapRegisterForm map)
         {
             if (!ModelState.IsValid)
@@ -68,13 +73,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var mapDal = map.MapToDal();
-                var mapCrated = _mapRepository.Create(mapDal);
+                Tag_Go.DAL.Entities.Map mapCrated = await _mapRepository.Create(mapDal);
 
-                if (mapCrated)
+                if (mapCrated != null)
                 {
                     await _mapHub.RefreshMap();
 
-                    return CreatedAtAction(nameof(Create), new { id = mapDal.Map_Id }, mapDal);
+                    return CreatedAtAction(nameof(Create), new { id = mapCrated.Map_Id }, mapCrated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create map" });
             }

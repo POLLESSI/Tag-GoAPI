@@ -20,18 +20,19 @@ namespace Tag_Go.BLL.Services
             _nPersonRepository = nPersonRepository;
         }
 
-        public bool Create(NPerson nPerson)
+        public async Task<NPerson> Create(NPerson nPerson)
         {
             try
             {
-                return _nPersonRepository.Create(nPerson);
+                return await _nPersonRepository.Create(nPerson);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating new person : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreatePerson(NPerson nPerson)
@@ -61,9 +62,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<NPerson?>> GetAllNPersons()
+        public Task<IEnumerable<NPerson?>> GetAllNPersons(bool includeInactive = false)
         {
-            return _nPersonRepository.GetAllNPersons();
+            try
+            {
+                return _nPersonRepository.GetAllNPersons();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Persons : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<NPerson?> GetByIdNPerson(int nPerson_Id)

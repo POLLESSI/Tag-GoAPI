@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(MediaItem mediaItem)
+        public async Task<MediaItem> Create(MediaItem mediaItem)
         {
             try
             {
@@ -30,14 +30,19 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@MediaType", mediaItem.MediaType);
                 parameters.Add("@UrlItem", mediaItem.UrlItem);
                 parameters.Add("@Description", mediaItem.Description);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+                mediaItem.MediaItem_Id = newId;
+
+                return mediaItem;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error Encoding New Media Item : {ex.ToString}");
+                return null;
             }
-            return false;
         }
 
         public void CreateMediaItem(MediaItem mediaItem)
@@ -89,10 +94,21 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<MediaItem?>> GetAllMediaItems()
+        public async Task<IEnumerable<MediaItem?>> GetAllMediaItems(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM MediaItem";
-            return _connection.QueryAsync<MediaItem?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM MediaItem" : "SELECT * FROM MediaItem WHERE Active = 1";
+                var mediaItems = await _connection.QueryAsync<MediaItem?>(sql);
+                return mediaItems;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving medias items: {ex.Message}");
+                return Enumerable.Empty<MediaItem>();
+            }
+            
         }
 
         public async Task<MediaItem?> GetByIdMediaItem(int mediaItem_Id)

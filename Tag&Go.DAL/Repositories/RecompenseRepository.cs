@@ -19,7 +19,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(Recompense recompense)
+        public async Task<Recompense> Create(Recompense recompense)
         {
             try
             {
@@ -30,15 +30,19 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@Point", recompense.Point);
                 parameters.Add("@Implication", recompense.Implication);
                 parameters.Add("@Granted", recompense.Granted);
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
 
-                return _connection.Execute(sql, parameters) > 0;
+                recompense.Recompense_Id = newId;
+
+                return recompense;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error encoding Recompense : {ex.ToString}");
+                return null;
             }
-            return false;
         }
 
         public void CreateRecompense(Recompense recompense)
@@ -90,10 +94,11 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<Recompense?>> GetAllRecompenses()
+        public async Task<IEnumerable<Recompense?>> GetAllRecompenses(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM Recompense";
-            return _connection.QueryAsync<Recompense?>(sql);
+            string sql = includeInactive ? "SELECT * FROM Recompense": "SELECT * FROM Recompense WHERE Active = 1";
+            var recompenses = await _connection.QueryAsync<Recompense?>(sql);
+            return recompenses;
         }
 
         public async Task<Recompense?> GetByIdRecompense(int recompense_Id)

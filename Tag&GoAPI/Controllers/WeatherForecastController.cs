@@ -32,13 +32,20 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var weatherForecasts = await _forecastRepository.GetAllWeatherForecasts();
+                bool isAdmin = User.IsInRole("Admin");
+                var weatherForecasts = await _forecastRepository.GetAllWeatherForecasts(isAdmin);
+
+                if (!weatherForecasts.Any()) 
+                {
+                    return NotFound("No active Weathers Forecasts found.");
+                }
+
                 return Ok(weatherForecasts);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}" );
             }
 
         }
@@ -62,7 +69,7 @@ namespace Tag_GoAPI.Controllers
             }
 
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create(WeatherForecastRegisterForm weatherregisterform)
         {
             if (!ModelState.IsValid)
@@ -73,13 +80,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var weatherForecastDal = weatherregisterform.WeatherForecastToDal();
-                var weatherForecastCreated = _forecastRepository.Create(weatherForecastDal);
+                Tag_Go.DAL.Entities.WeatherForecast weatherForecastCreated = await _forecastRepository.Create(weatherForecastDal);
 
-                if (_forecastRepository.Create(weatherregisterform.WeatherForecastToDal()))
+                if (weatherForecastCreated != null)
                 {
                     await _hub.RefreshWeatherForecast();
 
-                    return CreatedAtAction(nameof(Create), new { id = weatherForecastDal.WeatherForecast_Id }, weatherForecastDal);
+                    return CreatedAtAction(nameof(Create), new { id = weatherForecastCreated.WeatherForecast_Id }, weatherForecastCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create weather forecast" });
             }

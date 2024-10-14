@@ -21,18 +21,19 @@ namespace Tag_Go.BLL.Services
             _recompenseRepository = recompenseRepository;
         }
 
-        public bool Create(Recompense recompense)
+        public async Task<Recompense> Create(Recompense recompense)
         {
             try
             {
-                return _recompenseRepository.Create(recompense);
+                return await _recompenseRepository.Create(recompense);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating recompense : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateRecompense(Recompense recompense)
@@ -62,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<Recompense?>> GetAllRecompenses()
+        public Task<IEnumerable<Recompense?>> GetAllRecompenses(bool includeInactive = false)
         {
-            return _recompenseRepository.GetAllRecompenses();
+            try
+            {
+                return _recompenseRepository.GetAllRecompenses();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Recompenses : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<Recompense?> GetByIdRecompense(int recompense_Id)

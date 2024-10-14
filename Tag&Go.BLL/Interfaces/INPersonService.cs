@@ -11,9 +11,9 @@ namespace Tag_Go.BLL.Interfaces
     public interface INPersonService
     {
     #nullable disable
-        bool Create(NPerson nPerson);
+        Task<NPerson> Create(NPerson nPerson);
         void CreatePerson(NPerson nPerson);
-        Task<IEnumerable<NPerson?>> GetAllNPersons();
+        Task<IEnumerable<NPerson?>> GetAllNPersons(bool includeInactive = false);
         Task<NPerson?> GetByIdNPerson(int nPerson_Id);
         Task<NPerson?> DeleteNPerson(int nPerson_Id);
         Task<NPerson?> UpdateNPerson(NPerson nPerson);

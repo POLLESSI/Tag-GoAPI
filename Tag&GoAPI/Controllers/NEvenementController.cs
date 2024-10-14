@@ -27,13 +27,20 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var nevenements = await _nEvenementRepository.GetAllNEvenements();
+                bool isAdmin = User.IsInRole("Admin");
+                var nevenements = await _nEvenementRepository.GetAllNEvenements(isAdmin);
+
+                if (!nevenements.Any()) 
+                {
+                    return NotFound("No active events found.");
+                }
+
                 return Ok(nevenements);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
         }
@@ -66,13 +73,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nEvenementDal = nEvenement.NEvenementToDal();
-                var nEvenementCreated = _nEvenementRepository.Create(nEvenementDal);
+                Tag_Go.DAL.Entities.NEvenement nEvenementCreated = await _nEvenementRepository.Create(nEvenementDal);
 
-                if (nEvenementCreated)
+                if (nEvenementCreated != null)
                 {
                     await _nEvenementHub.RefreshEvenement();
 
-                    return CreatedAtAction(nameof(Create), new { id = nEvenementDal.NEvenement_Id }, nEvenementDal);
+                    return CreatedAtAction(nameof(Create), new { id = nEvenementCreated.NEvenement_Id }, nEvenementCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create event" });
             }

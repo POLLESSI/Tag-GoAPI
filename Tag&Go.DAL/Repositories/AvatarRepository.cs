@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(Avatar avatar)
+        public async Task<Avatar> Create(Avatar avatar)
         {
             try
             {
@@ -30,15 +30,21 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@avatarName", avatar.AvatarName);
                 parameters.Add("@avatarUrl", avatar.AvatarUrl);
                 parameters.Add("@description", avatar.Description);
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
 
-                return _connection.Execute(sql, parameters) > 0;
+                avatar.Avatar_Id = newId;
+
+                return avatar;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error Encoding New Avatar : {ex.ToString}");
+                //return false;
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateAvatar(Avatar avatar)
@@ -64,11 +70,11 @@ namespace Tag_Go.DAL.Repositories
         {
             try
             {
-                string sql = "SELECT * FROM Avatar WHERE Avatar_Id = @avatar_Id";
+                string sql = "SELECT * FROM Avatar WHERE Avatar_Id = @avatar_Id AND Active = 1";
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@avatar_Id", avatar_Id);
 
-                var avatar = await _connection.QueryFirstOrDefaultAsync<Avatar>(sql, new { avatar_Id });
+                var avatar = await _connection.QueryFirstOrDefaultAsync<Avatar>(sql, parameters);
 
                 if (avatar == null) 
                 {
@@ -90,10 +96,22 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public async Task <IEnumerable<Avatar?>> GetAllAvatars()
+        public async Task <IEnumerable<Avatar?>> GetAllAvatars(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM Avatar";
-            return await _connection.QueryAsync<Avatar?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM Avatar" : "SELECT * FROM Avatar WHERE Active = 1";
+
+                var avatars = await _connection.QueryAsync<Avatar?>(sql);
+                return avatars;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving avatars: {ex.Message}");
+                return Enumerable.Empty<Avatar>();
+            }
+            
         }
 
         public async Task<Avatar?> GetByIdAvatar(int avatar_Id)

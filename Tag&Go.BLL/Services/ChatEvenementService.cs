@@ -24,18 +24,19 @@ namespace Tag_Go.BLL.Services
             _chatEvenementRepository = chatEvenementRepository;
         }
 
-        public bool CreateChatEvenement(ChatEvenement chat)
+        public async Task<ChatEvenement> CreateChatEvenement(ChatEvenement chat)
         {
             try
             {
-                return _chatEvenementRepository.CreateChatEvenement(chat);
+                return await _chatEvenementRepository.CreateChatEvenement(chat);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating chat : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateChat(ChatEvenement chat)
@@ -65,9 +66,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<ChatEvenement?>> GetAllMessagesEvenements()
+        public Task<IEnumerable<ChatEvenement?>> GetAllMessagesEvenements(bool includeInactive = false)
         {
-            return _chatEvenementRepository.GetAllMessagesEvenements();
+            try
+            {
+                return _chatEvenementRepository.GetAllMessagesEvenements();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Messages Evenements : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<ChatEvenement?> GetByIdChatEvenement(int chat_Id)

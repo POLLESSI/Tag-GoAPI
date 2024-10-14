@@ -21,18 +21,19 @@ namespace Tag_Go.BLL.Services
             _avatarRepository = avatarRepository;
         }
 
-        public bool Create(Avatar avatar)
+        public async Task<Avatar> Create(Avatar avatar)
         {
             try
             {
-                return _avatarRepository.Create(avatar);
+                return await _avatarRepository.Create(avatar);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating avatar : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateAvatar(Avatar avatar)
@@ -62,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task <IEnumerable<Avatar?>> GetAllAvatars()
+        public Task <IEnumerable<Avatar?>> GetAllAvatars(bool includeInactive = false)
         {
-            return _avatarRepository.GetAllAvatars();
+            try
+            {
+                return _avatarRepository.GetAllAvatars();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Avatars : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<Avatar?> GetByIdAvatar(int avatar_Id)

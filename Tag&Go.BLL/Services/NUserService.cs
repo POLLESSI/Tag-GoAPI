@@ -22,18 +22,19 @@ namespace Tag_Go.BLL.Services
             _nUserRepository = nUserRepository;
         }
 
-        public bool Create(NUser nUser)
+        public async Task<NUser> Create(NUser nUser)
         {
             try
             {
-                return _nUserRepository.Create(nUser);
+                return await _nUserRepository.Create(nUser);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating new user : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateNUser(NUser nUser)
@@ -63,9 +64,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<NUser?>> GetAllNUsers()
+        public Task<IEnumerable<NUser?>> GetAllNUsers(bool includeInactive = false)
         {
-            return _nUserRepository.GetAllNUsers();
+            try
+            {
+                return _nUserRepository.GetAllNUsers();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Users : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<NUser?> GetByIdNUser(int nUser_Id)

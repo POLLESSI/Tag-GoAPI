@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(NEvenement nEvenement)
+        public async Task <NEvenement> Create(NEvenement nEvenement)
         {
             try
             {
@@ -38,14 +38,20 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@Recompense_Id", nEvenement.Recompense_Id);
                 parameters.Add("@Bonus_Id", nEvenement.Bonus_Id);
                 parameters.Add("@MediaItem_Id", nEvenement.MediaItem_Id);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+                nEvenement.NEvenement_Id = newId;
+
+                return nEvenement;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error enconding New Event : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateEvenement(NEvenement nEvenement)
@@ -66,7 +72,9 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@recompense_Id", nEvenement.Recompense_Id);
                 parameters.Add("@bonus_Id", nEvenement.Bonus_Id);
                 parameters.Add("@mediaItem", nEvenement.MediaItem_Id);
+                
                 _connection.Execute(sql, parameters);
+
             }
             catch (Exception ex)
             {
@@ -104,10 +112,11 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<NEvenement?>> GetAllNEvenements()
+        public async Task<IEnumerable<NEvenement?>> GetAllNEvenements(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM NEvenement";
-            return _connection.QueryAsync<NEvenement?>(sql);
+            string sql = includeInactive ? "SELECT * FROM NEvenement": "SELECT * FROM NEvenement WHERE Active = 1";
+            var nEvenements = await _connection.QueryAsync<NEvenement?>(sql);
+            return nEvenements;
         }
 
         public async Task<NEvenement?> GetByIdNEvenement(int nEvenement_Id)

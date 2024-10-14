@@ -10,9 +10,9 @@ namespace Tag_Go.DAL.Interfaces
     public interface INVoteRepository
     {
     #nullable disable
-        bool Create(NVote nVote);
+        Task<NVote> Create(NVote nVote);
         void CreateVote(NVote nVote);
-        Task<IEnumerable<NVote?>> GetAllNVotes();
+        Task<IEnumerable<NVote?>> GetAllNVotes(bool includeInactive = false);
         Task<NVote?> GetByIdNVote(int nVote_Id);
         Task<NVote?> DeleteNVote(int nVote_Id);
     }

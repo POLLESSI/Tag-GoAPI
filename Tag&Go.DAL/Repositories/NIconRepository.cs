@@ -21,7 +21,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(NIcon nIcon)
+        public async Task<NIcon> Create(NIcon nIcon)
         {
             try
             {
@@ -31,14 +31,20 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@NIconName", nIcon.NIconName);
                 parameters.Add("@NIconDescription", nIcon.NIconDescription);
                 parameters.Add("@NIconUrl", nIcon.NIconUrl);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+                nIcon.NIcon_Id = newId;
+
+                return nIcon;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating New Icon : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateIcon(NIcon nIcon)
@@ -89,10 +95,21 @@ namespace Tag_Go.DAL.Repositories
             }
         }
 
-        public Task<IEnumerable<NIcon?>> GetAllNIcons()
+        public async Task<IEnumerable<NIcon?>> GetAllNIcons(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM NIcon";
-            return _connection.QueryAsync<NIcon?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM NIcon" : "SELECT * FROM NIcon WHERE Active = 1";
+                var nicons = await _connection.QueryAsync<NIcon?>(sql);
+                return nicons;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving icons: {ex.Message}");
+                return Enumerable.Empty<NIcon>();
+            }
+            
         }
 
         public async Task<NIcon?> GetByIdNIcon(int nIcon_Id)

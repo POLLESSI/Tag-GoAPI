@@ -11,9 +11,9 @@ namespace Tag_Go.BLL.Interfaces
     public interface IBonusService
     {
     #nullable disable
-        bool Create(Bonus bonus);
+        Task<Bonus> Create(Bonus bonus);
         void CreateBonus(Bonus bonus);
-        Task<IEnumerable<Bonus?>> GetAllBonuss();
+        Task<IEnumerable<Bonus?>> GetAllBonuss(bool includeInactive = false);
         Task<Bonus?> GetByIdBonus(int bonus_Id);
         Task<Bonus?> DeleteBonus(int bonus_Id);
         Task<Bonus?> UpdateBonus(Bonus bonus);

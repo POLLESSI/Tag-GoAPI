@@ -29,13 +29,18 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var nusers = await _userRepository.GetAllNUsers();
+                bool isAdmin = User.IsInRole("Admin");
+                var nusers = await _userRepository.GetAllNUsers(isAdmin);
+                if (!nusers.Any())
+                {
+                    return NotFound("No activive users found.");
+                }
                 return Ok(nusers);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
         }
@@ -88,7 +93,7 @@ namespace Tag_GoAPI.Controllers
             //NUser registredNUser = await _userRepository.RegisterNUser(nUser.Email, nUser.Pwd, nUser.NPerson_Id, nUser.Role_Id, nUser.Avatar_Id, nUser.Point);
             return Ok();
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create(NUserRegisterForm nUser)
         {
             if (!ModelState.IsValid)
@@ -98,13 +103,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nUserDal = nUser.NUserToDal();
-                var nUserCreated = _userRepository.Create(nUserDal);
+                Tag_Go.DAL.Entities.NUser nUserCreated = await _userRepository.Create(nUserDal);
 
-                if (nUserCreated)
+                if (nUserCreated != null)
                 {
                     await _nUserHub.RefreshNUser();
 
-                    return CreatedAtAction(nameof(Create), new { id = nUserDal.NUser_Id }, nUserDal);
+                    return CreatedAtAction(nameof(Create), new { id = nUserCreated.NUser_Id }, nUserCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create new User" });
             }
@@ -159,8 +164,17 @@ namespace Tag_GoAPI.Controllers
         [HttpPatch("setRole")]
         public async Task<IActionResult> ChangeRole(NUserChangeRole role)
         {
-            _userRepository.SetRole(role.NUser_Id, role.Role_Id);
-            return Ok("Rôle Changed");
+            try
+            {
+                _userRepository.SetRole(role.NUser_Id, role.Role_Id);
+                return Ok("Rôle Changed");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Internal server error {ex.Message}");
+            }
+            
         }
     }
 }

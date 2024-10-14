@@ -21,18 +21,19 @@ namespace Tag_Go.BLL.Services
             _weatherForecastRepository = weatherForecastRepository;
         }
 
-        public bool Create(WeatherForecast wearherForecast)
+        public async Task<WeatherForecast> Create(WeatherForecast wearherForecast)
         {
             try
             {
-                return _weatherForecastRepository.Create(wearherForecast);
+                return await _weatherForecastRepository.Create(wearherForecast);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating weather forecast: {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateWearherForecast(WeatherForecast weatherForecast)
@@ -62,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<WeatherForecast>> GetAllWeatherForecasts()
+        public Task<IEnumerable<WeatherForecast>> GetAllWeatherForecasts(bool includeInactive = false)
         {
-            return _weatherForecastRepository.GetAllWeatherForecasts();
+            try
+            {
+                return _weatherForecastRepository.GetAllWeatherForecasts();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Weathers Forecasts : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<WeatherForecast?> GetByIdWeatherForecast(int weatherForecast_Id)

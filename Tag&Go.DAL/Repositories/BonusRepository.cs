@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(Bonus bonus)
+        public async Task <Bonus> Create(Bonus bonus)
         {
             try
             {
@@ -31,14 +31,20 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@BonusDescription", bonus.BonusDescription);
                 parameters.Add("@Application", bonus.Application);
                 parameters.Add("@Granted", bonus.Granted);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+
+                bonus.Bonus_Id = newId;
+
+                return bonus;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error encoding Bonus : {ex.ToString}");
+                return null;
             }
-            return false;
         }
 
         public void CreateBonus(Bonus bonus)
@@ -91,10 +97,20 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<Bonus?>> GetAllBonuss()
+        public async Task<IEnumerable<Bonus?>> GetAllBonuss(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM Bonus";
-            return _connection.QueryAsync<Bonus?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM Bonus" : "SELECT * FROM Bonus WHERE Active = 1";
+                var bonus = await _connection.QueryAsync<Bonus?>(sql);
+                return bonus;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving bonus: {ex.Message}");
+                return Enumerable.Empty<Bonus>();
+            }
+            
         }
 
         public async Task<Bonus?> GetByIdBonus(int bonus_Id)

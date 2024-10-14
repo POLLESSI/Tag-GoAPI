@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool CreateChatActivity(ChatActivity chat)
+        public async Task<ChatActivity> CreateChatActivity(ChatActivity chat)
         {
             try
             {
@@ -31,14 +31,19 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@Author", chat.Author);
                 parameters.Add("@SendingDate", chat.SendingDate);
                 parameters.Add("@Activity_Id", chat.Activity_Id);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+                chat.ChatActivity_Id = newId;
+                return chat;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error encoding chat Activity : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateChat(ChatActivity chat)
@@ -79,10 +84,21 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<IEnumerable<ChatActivity?>> GetAllMessagesActivities()
+        public async Task<IEnumerable<ChatActivity?>> GetAllMessagesActivities(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM ChatActivity";
-            return _connection.QueryAsync<ChatActivity?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM ChatActivity" : "SELECT *FROM ChatActivity WHERE Active = 1";
+                var chatActivities = await _connection.QueryAsync<ChatActivity?>(sql);
+                return chatActivities;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving Chat Activities: {ex.Message}");
+                return Enumerable.Empty<ChatActivity>();
+            }
+            
         }
 
         public async Task<ChatActivity?> GetByIdChatActivity(int chatActivity_Id)

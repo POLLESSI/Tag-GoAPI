@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(NPerson nPerson)
+        public async Task <NPerson> Create(NPerson nPerson)
         {
             try
             {
@@ -37,14 +37,20 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@Address_Country", nPerson.Address_Country);
                 parameters.Add("@Telephone", nPerson.Telephone);
                 parameters.Add("@Gsm", nPerson.Gsm);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+                nPerson.NPerson_Id = newId;
+
+                return nPerson;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error encoding New Person : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreatePerson(NPerson nPerson)
@@ -103,10 +109,21 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<NPerson?>> GetAllNPersons()
+        public async Task<IEnumerable<NPerson?>> GetAllNPersons(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM NPerson";
-            return _connection.QueryAsync<NPerson?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM NPerson": "SELECT * FROM NPerson WHERE Active = 1";
+                var npersons = await _connection.QueryAsync<NPerson?>(sql);
+                return npersons;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving persons: {ex.Message}");
+                return Enumerable.Empty<NPerson>();
+            }
+            
         }
 
         public async Task<NPerson?> GetByIdNPerson(int nPerson_Id)

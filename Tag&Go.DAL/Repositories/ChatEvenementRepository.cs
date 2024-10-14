@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool CreateChatEvenement(ChatEvenement chat)
+        public async Task<ChatEvenement> CreateChatEvenement(ChatEvenement chat)
         {
             try
             {
@@ -31,14 +31,21 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@Author", chat.Author);
                 parameters.Add("@SendingDate", chat.SendingDate);
                 parameters.Add("@NEvenement_Id", chat.NEvenement_Id);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+                chat.ChatEvenement_Id = newId;
+
+                return chat;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error encoding chat Event: {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateChat(ChatEvenement chat)
@@ -79,10 +86,22 @@ namespace Tag_Go.DAL.Repositories
             return null;
         }
 
-        public Task<IEnumerable<ChatEvenement?>> GetAllMessagesEvenements()
+        public async Task<IEnumerable<ChatEvenement?>> GetAllMessagesEvenements(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM ChatEvenement";
-            return _connection.QueryAsync<ChatEvenement?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM ChatEvenement" : "SELECT * FROM ChatEvenement WHERE Active = 1";
+
+                var chatEvenements = await _connection.QueryAsync<ChatEvenement?>(sql);
+                return chatEvenements;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving chats events: {ex.Message}");
+                return Enumerable.Empty<ChatEvenement>();
+            }
+            
         }
 
         public async Task<ChatEvenement?> GetByIdChatEvenement(int chatEvenement_Id)

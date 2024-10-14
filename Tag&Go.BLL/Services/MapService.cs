@@ -21,18 +21,19 @@ namespace Tag_Go.BLL.Services
             _mapRepository = mapRepository;
         }
 
-        public bool Create(Map map)
+        public async Task<Map> Create(Map map)
         {
             try
             {
-                return _mapRepository.Create(map);
+                return await _mapRepository.Create(map);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating map : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateMap(Map map)
@@ -62,9 +63,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<Map?>> GetAllMaps()
+        public Task<IEnumerable<Map?>> GetAllMaps(bool includeInactive = false)
         {
-            return _mapRepository.GetAllMaps();
+            try
+            {
+                return _mapRepository.GetAllMaps();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return maps : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<Map?> GetByIdMap(int map_Id)

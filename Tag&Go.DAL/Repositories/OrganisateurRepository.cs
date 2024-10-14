@@ -20,7 +20,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(Organisateur organisateur)
+        public async Task<Organisateur> Create(Organisateur organisateur)
         {
             try
             {
@@ -31,14 +31,19 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@BusinessNumber", organisateur.BusinessNumber);
                 parameters.Add("@NUser_Id", organisateur.NUser_Id);
                 parameters.Add("@Point", organisateur.Point);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0;
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+                organisateur.Organisateur_Id = newId;
+
+                return organisateur;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error encoding Organisator : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateOrganisateur(Organisateur organisateur)
@@ -91,10 +96,22 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<Organisateur?>> GetAllOrganisateurs()
+        public async Task<IEnumerable<Organisateur?>> GetAllOrganisateurs(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM Organisateur";
-            return _connection.QueryAsync<Organisateur?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM Organisateur" : "SELECT *FROM Organisateur WHERE Active = 1";
+
+                var organisateurs = await _connection.QueryAsync<Organisateur?>(sql);
+                return organisateurs;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving Organisators: {ex.Message}");
+                return Enumerable.Empty<Organisateur>();
+            }
+            
         }
 
         public async Task<Organisateur?> GetByIdOrganisateur(int organisateur_Id)

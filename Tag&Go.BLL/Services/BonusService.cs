@@ -22,18 +22,19 @@ namespace Tag_Go.BLL.Services
             _bonusRepository = bonusRepository;
         }
 
-        public bool Create(Bonus bonus)
+        public async Task<Bonus> Create(Bonus bonus)
         {
             try
             {
-                return _bonusRepository.Create(bonus);
+                return await _bonusRepository.Create(bonus);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating bonus : {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateBonus(Bonus bonus)
@@ -63,9 +64,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task<IEnumerable<Bonus?>> GetAllBonuss()
+        public Task<IEnumerable<Bonus?>> GetAllBonuss(bool includeInactive = false)
         {
-            return _bonusRepository.GetAllBonuss();
+            try
+            {
+                return _bonusRepository.GetAllBonuss();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Bonuss : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<Bonus?> GetByIdBonus(int bonus_Id)

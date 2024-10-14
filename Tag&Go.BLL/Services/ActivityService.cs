@@ -22,18 +22,19 @@ namespace Tag_Go.BLL.Services
         }
 
         
-        public bool Create(Activity activity)
+        public async Task<Activity> Create(Activity activity)
         {
             try
             {
-                return _activityRepository.Create(activity);
+                return await _activityRepository.Create(activity);
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error creating activity: {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         
@@ -66,9 +67,19 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task <IEnumerable<Activity?>> GetAllActivities()
+        public Task <IEnumerable<Activity?>> GetAllActivities(bool includeInactive = false)
         {
-            return _activityRepository.GetAllActivities();
+            try
+            {
+                return _activityRepository.GetAllActivities();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error return Activities : {ex.Message}");
+                return null;
+            }
+            
         }
 
         public Task<Activity?> GetByIdActivity(int activity_Id)

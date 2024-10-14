@@ -27,13 +27,18 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var mediaitems = await _mediaItemRepository.GetAllMediaItems();
+                bool isAdmin = User.IsInRole("Admin");
+                var mediaitems = await _mediaItemRepository.GetAllMediaItems(isAdmin);
+                if (!mediaitems.Any())
+                {
+                    return NotFound("No active medias items found.");
+                }
                 return Ok(mediaitems);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
         }
@@ -66,13 +71,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var mediaItemDal = newMediaItem.MediaItemToDal();
-                var mediaItemCreated = _mediaItemRepository.Create(mediaItemDal);
+                Tag_Go.DAL.Entities.MediaItem mediaItemCreated = await _mediaItemRepository.Create(mediaItemDal);
 
-                if (mediaItemCreated)
+                if (mediaItemCreated != null)
                 {
                     await _mediaItemHub.RefreshMediaItem();
 
-                    return CreatedAtAction(nameof(Created), new { id = mediaItemDal.MediaItem_Id }, mediaItemDal);
+                    return CreatedAtAction(nameof(Created), new { id = mediaItemCreated.MediaItem_Id }, mediaItemCreated);
                 }
                 return BadRequest(new { message = "Registration Horror. Could not create Media Item" });
             }

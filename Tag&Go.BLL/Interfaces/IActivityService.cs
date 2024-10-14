@@ -10,10 +10,10 @@ namespace Tag_Go.BLL.Interfaces
 {
     public interface IActivityService
     {
-    #nullable disable
-        bool Create(Activity activity);
+#nullable disable
+        Task<Activity> Create(Activity activity);
         void CreateActivity(Activity activity);
-        Task <IEnumerable<Activity?>> GetAllActivities();
+        Task <IEnumerable<Activity?>> GetAllActivities(bool includeInactive = false);
         Task<Activity?> GetByIdActivity(int activity_Id);
         Task<Activity?> DeleteActivity(int activity_Id);
         Task<Activity?> UpdateActivity(Activity activity);

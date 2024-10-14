@@ -17,7 +17,7 @@ namespace Tag_Go.DAL.Repositories
             _connection = connection;
         }
 
-        public bool Create(WeatherForecast wearherForecast)
+        public async Task <WeatherForecast> Create(WeatherForecast wearherForecast)
         {
             try
             {
@@ -33,14 +33,20 @@ namespace Tag_Go.DAL.Repositories
                 parameters.Add("@Humidity", wearherForecast.Humidity);
                 parameters.Add("@Precipitation", wearherForecast.Precipitation);
                 parameters.Add("@NEvenement_Id", wearherForecast.NEvenement_Id);
-                return _connection.Execute(sql, parameters) > 0;
+                //return _connection.Execute(sql, parameters) > 0; 
+                var newId = _connection.QuerySingle<int>(sql, parameters);
+
+                wearherForecast.WeatherForecast_Id = newId;
+
+                return wearherForecast;
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error encoding WeatherForecast: {ex.ToString}");
+                return null;
             }
-            return false;
+            
         }
 
         public void CreateWeatherForecast(WeatherForecast weatherForecast)
@@ -96,10 +102,21 @@ namespace Tag_Go.DAL.Repositories
             
         }
 
-        public Task<IEnumerable<WeatherForecast?>> GetAllWeatherForecasts()
+        public async Task<IEnumerable<WeatherForecast?>> GetAllWeatherForecasts(bool includeInactive = false)
         {
-            string sql = "SELECT * FROM WeatherForecast";
-            return _connection.QueryAsync<WeatherForecast?>(sql);
+            try
+            {
+                string sql = includeInactive ? "SELECT * FROM WeatherForecast" : "SELECT * FROM WeatherForecast WHERE Active = 1";
+                var weatherForecasts = await _connection.QueryAsync<WeatherForecast?>(sql);
+                return weatherForecasts;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error retrieving Weathers Forecasts: {ex.Message}");
+                return Enumerable.Empty<WeatherForecast>();
+            }
+            
         }
 
         public async Task<WeatherForecast?> GetByIdWeatherForecast(int weatherForecast_Id)

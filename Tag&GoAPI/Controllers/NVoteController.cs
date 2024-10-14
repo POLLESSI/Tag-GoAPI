@@ -27,13 +27,19 @@ namespace Tag_GoAPI.Controllers
         {
             try
             {
-                var nvotes = await _nVoteRepository.GetAllNVotes();
+                bool isAdmin = User.IsInRole("Admin");
+                var nvotes = await _nVoteRepository.GetAllNVotes(isAdmin);
+
+                if (!nvotes.Any()) 
+                {
+                    return NotFound("No active Votes found.");
+                }
                 return Ok(nvotes);
             }
             catch (Exception ex)
             {
 
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
         [HttpGet("{nVote_Id}")]
@@ -64,13 +70,13 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 var nVoteDal = nVote.NVoteToDal();
-                var nVoteCreated = _nVoteRepository.Create(nVoteDal);
+                Tag_Go.DAL.Entities.NVote nVoteCreated = await _nVoteRepository.Create(nVoteDal);
 
-                if (nVoteCreated)
+                if (nVoteCreated != null)
                 {
                     await _nVoteHub.RefreshVote();
 
-                    return CreatedAtAction(nameof(Create), new { id = nVoteDal.NVote_Id }, nVoteDal);
+                    return CreatedAtAction(nameof(Create), new { id = nVoteCreated.NVote_Id }, nVoteCreated);
                 }
                 return BadRequest(new { message = "Registration Error. Could not create new vote" });
             }
