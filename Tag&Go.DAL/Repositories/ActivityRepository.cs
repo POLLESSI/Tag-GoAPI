@@ -108,12 +108,14 @@ namespace Tag_Go.DAL.Repositories
                 string sql = includeInactive ? "SELECT * FROM Activity": "SELECT * FROM Activity WHERE Active = 1";
 
                 var activities = await _connection.QueryAsync<Activity?>(sql);
-                return activities;
+
+                return activities ?? Enumerable.Empty<Activity>();
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine($"Error retrieving activities: {ex.Message}");
+
                 return Enumerable.Empty<Activity>();
             }
             

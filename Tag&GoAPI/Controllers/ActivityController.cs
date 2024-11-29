@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using Tag_Go.DAL.Entities;
 using Tag_GoAPI.DTOs;
 using System.Diagnostics;
-using Tag_Go.DAL.Entities;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Tag_GoAPI.Controllers
 {
@@ -32,7 +32,7 @@ namespace Tag_GoAPI.Controllers
             try
             {
                 bool isAdmin = User.IsInRole("Admin");
-                var activities = await _activityRepository.GetAllActivities(isAdmin);
+                var activities = await _activityRepository.GetAllActivities();
 
                 if (!activities.Any()) 
                 {
@@ -132,6 +132,7 @@ namespace Tag_GoAPI.Controllers
                 {
                     return NotFound($"Activity with ID {activityDal.Activity_Id} not found.");
                 }
+                
                 // Retourner l'activité mise à jour
                 return Ok(updatedActivity);
             }

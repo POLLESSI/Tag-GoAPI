@@ -19,7 +19,7 @@ namespace Tag_GoAPI.DTOs
         public DateTime SendingDate { get; set; } = DateTime.UtcNow;
         [Required]
         [DisplayName("Event Id : ")]
-        public int Evenement_Id { get; set; }
+        public int NEvenement_Id { get; set; }
         [DisplayName("Is Private? : ")]
         public string IsPrivate { get; set; } = "No";
     }

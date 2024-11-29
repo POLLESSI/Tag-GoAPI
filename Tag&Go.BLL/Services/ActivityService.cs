@@ -67,11 +67,11 @@ namespace Tag_Go.BLL.Services
             return null;
         }
 
-        public Task <IEnumerable<Activity?>> GetAllActivities(bool includeInactive = false)
+        public async Task <IEnumerable<Activity?>> GetAllActivities(bool includeInactive = false)
         {
             try
             {
-                return _activityRepository.GetAllActivities();
+                return await _activityRepository.GetAllActivities();
             }
             catch (Exception ex)
             {

@@ -22,5 +22,10 @@ namespace Tag_GoAPI.Hubs
                 await Clients.All.SendAsync("notifynewactivity");
             }
         }
+        public async Task UpdateMarker(int nEvenement_Id, string comment, bool funOrNot)
+        {
+            //Notify all clients of an update
+            await Clients.All.SendAsync("MarkerUpdated", nEvenement_Id, comment, funOrNot); 
+        }
     }
 }

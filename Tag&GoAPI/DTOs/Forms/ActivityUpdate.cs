@@ -10,11 +10,12 @@ namespace Tag_GoAPI.DTOs.Forms
         [DisplayName("Id Activity : ")]
         public int Activity_Id { get; set; }
         [Required]
+        [MaxLength(64)]
         [DisplayName("ActivityName : ")]
         public string ActivityName { get; set; }
         [Required]
         [MinLength(2)]
-        [MaxLength(32)]
+        [MaxLength(64)]
         [DisplayName("Avatar Address : ")]
         public string ActivityAddress { get; set; }
         [Required]
